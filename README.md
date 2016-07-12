@@ -12,7 +12,7 @@ The Open OnDemand Project is an open-source software project, based on the Ohio 
   * [[Authentication] Install User Mapping Script](#authentication-install-user-mapping-script)
   * [[Authentication] Deploy the Discovery Page](#authentication-deploy-the-discovery-page)
   * [[Authentication] Deploy the Registration Page](#authentication-deploy-the-registration-page)
-  * [[Authentication] Deploy Mapping Helper Scripts](https://github.com/OSC/Open-OnDemand/wiki#authentication-deploy-mapping-helper-scripts)
+  * [[Authentication] Deploy Mapping Helper Scripts](#authentication-deploy-mapping-helper-scripts)
 * [App Deployment Strategy](#app-deployment-strategy)
   * [Local Directory Structure](#local-directory-structure)
   * [Mapping URI to Local Directory Structure](#mapping-uri-to-local-directory-structure)

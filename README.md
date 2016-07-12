@@ -42,9 +42,9 @@ The PUN is described as an NGINX server instance running as a system-level user 
 
 | Component | Description |
 | --------- | ----------- |
-| [ood-portal-generator](https://code.osu.edu/open-ondemand/ood-portal-generator) | Generates an Open OnDemand portal config for an Apache server that defines the proxy interface. |
-| [mod_ood_proxy](https://code.osu.edu/open-ondemand/mod_ood_proxy) | An Apache httpd module implementing the Open OnDemand proxy API. |
-| [nginx_stage](https://code.osu.edu/open-ondemand/nginx_stage) | Stages and controls the per-user NGINX (PUN) instances. |
+| [ood-portal-generator](https://github.com/OSC/ood-portal-generator) | Generates an Open OnDemand portal config for an Apache server that defines the proxy interface. |
+| [mod_ood_proxy](https://github.com/OSC/mod_ood_proxy) | An Apache httpd module implementing the Open OnDemand proxy API. |
+| [nginx_stage](https://github.com/OSC/nginx_stage) | Stages and controls the per-user NGINX (PUN) instances. |
 
 ### Authentication and Authorization
 
@@ -54,10 +54,10 @@ After the user authenticates with their OpenID Connect Provider authorization is
 
 | Component | Description |
 | --------- | ----------- |
-| [mapdn](https://code.osu.edu/open-ondemand/mapdn) | Scripts to setup/maintain mappings between Distinguished Names (DNs) to local usernames. |
-| [ood_auth_map](https://code.osu.edu/open-ondemand/ood_auth_map) | The user mapping script employed by OSC for OnDemand and AweSim. |
-| [ood_auth_discovery](https://code.osu.edu/open-ondemand/ood_auth_discovery) | Open ID Connect Discovery page for OSC OnDemand. |
-| [ood_auth_registration](https://code.osu.edu/open-ondemand/ood_auth_registration) | OSC OnDemand Open ID Connect registration page. |
+| [ood_auth_mapdn](https://github.com/OSC/ood_auth_mapdn) | Scripts to setup/maintain mappings between Distinguished Names (DNs) to local usernames. |
+| [ood_auth_map](https://github.com/OSC/ood_auth_map) | The user mapping script employed by OSC for OnDemand and AweSim. |
+| [ood_auth_discovery](https://github.com/OSC/ood_auth_discovery) | Open ID Connect Discovery page for OSC OnDemand. |
+| [ood_auth_registration](https://github.com/OSC/ood_auth_registration) | OSC OnDemand Open ID Connect registration page. |
 
 ## Installation Guide
 
@@ -67,12 +67,12 @@ After the user authenticates with their OpenID Connect Provider authorization is
 
 ### Generate Apache Config for Open OnDemand Portal
 
-In this section we will generate an Open OnDemand Portal config file used by the Apache server. This can be done manually or using the [ood-portal-generator](https://code.osu.edu/open-ondemand/ood-portal-generator).
+In this section we will generate an Open OnDemand Portal config file used by the Apache server. This can be done manually or using the [ood-portal-generator](https://github.com/OSC/ood-portal-generator).
 
 1.  We clone the `ood-portal-generator` repo to the local disk:
 
     ```sh
-    git clone git@code.osu.edu:open-ondemand/ood-portal-generator.git
+    git clone https://github.com/OSC/ood-portal-generator.git
     cd ood-portal-generator
     ```
 
@@ -92,7 +92,7 @@ In this section we will generate an Open OnDemand Portal config file used by the
 
     Documentation on the available options can be found at:
 
-    https://code.osu.edu/open-ondemand/ood-portal-generator#default-options
+    https://github.com/OSC/ood-portal-generator#default-options
 
     **SUBDOMAIN** -- If a subdomain or different IP address is used (assuming the SSL certificates are setup as well for this subdomain):
 
@@ -118,7 +118,7 @@ In this section we will generate an Open OnDemand Portal config file used by the
 
 6.  If using recommended OOD authentication, be sure to setup the OpenID Connect Discovery Provider information needed by the `mod_auth_openidc` Apache module:
 
-    https://code.osu.edu/open-ondemand/ood-portal-generator#cilogon-setup
+    https://github.com/OSC/ood-portal-generator#cilogon-setup
 
     For CILogon you will need to register a **new** redirect URI for every host machine you install an OOD Portal on.
 
@@ -126,12 +126,12 @@ Note: This package references the location of `mod_ood_proxy`, `nginx_stage`, an
 
 ### Install Open OnDemand Proxy Module for Apache
 
-An Apache module written in Lua is the primary component for the proxy logic. It is given by the [mod_ood_proxy](https://code.osu.edu/open-ondemand/mod_ood_proxy) project.
+An Apache module written in Lua is the primary component for the proxy logic. It is given by the [mod_ood_proxy](https://github.com/OSC/mod_ood_proxy) project.
 
 1.  We clone the `mod_ood_proxy` repo to the local disk:
 
     ```sh
-    git clone git@code.osu.edu:open-ondemand/mod_ood_proxy.git
+    git clone https://github.com/OSC/mod_ood_proxy.git
     cd mod_ood_proxy
     ```
 
@@ -152,12 +152,12 @@ An Apache module written in Lua is the primary component for the proxy logic. It
 
 ### Install the PUN Utility
 
-The PUNs are manipulated and maintained by the [nginx_stage](https://code.osu.edu/open-ondemand/nginx_stage) utility. This tool is meant to by run by `root` or a user with `sudoers` privileges.
+The PUNs are manipulated and maintained by the [nginx_stage](https://github.com/OSC/nginx_stage) utility. This tool is meant to by run by `root` or a user with `sudoers` privileges.
 
 1.  We clone the `nginx_stage` repo to the local disk:
 
     ```sh
-    git clone git@code.osu.edu:open-ondemand/nginx_stage.git
+    git clone https://github.com/OSC/nginx_stage.git
     cd nginx_stage
     ```
 
@@ -193,12 +193,12 @@ The PUNs are manipulated and maintained by the [nginx_stage](https://code.osu.ed
 
 ### [Authentication] Install User Mapping Script
 
-If you are using the OOD recommended authentication procedure you will need to map the Apache authenticated user to the local system user. This is done with the simple tool: [ood_auth_map](https://code.osu.edu/open-ondemand/ood_auth_map).
+If you are using the OOD recommended authentication procedure you will need to map the Apache authenticated user to the local system user. This is done with the simple tool: [ood_auth_map](https://github.com/OSC/ood_auth_map).
 
 1.  We clone the `ood_auth_map` repo to the local disk:
 
     ```sh
-    git clone git@code.osu.edu:open-ondemand/ood_auth_map.git
+    git clone https://github.com/OSC/ood_auth_map.git
     cd ood_auth_map
     ```
 
@@ -221,12 +221,12 @@ The principle behind this script is that you call it with a URL encoded `REMOTE_
 
 ### [Authentication] Deploy the Discovery Page
 
-Before a user is authenticated, the user is presented with a discovery page where he/she can choose the OpenID Connect Provider. For the [ood_auth_discovery](https://code.osu.edu/open-ondemand/ood_auth_discovery) repo it is a branded page with a link to CILogon.
+Before a user is authenticated, the user is presented with a discovery page where he/she can choose the OpenID Connect Provider. For the [ood_auth_discovery](https://github.com/OSC/ood_auth_discovery) repo it is a branded page with a link to CILogon.
 
 1.  We clone the `ood_auth_discovery` repo to the local disk:
 
     ```sh
-    git clone git@code.osu.edu:open-ondemand/ood_auth_discovery.git
+    git clone https://github.com/OSC/ood_auth_discovery.git
     ```
 
 2.  Install it to its global location:
@@ -240,12 +240,12 @@ Before a user is authenticated, the user is presented with a discovery page wher
 
 ### [Authentication] Deploy the Registration Page
 
-After a user is authenticated and it is determined that no mapping exists to a local system user, they are redirected to the [ood_auth_registration](https://code.osu.edu/open-ondemand/ood_auth_registration) branded page. Here the user is required to enter their local system credentials and the mapping is generated.
+After a user is authenticated and it is determined that no mapping exists to a local system user, they are redirected to the [ood_auth_registration](https://github.com/OSC/ood_auth_registration) branded page. Here the user is required to enter their local system credentials and the mapping is generated.
 
 1.  We clone the `ood_auth_registration` repo to the local disk:
 
     ```sh
-    git clone git@code.osu.edu:open-ondemand/ood_auth_registration.git
+    git clone https://github.com/OSC/ood_auth_registration.git
     ```
 
 2.  Install it to its global location:
@@ -276,6 +276,8 @@ After a user is authenticated and it is determined that no mapping exists to a l
 ### [Authentication] Deploy Mapping Helper Scripts
 
 **FIXME**
+
+[ood_auth_mapdn](https://github.com/OSC/ood_auth_mapdn)
 
 ## App Deployment Strategy
 

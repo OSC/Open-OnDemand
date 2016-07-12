@@ -460,6 +460,16 @@ These are the apps deployed by the system administrator on the local disk that a
 
 ### Dashboard App
 
+https://github.com/OSC/ood-dashboard
+
 ### Shell App
 
+https://github.com/OSC/ood-shell
+
 ### Files App
+
+https://github.com/OSC/ood-fileexplorer
+
+### File Editor App
+
+https://github.com/OSC/ood-fileeditor

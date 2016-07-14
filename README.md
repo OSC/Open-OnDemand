@@ -29,6 +29,7 @@ The Open OnDemand Project is an open-source software project, based on the Ohio 
     * [Dashboard App](#dashboard-app)
     * [Shell App](#shell-app)
     * [Files App](#files-app)
+    * [File Editor App](#file-editor-app)
 
 ## Components
 

@@ -388,14 +388,14 @@ Available OSC Portals:
 The system apps are maintained by mirroring the following directory:
 
 ```
-/nfs/gpfs/PZS0645/ood_portals/<PORTAL>/sys
+/users/PZS0645/wiag/ood_portals/<PORTAL>/sys
 ```
 
 The command to mirror this directory (**performed** on `websvcsXX`) is:
 
 ```sh
 # Mirror the deployment directory with the staged directory
-sudo rsync -rlptvu --delete /nfs/gpfs/PZS0645/ood_portals/<PORTAL>/sys/ /var/www/ood/apps/sys
+sudo rsync -rlptvu --delete /users/PZS0645/wiag/ood_portals/<PORTAL>/sys/ /var/www/ood/apps/sys
 ```
 
 #### Add/Update User Apps (requires root)
@@ -444,14 +444,14 @@ mkdir -p ~/<PORTAL>/dev
 The public assets are maintained by mirroring the following directory:
 
 ```
-/nfs/gpfs/PZS0645/ood_portals/<PORTAL>/public
+/users/PZS0645/wiag/ood_portals/<PORTAL>/public
 ```
 
 The command to mirror this directory (**performed** on `websvcsXX`) is:
 
 ```sh
 # Mirror the deployment directory with the staged directory
-sudo rsync -rlptvu --delete /nfs/gpfs/PZS0645/ood_portals/<PORTAL>/public/ /var/www/ood/public
+sudo rsync -rlptvu --delete /users/PZS0645/wiag/ood_portals/<PORTAL>/public/ /var/www/ood/public
 ```
 
 ## System Apps

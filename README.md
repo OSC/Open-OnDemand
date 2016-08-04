@@ -140,8 +140,8 @@ An Apache module written in Lua is the primary component for the proxy logic. It
 
     ```sh
     # A list of versions & details can be viewed in the CHANGELOG.md
-    # As of writing this the latest version is `v0.0.1`
-    git checkout tags/v0.0.1
+    # As of writing this the latest version is `v0.0.2`
+    git checkout tags/v0.0.2
     ```
 
 3.  Install it to its global location:

@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Open OnDemand : Open-source project based on the Ohio Supercomputer Center’s “OSC OnDemand” platform">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Open OnDemand</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/OSC/Open-OnDemand">View on GitHub</a>
+
+          <h1 id="project_title">Open OnDemand</h1>
+          <h2 id="project_tagline">Open-source project based on the Ohio Supercomputer Center’s “OSC OnDemand” platform</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/OSC/Open-OnDemand/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/OSC/Open-OnDemand/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a id="open-ondemand" class="anchor" href="#open-ondemand" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Open OnDemand</h1>
+
+<p>The Open OnDemand Project is an open-source software project, based on the Ohio Supercomputer Center's proven "OSC OnDemand" platform, that enables HPC centers to install and deploy advanced web and graphical interfaces for their users. More information can be found in the paper <a href="http://dx.doi.org/10.1145/2949550.2949644">http://dx.doi.org/10.1145/2949550.2949644</a>.</p>
+
+<ul>
+<li>
+<a href="#components">Components</a>
+
+<ul>
+<li><a href="#proxy-and-pun">Proxy and PUN</a></li>
+<li><a href="#authentication-and-authorization">Authentication and Authorization</a></li>
+</ul>
+</li>
+<li>
+<a href="#installation-guide">Installation Guide</a>
+
+<ul>
+<li><a href="#generate-apache-config-for-open-ondemand-portal">Generate Apache Config for Open OnDemand Portal</a></li>
+<li><a href="#install-open-ondemand-proxy-module-for-apache">Install Open OnDemand Proxy Module for Apache</a></li>
+<li><a href="#install-the-pun-utility">Install the PUN Utility</a></li>
+<li><a href="#authentication-install-user-mapping-script">[Authentication] Install User Mapping Script</a></li>
+<li><a href="#authentication-deploy-the-discovery-page">[Authentication] Deploy the Discovery Page</a></li>
+<li><a href="#authentication-deploy-the-registration-page">[Authentication] Deploy the Registration Page</a></li>
+<li><a href="#authentication-deploy-mapping-helper-scripts">[Authentication] Deploy Mapping Helper Scripts</a></li>
+</ul>
+</li>
+<li>
+<a href="#app-deployment-strategy">App Deployment Strategy</a>
+
+<ul>
+<li><a href="#local-directory-structure">Local Directory Structure</a></li>
+<li>
+<a href="#mapping-uri-to-local-directory-structure">Mapping URI to Local Directory Structure</a>
+
+<ul>
+<li><a href="#apps-uri">Apps URI</a></li>
+<li><a href="#discover-uri">Discover URI</a></li>
+<li><a href="#public-uri">Public URI</a></li>
+<li><a href="#register-uri">Register URI</a></li>
+</ul>
+</li>
+<li>
+<a href="#osc-portals">OSC Portals</a>
+
+<ul>
+<li><a href="#addupdate-system-apps-requires-root">Add/Update System Apps (requires root)</a></li>
+<li><a href="#addupdate-user-apps-requires-root">Add/Update User Apps (requires root)</a></li>
+<li><a href="#addupdate-dev-apps">Add/Update Dev Apps</a></li>
+<li><a href="#addupdate-public-assets-requires-root">Add/Update Public Assets (requires root)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<a href="#system-apps">System Apps</a>
+
+<ul>
+<li><a href="#dashboard-app">Dashboard App</a></li>
+<li><a href="#shell-app">Shell App</a></li>
+<li><a href="#files-app">Files App</a></li>
+<li><a href="#file-editor-app">File Editor App</a></li>
+</ul>
+</li>
+</ul>
+
+<h2>
+<a id="components" class="anchor" href="#components" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Components</h2>
+
+<p>Details of the components that make up the Open OnDemand <strong>infrastructure</strong>.</p>
+
+<h3>
+<a id="proxy-and-pun" class="anchor" href="#proxy-and-pun" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Proxy and PUN</h3>
+
+<p>The core of the infrastructure includes a proxy layer that all traffic passes through using the securely encrypted SSL protocol on port 443. The <a href="https://httpd.apache.org/">Apache proxy</a> parses the URI and dynamically determines where to route the traffic to. In most cases the traffic will be routed to the per-user <a href="https://www.nginx.com/">NGINX</a> (PUN) web server.</p>
+
+<p>The PUN is described as an NGINX server instance running as a system-level user listening on a <a href="https://en.wikipedia.org/wiki/Unix_domain_socket">Unix domain socket</a>. File and directory permissions are used to restrict access to this Unix domain socket such that only the proxy daemon can communicate with the PUN.</p>
+
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/OSC/ood-portal-generator">ood-portal-generator</a></td>
+<td>Generates an Open OnDemand portal config for an Apache server that defines the proxy interface.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/OSC/mod_ood_proxy">mod_ood_proxy</a></td>
+<td>An Apache httpd module implementing the Open OnDemand proxy API.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/OSC/nginx_stage">nginx_stage</a></td>
+<td>Stages and controls the per-user NGINX (PUN) instances.</td>
+</tr>
+</tbody>
+</table>
+
+<h3>
+<a id="authentication-and-authorization" class="anchor" href="#authentication-and-authorization" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Authentication and Authorization</h3>
+
+<p>There is <strong>no required</strong> authentication mechanism built-into Open OnDemand, but we do provide a recommended solution. The recommended solution utilizes the <a href="https://github.com/pingidentity/mod_auth_openidc">mod_auth_openidc</a> module within the Apache proxy to authenticate users against an <a href="http://openid.net/connect/">OpenID Connect</a> Provider for federated authentication.</p>
+
+<p>After the user authenticates with their OpenID Connect Provider authorization is granted by mapping the user's authenticated username to a local system username. The Apache proxy handles this by calling a script that handles the user mapping lookup. If the mapping fails, the user can be taken to a registration page where he or she can set up a mapping.</p>
+
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/OSC/ood_auth_mapdn">ood_auth_mapdn</a></td>
+<td>Scripts to setup/maintain mappings between Distinguished Names (DNs) to local usernames.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/OSC/ood_auth_map">ood_auth_map</a></td>
+<td>The user mapping script employed by OSC for OnDemand and AweSim.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/OSC/ood_auth_discovery">ood_auth_discovery</a></td>
+<td>Open ID Connect Discovery page for OSC OnDemand.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/OSC/ood_auth_registration">ood_auth_registration</a></td>
+<td>OSC OnDemand Open ID Connect registration page.</td>
+</tr>
+</tbody>
+</table>
+
+<h2>
+<a id="installation-guide" class="anchor" href="#installation-guide" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation Guide</h2>
+
+<p><strong>Work in Progress</strong></p>
+
+<p><strong>Assumes you are using Software Collections</strong></p>
+
+<h3>
+<a id="generate-apache-config-for-open-ondemand-portal" class="anchor" href="#generate-apache-config-for-open-ondemand-portal" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Generate Apache Config for Open OnDemand Portal</h3>
+
+<p>In this section we will generate an Open OnDemand Portal config file used by the Apache server. This can be done manually or using the <a href="https://github.com/OSC/ood-portal-generator">ood-portal-generator</a>.</p>
+
+<ol>
+<li>
+<p>We clone the <code>ood-portal-generator</code> repo to the local disk:</p>
+
+<div class="highlight highlight-source-shell"><pre>git clone https://github.com/OSC/ood-portal-generator.git
+<span class="pl-c1">cd</span> ood-portal-generator</pre></div>
+</li>
+<li>
+<p>Check out the version of the generator you intend on using:</p>
+
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"># A list of versions &amp; details can be viewed in the CHANGELOG.md</span>
+<span class="pl-c"># As of writing this the latest version is `v0.0.1`</span>
+git checkout tags/v0.0.1</pre></div>
+</li>
+<li>
+<p>Now we build the Apache config using environment variables to modify any of the default settings:</p>
+
+<div class="highlight highlight-source-shell"><pre>scl <span class="pl-c1">enable</span> rh-ruby22 -- rake</pre></div>
+
+<p>Documentation on the available options can be found at:</p>
+
+<p><a href="https://github.com/OSC/ood-portal-generator#default-options">https://github.com/OSC/ood-portal-generator#default-options</a></p>
+
+<p><strong>SUBDOMAIN</strong> -- If a subdomain or different IP address is used (assuming the SSL certificates are setup as well for this subdomain):</p>
+
+<div class="highlight highlight-source-shell"><pre>scl <span class="pl-c1">enable</span> rh-ruby22 -- rake OOD_IP=<span class="pl-k">&lt;</span>ip<span class="pl-k">&gt;</span> OOD_SERVER_NAME=<span class="pl-k">&lt;</span>subdomain<span class="pl-k">&gt;</span>
+
+<span class="pl-c"># Example:</span>
+scl <span class="pl-c1">enable</span> rh-ruby22 -- rake OOD_IP=<span class="pl-s"><span class="pl-pds">'</span>xxx.xxx.xxx.xxx<span class="pl-pds">'</span></span> OOD_SERVER_NAME=<span class="pl-s"><span class="pl-pds">'</span>ondemand.osc.edu<span class="pl-pds">'</span></span></pre></div>
+</li>
+<li>
+<p>Confirm the Apache config is to your liking by viewing the config file generated:</p>
+
+<div class="highlight highlight-source-shell"><pre>cat build/ood-portal.conf</pre></div>
+</li>
+<li>
+<p>Install it to its global location:</p>
+
+<div class="highlight highlight-source-shell"><pre>sudo scl <span class="pl-c1">enable</span> rh-ruby22 -- rake install
+<span class="pl-c"># =&gt; /opt/rh/httpd24/root/etc/httpd/conf.d/ood-portal.conf</span></pre></div>
+</li>
+<li>
+<p>If using recommended OOD authentication, be sure to setup the OpenID Connect Discovery Provider information needed by the <code>mod_auth_openidc</code> Apache module:</p>
+
+<p><a href="https://github.com/OSC/ood-portal-generator#cilogon-setup">https://github.com/OSC/ood-portal-generator#cilogon-setup</a></p>
+
+<p>For CILogon you will need to register a <strong>new</strong> redirect URI for every host machine you install an OOD Portal on.</p>
+</li>
+</ol>
+
+<p>Note: This package references the location of <code>mod_ood_proxy</code>, <code>nginx_stage</code>, and <code>osc-user-map</code>. It is the source of knowledge for the locations of the various OOD infrastructure pieces. Be sure to update these locations if you change the <code>PREFIX</code> for any installation of the corresponding package.</p>
+
+<h3>
+<a id="install-open-ondemand-proxy-module-for-apache" class="anchor" href="#install-open-ondemand-proxy-module-for-apache" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Install Open OnDemand Proxy Module for Apache</h3>
+
+<p>An Apache module written in Lua is the primary component for the proxy logic. It is given by the <a href="https://github.com/OSC/mod_ood_proxy">mod_ood_proxy</a> project.</p>
+
+<ol>
+<li>
+<p>We clone the <code>mod_ood_proxy</code> repo to the local disk:</p>
+
+<div class="highlight highlight-source-shell"><pre>git clone https://github.com/OSC/mod_ood_proxy.git
+<span class="pl-c1">cd</span> mod_ood_proxy</pre></div>
+</li>
+<li>
+<p>Check out the version of the generator you intend on using:</p>
+
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"># A list of versions &amp; details can be viewed in the CHANGELOG.md</span>
+<span class="pl-c"># As of writing this the latest version is `v0.0.2`</span>
+git checkout tags/v0.0.2</pre></div>
+</li>
+<li>
+<p>Install it to its global location:</p>
+
+<div class="highlight highlight-source-shell"><pre>sudo scl <span class="pl-c1">enable</span> rh-ruby22 -- rake install
+<span class="pl-c"># =&gt; /opt/ood/mod_ood_proxy</span></pre></div>
+</li>
+</ol>
+
+<h3>
+<a id="install-the-pun-utility" class="anchor" href="#install-the-pun-utility" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Install the PUN Utility</h3>
+
+<p>The PUNs are manipulated and maintained by the <a href="https://github.com/OSC/nginx_stage">nginx_stage</a> utility. This tool is meant to by run by <code>root</code> or a user with <code>sudoers</code> privileges.</p>
+
+<ol>
+<li>
+<p>We clone the <code>nginx_stage</code> repo to the local disk:</p>
+
+<div class="highlight highlight-source-shell"><pre>git clone https://github.com/OSC/nginx_stage.git
+<span class="pl-c1">cd</span> nginx_stage</pre></div>
+</li>
+<li>
+<p>Check out the version of the generator you intend on using:</p>
+
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"># A list of versions &amp; details can be viewed in the CHANGELOG.md</span>
+<span class="pl-c"># As of writing this the latest version is `v0.0.7`</span>
+git checkout tags/v0.0.7</pre></div>
+</li>
+<li>
+<p>Install it to its global location:</p>
+
+<div class="highlight highlight-source-shell"><pre>sudo scl <span class="pl-c1">enable</span> rh-ruby22 -- rake install
+<span class="pl-c"># =&gt; /opt/ood/nginx_stage</span></pre></div>
+</li>
+<li>
+<p>Modify <code>/opt/ood/nginx_stage/config/nginx_stage.yml</code> and <code>/opt/ood/nginx_stage/bin/ood_ruby</code>.</p>
+
+<p>In particular, opt into metrics reporting in <code>nginx_stage.yml</code> and use Software Collections in <code>ood_ruby</code>.</p>
+
+<p>Note: These files will not be overwritten the next time you update <code>nginx_stage</code>.</p>
+</li>
+<li>
+<p>If not already done, give the <code>apache</code> user <code>sudo</code> privileges to run this tool:</p>
+
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"># /etc/sudoers</span>
+
+Defaults:apache     <span class="pl-k">!</span>requiretty, <span class="pl-k">!</span>authenticate
+apache ALL=(ALL) NOPASSWD: /opt/ood/nginx_stage/sbin/nginx_stage</pre></div>
+</li>
+</ol>
+
+<h3>
+<a id="authentication-install-user-mapping-script" class="anchor" href="#authentication-install-user-mapping-script" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>[Authentication] Install User Mapping Script</h3>
+
+<p>If you are using the OOD recommended authentication procedure you will need to map the Apache authenticated user to the local system user. This is done with the simple tool: <a href="https://github.com/OSC/ood_auth_map">ood_auth_map</a>.</p>
+
+<ol>
+<li>
+<p>We clone the <code>ood_auth_map</code> repo to the local disk:</p>
+
+<div class="highlight highlight-source-shell"><pre>git clone https://github.com/OSC/ood_auth_map.git
+<span class="pl-c1">cd</span> ood_auth_map</pre></div>
+</li>
+<li>
+<p>Check out the version of the generator you intend on using:</p>
+
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"># A list of versions &amp; details can be viewed in the CHANGELOG.md</span>
+<span class="pl-c"># As of writing this the latest version is `v0.0.1`</span>
+git checkout tags/v0.0.1</pre></div>
+</li>
+<li>
+<p>Install it to its global location:</p>
+
+<div class="highlight highlight-source-shell"><pre>sudo scl <span class="pl-c1">enable</span> rh-ruby22 -- rake install
+<span class="pl-c"># =&gt; /opt/ood/ood_auth_map</span></pre></div>
+</li>
+</ol>
+
+<p>The principle behind this script is that you call it with a URL encoded <code>REMOTE_USER</code> user name as the only argument, and it will return the mapping to the local system user name if it exists. This requires the availability of the <code>/etc/grid-security/grid-mapfile</code> (<a href="http://toolkit.globus.org/toolkit/docs/2.4/gsi/grid-mapfile_v11.html">more information</a>).</p>
+
+<h3>
+<a id="authentication-deploy-the-discovery-page" class="anchor" href="#authentication-deploy-the-discovery-page" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>[Authentication] Deploy the Discovery Page</h3>
+
+<p>Before a user is authenticated, the user is presented with a discovery page where he/she can choose the OpenID Connect Provider. For the <a href="https://github.com/OSC/ood_auth_discovery">ood_auth_discovery</a> repo it is a branded page with a link to CILogon.</p>
+
+<ol>
+<li>
+<p>We clone the <code>ood_auth_discovery</code> repo to the local disk:</p>
+
+<div class="highlight highlight-source-shell"><pre>git clone https://github.com/OSC/ood_auth_discovery.git</pre></div>
+</li>
+<li>
+<p>Install it to its global location:</p>
+
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"># create the /var/www/ood directory if it doesn't already exist</span>
+
+<span class="pl-c"># copy this repo to its default location</span>
+sudo cp -r ood_auth_discovery /var/www/ood/discover</pre></div>
+</li>
+</ol>
+
+<h3>
+<a id="authentication-deploy-the-registration-page" class="anchor" href="#authentication-deploy-the-registration-page" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>[Authentication] Deploy the Registration Page</h3>
+
+<p>After a user is authenticated and it is determined that no mapping exists to a local system user, they are redirected to the <a href="https://github.com/OSC/ood_auth_registration">ood_auth_registration</a> branded page. Here the user is required to enter their local system credentials and the mapping is generated.</p>
+
+<ol>
+<li>
+<p>We clone the <code>ood_auth_registration</code> repo to the local disk:</p>
+
+<div class="highlight highlight-source-shell"><pre>git clone https://github.com/OSC/ood_auth_registration.git</pre></div>
+</li>
+<li>
+<p>Install it to its global location:</p>
+
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"># create the /var/www/ood directory if it doesn't already exist</span>
+
+<span class="pl-c"># copy this repo to its default location</span>
+sudo cp -r ood_auth_registration /var/www/ood/register</pre></div>
+</li>
+<li>
+<p>This repo makes use of a securely encrypted <code>ldaps://...</code> server for authenticating a user to the local system. This requires the appropriate OpenLDAP Certificate Authority files be hosted on the local machine:</p>
+
+<div class="highlight highlight-source-shell"><pre>/etc/openldap/cacerts/<span class="pl-k">*</span></pre></div>
+</li>
+<li>
+<p>This repo also generates a proper user mapping after the user authenticates successfully on the local system. So the <code>apache</code> user will need permissions to generate this mapping on behalf of the user. This requires granting the <code>apache</code> user <code>sudo</code> privileges to the respective <code>mapdn</code> script.</p>
+
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"># /etc/sudoers</span>
+
+apache      ALL=(ALL) NOPASSWD:  /usr/local/bin/add-user-dn.real, \
+                                 /usr/local/bin/delete-user-dn.real, \
+                                 /usr/local/bin/list-user-dns.real</pre></div>
+</li>
+</ol>
+
+<h3>
+<a id="authentication-deploy-mapping-helper-scripts" class="anchor" href="#authentication-deploy-mapping-helper-scripts" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>[Authentication] Deploy Mapping Helper Scripts</h3>
+
+<p><strong>FIXME</strong></p>
+
+<p><a href="https://github.com/OSC/ood_auth_mapdn">ood_auth_mapdn</a></p>
+
+<h2>
+<a id="app-deployment-strategy" class="anchor" href="#app-deployment-strategy" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>App Deployment Strategy</h2>
+
+<p>This is the strategy currently employed at the OSC OnDemand and OSC AweSim portals for deploying apps. This is in no way a requirement, and system administrators are encouraged to explore different options.</p>
+
+<h3>
+<a id="local-directory-structure" class="anchor" href="#local-directory-structure" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Local Directory Structure</h3>
+
+<p>Apps are deployed on the local disk of the host serving the Open OnDemand portal. Care must be taken for user shared apps as they are deployed through symlinks to the corresponding user's home directory on the shared file system.</p>
+
+<div class="highlight highlight-source-shell"><pre>/var/www/ood                                       <span class="pl-c"># drwxr-xr-x  root    root</span>
+├── apps                                           <span class="pl-c"># drwxr-xr-x  root    root</span>
+│   ├── sys                                        <span class="pl-c"># drwxr-xr-x  root    root</span>
+│   │   ├── <span class="pl-k">&lt;</span>APP<span class="pl-k">&gt;</span>                                  <span class="pl-c"># drwxr-xr-x  root    root</span>
+│   │   │   ├── config.ru                          <span class="pl-c"># -rw-r--r--  root    root</span>
+│   │   │   └── ...                                <span class="pl-c"># -rw-r--r--  root    root</span>
+│   │   ├── dashboard                              <span class="pl-c"># drwxr-xr-x  root    root</span>
+│   │   │   ├── config.ru                          <span class="pl-c"># -rw-r--r--  root    root</span>
+│   │   │   └── ...                                <span class="pl-c"># -rw-r--r--  root    root</span>
+│   │   └── ...                                    <span class="pl-c"># drwxr-xr-x  root    root</span>
+│   └── usr                                        <span class="pl-c"># drwxr-xr-x  root    root</span>
+│       ├── <span class="pl-k">&lt;</span>USER<span class="pl-k">&gt;</span>                                 <span class="pl-c"># drwxr-x---  root    &lt;GROUP&gt;</span>
+│       │   └── gateway -<span class="pl-k">&gt;</span> <span class="pl-k">~</span><span class="pl-k">&lt;</span>USER<span class="pl-k">&gt;</span>/<span class="pl-k">&lt;</span>PORTAL<span class="pl-k">&gt;</span>/share  <span class="pl-c"># lrwxrwxrwx  root    root</span>
+│       │       ├── <span class="pl-k">&lt;</span>APP<span class="pl-k">&gt;</span>                          <span class="pl-c"># drwx------+ &lt;USER&gt;  &lt;GROUP&gt;</span>
+│       │       │   ├── config.ru                  <span class="pl-c"># -rw-r--r--  &lt;USER&gt;  &lt;GROUP&gt;</span>
+│       │       │   └── ...                        <span class="pl-c"># -rw-r--r--  &lt;USER&gt;  &lt;GROUP&gt;</span>
+│       │       └── ...                            <span class="pl-c"># drwx------+ &lt;USER&gt;  &lt;GROUP&gt;</span>
+│       └── efranz                                 <span class="pl-c"># drwxr-x---  root    PZS0562</span>
+│           └── gateway -<span class="pl-k">&gt;</span> <span class="pl-k">~</span>efranz/<span class="pl-k">&lt;</span>PORTAL<span class="pl-k">&gt;</span>/share  <span class="pl-c"># lrwxrwxrwx  root    root</span>
+│               ├── activejobs                     <span class="pl-c"># drwx------+ efranz  PZS0562</span>
+│               │   ├── config.ru                  <span class="pl-c"># -rw-r--r--  efranz  PZS0562</span>
+│               │   └── ...                        <span class="pl-c"># -rw-r--r--  efranz  PZS0562</span>
+│               └── ...                            <span class="pl-c"># drwx------+ efranz  PZS0562</span>
+├── discover                                       <span class="pl-c"># drwxr-xr-x  root    root</span>
+│   ├── index.php                                  <span class="pl-c"># -rw-r--r--  root    root</span>
+│   └── ...                                        <span class="pl-c"># -rw-r--r--  root    root</span>
+├── public                                         <span class="pl-c"># drwxr-xr-x  root    root</span>
+│   ├── favicon.ico                                <span class="pl-c"># -rw-r--r--  root    root</span>
+│   └── ...                                        <span class="pl-c"># -rw-r--r--  root    root</span>
+└── register                                       <span class="pl-c"># drwxr-xr-x  root    root</span>
+    ├── index.php                                  <span class="pl-c"># -rw-r--r--  root    root</span>
+    └── ...                                        <span class="pl-c"># -rw-r--r--  root    root</span></pre></div>
+
+<h3>
+<a id="mapping-uri-to-local-directory-structure" class="anchor" href="#mapping-uri-to-local-directory-structure" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Mapping URI to Local Directory Structure</h3>
+
+<h4>
+<a id="apps-uri" class="anchor" href="#apps-uri" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Apps URI</h4>
+
+<p>To access an app you <strong>MUST</strong>:</p>
+
+<ul>
+<li>be authenticated through Apache (in particular authenticated through CILogon)</li>
+<li>have authenticated user be mapped to a local system user</li>
+<li>have <code>uid &gt; 1000</code>
+</li>
+<li>have a valid shell</li>
+</ul>
+
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"># Accessing a system app</span>
+https://<span class="pl-k">&lt;</span>PORTAL<span class="pl-k">&gt;</span>.osc.edu/pun/sys/<span class="pl-k">&lt;</span>APP<span class="pl-k">&gt;</span>         =<span class="pl-k">&gt;</span>  /var/www/ood/apps/sys/<span class="pl-k">&lt;</span>APP<span class="pl-k">&gt;</span>
+
+<span class="pl-c"># Accessing a user shared app</span>
+https://<span class="pl-k">&lt;</span>PORTAL<span class="pl-k">&gt;</span>.osc.edu/pun/usr/<span class="pl-k">&lt;</span>USER<span class="pl-k">&gt;</span>/<span class="pl-k">&lt;</span>APP<span class="pl-k">&gt;</span>  =<span class="pl-k">&gt;</span>  /var/www/ood/apps/usr/<span class="pl-k">&lt;</span>USER<span class="pl-k">&gt;</span>/gateway/<span class="pl-k">&lt;</span>APP<span class="pl-k">&gt;</span>
+                                               =<span class="pl-k">&gt;</span>  <span class="pl-k">~</span><span class="pl-k">&lt;</span>USER<span class="pl-k">&gt;</span>/<span class="pl-k">&lt;</span>PORTAL<span class="pl-k">&gt;</span>/share/<span class="pl-k">&lt;</span>APP<span class="pl-k">&gt;</span>
+
+<span class="pl-c"># Accessing your own sandbox app</span>
+https://<span class="pl-k">&lt;</span>PORTAL<span class="pl-k">&gt;</span>.osc.edu/pun/dev/<span class="pl-k">&lt;</span>APP<span class="pl-k">&gt;</span>         =<span class="pl-k">&gt;</span>  <span class="pl-k">~</span>/<span class="pl-k">&lt;</span>PORTAL<span class="pl-k">&gt;</span>/dev/<span class="pl-k">&lt;</span>APP<span class="pl-k">&gt;</span></pre></div>
+
+<h4>
+<a id="discover-uri" class="anchor" href="#discover-uri" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Discover URI</h4>
+
+<p><strong>Anyone</strong> can access the resources underneath the <code>/discover</code> URI.</p>
+
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"># Accessing the discovery page</span>
+https://<span class="pl-k">&lt;</span>PORTAL<span class="pl-k">&gt;</span>.osc.edu/discover  =<span class="pl-k">&gt;</span>  /var/www/ood/discover/index.php</pre></div>
+
+<h4>
+<a id="public-uri" class="anchor" href="#public-uri" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Public URI</h4>
+
+<p><strong>Anyone</strong> can access the resources underneath the <code>/public</code> URI.</p>
+
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"># Accessing a publicly available resource</span>
+https://<span class="pl-k">&lt;</span>PORTAL<span class="pl-k">&gt;</span>.osc.edu/public/favicon.ico  =<span class="pl-k">&gt;</span>  /var/www/ood/public/favicon.ico</pre></div>
+
+<h4>
+<a id="register-uri" class="anchor" href="#register-uri" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Register URI</h4>
+
+<p>To access any resource underneath the <code>/register</code> URI you <strong>MUST</strong>:</p>
+
+<ul>
+<li>be authenticated through Apache (in particular authenticated through CILogon)</li>
+</ul>
+
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"># Accessing the registration page</span>
+https://<span class="pl-k">&lt;</span>PORTAL<span class="pl-k">&gt;</span>.osc.edu/register  =<span class="pl-k">&gt;</span>  /var/www/ood/register/index.php</pre></div>
+
+<h3>
+<a id="osc-portals" class="anchor" href="#osc-portals" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>OSC Portals</h3>
+
+<p>Available OSC Portals:</p>
+
+<table>
+<thead>
+<tr>
+<th><code>&lt;PORTAL&gt;</code></th>
+<th><code>&lt;HOST&gt;</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ondemand</code></td>
+<td><code>websvcs08</code></td>
+</tr>
+<tr>
+<td><code>awesim</code></td>
+<td><code>websvcs??</code></td>
+</tr>
+</tbody>
+</table>
+
+<h4>
+<a id="addupdate-system-apps-requires-root" class="anchor" href="#addupdate-system-apps-requires-root" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Add/Update System Apps (requires root)</h4>
+
+<p>The system apps are maintained by mirroring the following directory:</p>
+
+<pre><code>/users/PZS0645/wiag/ood_portals/&lt;PORTAL&gt;/sys
+</code></pre>
+
+<p>The command to mirror this directory (<strong>performed</strong> on <code>websvcsXX</code>) is:</p>
+
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"># Mirror the deployment directory with the staged directory</span>
+sudo rsync -rlptvu --delete /users/PZS0645/wiag/ood_portals/<span class="pl-k">&lt;</span>PORTAL<span class="pl-k">&gt;</span>/sys/ /var/www/ood/apps/sys</pre></div>
+
+<h4>
+<a id="addupdate-user-apps-requires-root" class="anchor" href="#addupdate-user-apps-requires-root" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Add/Update User Apps (requires root)</h4>
+
+<p>Each <code>&lt;USER&gt;</code> directory on the local disk will be given an appropriate permission such that only members of the <code>&lt;GROUP&gt;</code> can access the user's shared apps. This is an important security condition so that users don't access malicious developers' apps.</p>
+
+<table>
+<thead>
+<tr>
+<th><code>&lt;PORTAL&gt;</code></th>
+<th><code>&lt;GROUP&gt;</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ondemand</code></td>
+<td>
+<code>&lt;USER&gt;</code>'s primary group</td>
+</tr>
+<tr>
+<td><code>awesim</code></td>
+<td><code>awesim</code></td>
+</tr>
+</tbody>
+</table>
+
+<p>To register a developer with username <code>&lt;USER&gt;</code> and groupname <code>&lt;GROUP&gt;</code> (<strong>performed</strong> on <code>websvcsXX</code>):</p>
+
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"># Create the user's app sharing directory</span>
+sudo mkdir -p /var/www/ood/apps/usr/<span class="pl-k">&lt;</span>USER<span class="pl-k">&gt;</span>
+
+<span class="pl-c"># Set proper permissions so only primary group members can access shared apps</span>
+<span class="pl-c"># NB: This is important or any user can access this developer's apps which can be a security risk</span>
+sudo chmod 750 /var/www/ood/apps/usr/<span class="pl-k">&lt;</span>USER<span class="pl-k">&gt;</span>
+sudo chgrp <span class="pl-k">&lt;</span>GROUP<span class="pl-k">&gt;</span> /var/www/ood/apps/usr/<span class="pl-k">&lt;</span>USER<span class="pl-k">&gt;</span>
+
+<span class="pl-c"># Create symlink to user's shared apps location in their homedir for given portal</span>
+<span class="pl-c"># NB: May need to create the directory for the user in their home directory</span>
+sudo -u <span class="pl-k">&lt;</span>USER<span class="pl-k">&gt;</span> mkdir -p <span class="pl-k">~</span><span class="pl-k">&lt;</span>USER<span class="pl-k">&gt;</span>/<span class="pl-k">&lt;</span>PORTAL<span class="pl-k">&gt;</span>/share
+sudo ln -s <span class="pl-k">~</span><span class="pl-k">&lt;</span>USER<span class="pl-k">&gt;</span>/<span class="pl-k">&lt;</span>PORTAL<span class="pl-k">&gt;</span>/share /var/www/ood/apps/usr/<span class="pl-k">&lt;</span>USER<span class="pl-k">&gt;</span>/gateway</pre></div>
+
+<p>Now the user can update/maintain his or her own apps within their home directory:</p>
+
+<div class="highlight highlight-source-shell"><pre><span class="pl-k">~</span>/<span class="pl-k">&lt;</span>PORTAL<span class="pl-k">&gt;</span>/share/<span class="pl-k">*</span></pre></div>
+
+<h4>
+<a id="addupdate-dev-apps" class="anchor" href="#addupdate-dev-apps" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Add/Update Dev Apps</h4>
+
+<p>The user will need to create the required dev directory in their home directory in order to develop apps on the given <code>&lt;PORTAL&gt;</code>:</p>
+
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"># Create directory that holds dev apps</span>
+mkdir -p <span class="pl-k">~</span>/<span class="pl-k">&lt;</span>PORTAL<span class="pl-k">&gt;</span>/dev</pre></div>
+
+<h4>
+<a id="addupdate-public-assets-requires-root" class="anchor" href="#addupdate-public-assets-requires-root" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Add/Update Public Assets (requires root)</h4>
+
+<p>The public assets are maintained by mirroring the following directory:</p>
+
+<pre><code>/users/PZS0645/wiag/ood_portals/&lt;PORTAL&gt;/public
+</code></pre>
+
+<p>The command to mirror this directory (<strong>performed</strong> on <code>websvcsXX</code>) is:</p>
+
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"># Mirror the deployment directory with the staged directory</span>
+sudo rsync -rlptvu --delete /users/PZS0645/wiag/ood_portals/<span class="pl-k">&lt;</span>PORTAL<span class="pl-k">&gt;</span>/public/ /var/www/ood/public</pre></div>
+
+<h2>
+<a id="system-apps" class="anchor" href="#system-apps" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>System Apps</h2>
+
+<p>These are the apps deployed by the system administrator on the local disk that are accessible by all users.</p>
+
+<h3>
+<a id="dashboard-app" class="anchor" href="#dashboard-app" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Dashboard App</h3>
+
+<p><a href="https://github.com/OSC/ood-dashboard">https://github.com/OSC/ood-dashboard</a></p>
+
+<h3>
+<a id="shell-app" class="anchor" href="#shell-app" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Shell App</h3>
+
+<p><a href="https://github.com/OSC/ood-shell">https://github.com/OSC/ood-shell</a></p>
+
+<h3>
+<a id="files-app" class="anchor" href="#files-app" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Files App</h3>
+
+<p><a href="https://github.com/OSC/ood-fileexplorer">https://github.com/OSC/ood-fileexplorer</a></p>
+
+<h3>
+<a id="file-editor-app" class="anchor" href="#file-editor-app" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>File Editor App</h3>
+
+<p><a href="https://github.com/OSC/ood-fileeditor">https://github.com/OSC/ood-fileeditor</a></p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Open OnDemand maintained by <a href="https://github.com/OSC">OSC</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>

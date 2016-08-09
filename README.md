@@ -13,6 +13,7 @@ The Open OnDemand Project is an open-source software project, based on the Ohio 
   * [[Authentication] Deploy the Discovery Page](#authentication-deploy-the-discovery-page)
   * [[Authentication] Deploy the Registration Page](#authentication-deploy-the-registration-page)
   * [[Authentication] Deploy Mapping Helper Scripts](#authentication-deploy-mapping-helper-scripts)
+* [Authentication Strategy](#authentication-strategy)
 * [App Deployment Strategy](#app-deployment-strategy)
   * [Local Directory Structure](#local-directory-structure)
   * [Mapping URI to Local Directory Structure](#mapping-uri-to-local-directory-structure)
@@ -279,6 +280,22 @@ After a user is authenticated and it is determined that no mapping exists to a l
 **FIXME**
 
 [ood_auth_mapdn](https://github.com/OSC/ood_auth_mapdn)
+
+## Authentication Strategy
+
+The current strategy employed by the OSC OnDemand portal is outlined in the figure below.
+
+[[images/auth.png]]
+
+An unauthenticated user tries to access a resource through the OOD portal that is protected:
+
+1. The Apache proxy redirects the user to the `ood_discovery` page
+2. The user will then click the link to the CILogon authentication portal
+3. After choosing their authentication provider and successfully authenticating
+4. They are redirected to the protected resource served by the Apache proxy
+5. **If** no mapping exists for the authenticated user to a local system user, they are redirected to the `ood_registration` page
+6. Here the user registers their authenticated user name to a local system user name by authenticating against a local LDAP server
+7. The mapping is generated if successful and the user is again redirected to the protected resource
 
 ## App Deployment Strategy
 

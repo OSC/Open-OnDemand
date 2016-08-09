@@ -293,7 +293,7 @@ An unauthenticated user tries to access a resource through the OOD portal that i
 2. The user will then click the link to the CILogon authentication portal
 3. After choosing their authentication provider and successfully authenticating
 4. They are redirected to the protected resource served by the Apache proxy
-5. **If** no mapping exists for the authenticated user to a local system user, they are redirected to the `ood_registration` page
+5. **If no mapping exists** for the authenticated user to a local system user, they are redirected to the `ood_registration` page
 6. Here the user registers their authenticated user name to a local system user name by authenticating against a local LDAP server
 7. The mapping is generated if successful and the user is again redirected to the protected resource
 

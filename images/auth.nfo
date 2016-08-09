@@ -1,29 +1,76 @@
 # https://www.websequencediagrams.com/
 
-title OD3 Authentication Sequence
+title OSC OnDemand Authentication Diagram
 
-User->Apache: ondemand3.osc.edu
-Apache-->-User: go to IDP (initial login page)
-User->Apache: IDP
-Apache-->-User: show providers list
-note right of Apache: show IDP with list \nof providers to \nchoose from \n(including CI Logon)
-User->CI Logon: request to login for OOD
-CI Logon-->-User: choose provider from list
-User->CI Logon: request to login with provider OSU
-CI Logon-->-User: redirect to provider login
-User->OSU: login
-OSU-->-User: redirect to Apache
-User->Apache: IDP2 page\nI logged in with OSU
+participant Alice
+participant WebNode
+participant CILogon
+participant IdP
 
-alt new mapping for user
-    Apache-->-User: please enter OSC cred. (login page)
-    User->Apache: heres my OSC username + pass
-    Apache->Apache: bind against ldap to verify auth
-    Apache->Apache: use mapdn to update grid map file
-    Apache-->-User: redirect to ondemand3.osc.edu
-else OSU user mapping in grid map file!
-    Apache-->-User: redirect to ondemand3.osc.edu
+Alice->+WebNode: GET https://webnode/<app>
+WebNode->WebNode: check for valid openidc session\nand fail because not logged in
+activate WebNode
+deactivate WebNode
+WebNode-->-Alice: [302] Redirect https://webnode/discover
+
+Alice->+WebNode: GET https://webnode/discover
+WebNode-->-Alice: [200] Helpful page with link to login with CILogon
+
+Alice->+WebNode: GET https://webnode/oidc/?iss=...
+WebNode-->-Alice: *Set openidc state cookie*\n[302] Redirect https://cilogon.org/authorize?...
+
+Alice->+CILogon: GET https://cilogon.org/authorize?...
+CILogon-->-Alice: [200] Select an Identity Provider
+
+Alice->+CILogon: POST https://cilogon.org/authorize (body: IdP info)
+CILogon-->-Alice: [302] Redirect https://idp/?...
+
+Alice->+IdP: Login + Permit authorization
+IdP-->Alice:
+note left of IdP: multiple GET/POST\nrequests go on in here
+Alice->IdP:
+IdP-->-Alice: [302] Redirect https://cilogon.org/getuser/?...
+
+Alice->+CILogon: GET https://cilogon/getuser/?...
+CILogon-->-Alice: [302] Redirect https://cilogon.org/authorize
+
+Alice->+CILogon: GET https://cilogon.org/authorize
+CILogon-->-Alice: [302] Redirect https://webnode/oidc/?...
+
+Alice->+WebNode: GET https://webnode/oidc/?...
+WebNode->WebNode: create a session for Alice
+activate WebNode
+deactivate WebNode
+WebNode-->-Alice: *Remove openidc state cookie*\n*Set openidc session cookie*\n[302] Redirect https://webnode/<app>
+
+Alice->+WebNode: GET https://webnode/<app>
+  WebNode->WebNode: check for valid openidc session\nand set REMOTE_USER
+activate WebNode
+deactivate WebNode
+WebNode->WebNode: map REMOTE_USER to valid\nOSC user, using grid-mapfile
+activate WebNode
+deactivate WebNode
+opt no mapping found
+  WebNode-->-Alice: [302] Redirect https://webnode/register?redir=...
+  Alice->+WebNode: https://webnode/register?redir=...
+  WebNode->WebNode: check for valid openidc session\nand set REMOTE_USER
+  activate WebNode
+  deactivate WebNode
+  WebNode-->-Alice: [200] OSC Login form
+  Alice->+WebNode: POST https://webnode/register (body: username/password)
+  WebNode->WebNode: check for valid openidc session\nand set REMOTE_USER
+  activate WebNode
+  deactivate WebNode
+  WebNode->WebNode: if valid username/password:\nadd REMOTE_USER for valid\nOSC user in grid-mapfile
+  activate WebNode
+  deactivate WebNode
+  WebNode-->-Alice: [302] Redirect https://webnode/<app>
+  Alice->+WebNode: GET https://webnode/<app>
+  WebNode->WebNode: check for valid openidc session\nand set REMOTE_USER
+  activate WebNode
+  deactivate WebNode
+  WebNode->WebNode: map REMOTE_USER to valid\nOSC user, using grid-mapfile
+  activate WebNode
+  deactivate WebNode
 end
-
-User->Apache: ondemand3.osc.edu
-Apache-->-User: show user dashboard from their PUN!
+WebNode-->-Alice: [200] Return the web app

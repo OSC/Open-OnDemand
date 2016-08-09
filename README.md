@@ -285,7 +285,7 @@ After a user is authenticated and it is determined that no mapping exists to a l
 
 The current strategy employed by the OSC OnDemand portal is outlined in the figure below.
 
-[[images/auth.png]]
+![Authentication Strategy](/images/auth.png)
 
 An unauthenticated user tries to access a resource through the OOD portal that is protected:
 

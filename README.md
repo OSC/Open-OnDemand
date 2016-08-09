@@ -283,19 +283,31 @@ After a user is authenticated and it is determined that no mapping exists to a l
 
 ## Authentication Strategy
 
-The current strategy employed by the OSC OnDemand portal is outlined in the figure below.
+The current strategy employed by the OSC OnDemand portal is outlined in detail
+in the figure below.
 
 ![Authentication Strategy](/images/auth.png)
 
-An unauthenticated user tries to access a resource through the OOD portal that is protected:
+The workflow for an unauthenticated user accessing a protected resource behind
+the Apache proxy can be briefly described as:
 
-1. The Apache proxy redirects the user to the `ood_discovery` page
-2. The user will then click the link to the CILogon authentication portal
-3. After choosing their authentication provider and successfully authenticating
-4. They are redirected to the protected resource served by the Apache proxy
-  5. **If no mapping exists** for the authenticated user to a local system user, they are redirected to the `ood_registration` page
-  6. Here the user registers their authenticated user name to a local system user name by authenticating against a local LDAP server
-  7. The mapping is generated if successful and the user is again redirected to the protected resource
+1.  The Apache proxy redirects the user to the
+    [ood_discovery](https://github.com/OSC/ood_auth_discovery/) page
+2.  The user then clicks the link to the CILogon authentication portal
+3.  After choosing their authentication provider and successfully
+    authenticating
+4.  If a mapping exists for the authenticated user to a local system user:
+
+    1. User is given access to the protected resource
+
+    If the mapping doesn't exist:
+
+    1. The user is redirected to the
+       [ood_registration](https://github.com/OSC/ood_auth_registration/) page
+    2. The user registers their authenticated user name to a local system user
+       name by authenticating against a local LDAP server
+    3. The mapping is generated if successfully authenticated
+    4. The user is again redirected to the protected resource
 
 ## App Deployment Strategy
 

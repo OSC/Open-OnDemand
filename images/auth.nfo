@@ -1,0 +1,29 @@
+# https://www.websequencediagrams.com/
+
+title OD3 Authentication Sequence
+
+User->Apache: ondemand3.osc.edu
+Apache-->-User: go to IDP (initial login page)
+User->Apache: IDP
+Apache-->-User: show providers list
+note right of Apache: show IDP with list \nof providers to \nchoose from \n(including CI Logon)
+User->CI Logon: request to login for OOD
+CI Logon-->-User: choose provider from list
+User->CI Logon: request to login with provider OSU
+CI Logon-->-User: redirect to provider login
+User->OSU: login
+OSU-->-User: redirect to Apache
+User->Apache: IDP2 page\nI logged in with OSU
+
+alt new mapping for user
+    Apache-->-User: please enter OSC cred. (login page)
+    User->Apache: heres my OSC username + pass
+    Apache->Apache: bind against ldap to verify auth
+    Apache->Apache: use mapdn to update grid map file
+    Apache-->-User: redirect to ondemand3.osc.edu
+else OSU user mapping in grid map file!
+    Apache-->-User: redirect to ondemand3.osc.edu
+end
+
+User->Apache: ondemand3.osc.edu
+Apache-->-User: show user dashboard from their PUN!

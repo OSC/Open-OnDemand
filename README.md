@@ -167,8 +167,8 @@ The PUNs are manipulated and maintained by the [nginx_stage](https://github.com/
 
     ```sh
     # A list of versions & details can be viewed in the CHANGELOG.md
-    # As of writing this the latest version is `v0.0.7`
-    git checkout tags/v0.0.7
+    # As of writing this the latest version is `v0.0.10`
+    git checkout tags/v0.0.10
     ```
 
 3.  Install it to its global location:

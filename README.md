@@ -9,10 +9,10 @@ The Open OnDemand Project is an open-source software project, based on the Ohio 
   * [Generate Apache Config for Open OnDemand Portal](#generate-apache-config-for-open-ondemand-portal)
   * [Install Open OnDemand Proxy Module for Apache](#install-open-ondemand-proxy-module-for-apache)
   * [Install the PUN Utility](#install-the-pun-utility)
-  * [[Authentication] Install User Mapping Script](#authentication-install-user-mapping-script)
-  * [[Authentication] Deploy the Discovery Page](#authentication-deploy-the-discovery-page)
-  * [[Authentication] Deploy the Registration Page](#authentication-deploy-the-registration-page)
-  * [[Authentication] Deploy Mapping Helper Scripts](#authentication-deploy-mapping-helper-scripts)
+  * [Install User Mapping Script](#install-user-mapping-script)
+  * [[Optional] Deploy the Discovery Page](#optional-deploy-the-discovery-page)
+  * [[Optional] Deploy the Registration Page](#optional-deploy-the-registration-page)
+  * [[Optional] Deploy Mapping Helper Scripts](#optional-deploy-mapping-helper-scripts)
 * [Authentication Strategy](#authentication-strategy)
 * [App Deployment Strategy](#app-deployment-strategy)
   * [Local Directory Structure](#local-directory-structure)
@@ -215,9 +215,9 @@ The PUNs are manipulated and maintained by the [nginx_stage](https://github.com/
     apache ALL=(ALL) NOPASSWD: /opt/ood/nginx_stage/sbin/nginx_stage
     ```
 
-### [Authentication] Install User Mapping Script
+### Install User Mapping Script
 
-If you are using the OOD recommended authentication procedure you will need to map the Apache authenticated user to the local system user. This is done with the simple tool: [ood_auth_map](https://github.com/OSC/ood_auth_map).
+You will need to map the Apache authenticated user to the local system user. This is done with the simple tool: [ood_auth_map](https://github.com/OSC/ood_auth_map).
 
 1.  We clone the `ood_auth_map` repo to the local disk:
 
@@ -241,9 +241,9 @@ If you are using the OOD recommended authentication procedure you will need to m
     # => /opt/ood/ood_auth_map
     ```
 
-The principle behind this script is that you call it with a URL encoded `REMOTE_USER` user name as the only argument, and it will return the mapping to the local system user name if it exists. This requires the availability of the `/etc/grid-security/grid-mapfile` ([more information](http://toolkit.globus.org/toolkit/docs/2.4/gsi/grid-mapfile_v11.html)).
+The principle behind this script is that you call it with a URL encoded `REMOTE_USER` user name as the only argument, and it will return the mapping to the local system user name if it exists.
 
-### [Authentication] Deploy the Discovery Page
+### [Optional] Deploy the Discovery Page
 
 Before a user is authenticated, the user is presented with a discovery page where he/she can choose the OpenID Connect Provider. For the [ood_auth_discovery](https://github.com/OSC/ood_auth_discovery) repo it is a branded page with a link to CILogon.
 
@@ -263,7 +263,7 @@ Before a user is authenticated, the user is presented with a discovery page wher
     sudo cp -r ood_auth_discovery /var/www/ood/discover
     ```
 
-### [Authentication] Deploy the Registration Page
+### [Optional] Deploy the Registration Page
 
 After a user is authenticated and it is determined that no mapping exists to a local system user, they are redirected to the [ood_auth_registration](https://github.com/OSC/ood_auth_registration) branded page. Here the user is required to enter their local system credentials and the mapping is generated.
 
@@ -299,7 +299,7 @@ After a user is authenticated and it is determined that no mapping exists to a l
                                      /usr/local/bin/list-user-dns.real
     ```
 
-### [Authentication] Deploy Mapping Helper Scripts
+### [Optional] Deploy Mapping Helper Scripts
 
 **FIXME**
 

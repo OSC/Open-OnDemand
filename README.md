@@ -434,8 +434,8 @@ Available OSC Portals:
 
 | `<PORTAL>` | `<HOST>` |
 | ---------- | -------- |
-| `ondemand` | `websvcs08` |
-| `awesim`   | `websvcs??` |
+| `ondemand` | `web02.hpc.osc.edu` |
+| `awesim`   | `web04.hpc.osc.edu` |
 
 #### Add/Update System Apps (requires root)
 
@@ -445,7 +445,7 @@ The system apps are maintained by mirroring the following directory:
 /users/PZS0645/wiag/ood_portals/<PORTAL>/sys
 ```
 
-The command to mirror this directory (**performed** on `websvcsXX`) is:
+The command to mirror this directory (**performed** on `webXX`) is:
 
 ```sh
 # Mirror the deployment directory with the staged directory
@@ -461,7 +461,7 @@ Each `<USER>` directory on the local disk will be given an appropriate permissio
 | `ondemand` | `<USER>`'s primary group |
 | `awesim`   | `awesim`  |
 
-To register a developer with username `<USER>` and groupname `<GROUP>` (**performed** on `websvcsXX`):
+To register a developer with username `<USER>` and groupname `<GROUP>` (**performed** on `webXX`):
 
 ```sh
 # Create the user's app sharing directory
@@ -473,9 +473,10 @@ sudo chmod 750 /var/www/ood/apps/usr/<USER>
 sudo chgrp <GROUP> /var/www/ood/apps/usr/<USER>
 
 # Create symlink to user's shared apps location in their homedir for given portal
-# NB: May need to create the directory for the user in their home directory
-sudo -u <USER> mkdir -p ~<USER>/<PORTAL>/share
 sudo ln -s ~<USER>/<PORTAL>/share /var/www/ood/apps/usr/<USER>/gateway
+
+# Optional: May need to create the directory for the user in their home directory
+sudo -u <USER> mkdir -p ~<USER>/<PORTAL>/share
 ```
 
 Now the user can update/maintain his or her own apps within their home directory:
@@ -501,7 +502,7 @@ The public assets are maintained by mirroring the following directory:
 /users/PZS0645/wiag/ood_portals/<PORTAL>/public
 ```
 
-The command to mirror this directory (**performed** on `websvcsXX`) is:
+The command to mirror this directory (**performed** on `webXX`) is:
 
 ```sh
 # Mirror the deployment directory with the staged directory
@@ -514,16 +515,16 @@ These are the apps deployed by the system administrator on the local disk that a
 
 ### Dashboard App
 
-https://github.com/OSC/ood-dashboard
+See https://github.com/OSC/ood-dashboard for more information.
 
 ### Shell App
 
-https://github.com/OSC/ood-shell
+See https://github.com/OSC/ood-shell for more information.
 
 ### Files App
 
-https://github.com/OSC/ood-fileexplorer
+See https://github.com/OSC/ood-fileexplorer for more information.
 
 ### File Editor App
 
-https://github.com/OSC/ood-fileeditor
+See https://github.com/OSC/ood-fileeditor for more information.

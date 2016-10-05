@@ -118,11 +118,33 @@ In this section we will generate an Open OnDemand Portal config file used by the
     # => /opt/rh/httpd24/root/etc/httpd/conf.d/ood-portal.conf
     ```
 
-6.  If using recommended OOD authentication, be sure to setup the OpenID Connect Discovery Provider information needed by the `mod_auth_openidc` Apache module:
+6.  Setup authentication modules:
 
-    https://github.com/OSC/ood-portal-generator#cilogon-setup
+    -   If using default authentication setup, be sure to create an `.htpasswd` file that maps to system-level usernames. The default location specified for this file is:
+    
+        ```
+        /opt/rh/httpd24/root/etc/httpd/.htpasswd
+        ```
+        
+        You can generate this file using the `htpasswd` binary as such:
+        
+        ```
+        sudo scl enable httpd24 -- htpasswd -c /opt/rh/httpd24/root/etc/httpd/.htpasswd <username1>
+        # => New password:
+        ```
+        
+        The password doesn't need to correspond to the system-level password used by the user to log into the cluster. To add more accounts you can remove the `-c` option:
+        
+        ```
+        sudo scl enable httpd24 -- htpasswd /opt/rh/httpd24/root/etc/httpd/.htpasswd <username2>
+        # => New password:
+        ```
 
-    For CILogon you will need to register a **new** redirect URI for every host machine you install an OOD Portal on.
+    -   If using recommended OOD authentication, be sure to setup the OpenID Connect Discovery Provider information needed by the `mod_auth_openidc` Apache module:
+
+        https://github.com/OSC/ood-portal-generator#cilogon-setup
+
+        For CILogon you will need to register a **new** redirect URI for every host machine you install an OOD Portal on.
 
 Note: This package references the location of `mod_ood_proxy`, `nginx_stage`, and `osc-user-map`. It is the source of knowledge for the locations of the various OOD infrastructure pieces. Be sure to update these locations if you change the `PREFIX` for any installation of the corresponding package.
 

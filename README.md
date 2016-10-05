@@ -2,10 +2,10 @@
 
 The Open OnDemand Project is an open-source software project, based on the Ohio Supercomputer Center's proven "OSC OnDemand" platform, that enables HPC centers to install and deploy advanced web and graphical interfaces for their users. More information can be found in the paper [http://dx.doi.org/10.1145/2949550.2949644](http://dx.doi.org/10.1145/2949550.2949644).
 
-* [Components](#components)
+* [Section 1: Components](#section-1-components)
   * [Proxy and PUN](#proxy-and-pun)
   * [Authentication and Authorization](#authentication-and-authorization)
-* [Installation Guide](#installation-guide)
+* [Section 2: Installation Guide](#section-2-installation-guide)
   * [Generate Apache Config for Open OnDemand Portal](#generate-apache-config-for-open-ondemand-portal)
   * [Install Open OnDemand Proxy Module for Apache](#install-open-ondemand-proxy-module-for-apache)
   * [Install the PUN Utility](#install-the-pun-utility)
@@ -13,7 +13,7 @@ The Open OnDemand Project is an open-source software project, based on the Ohio 
   * [[Optional] Deploy the Discovery Page](#optional-deploy-the-discovery-page)
   * [[Optional] Deploy the Registration Page](#optional-deploy-the-registration-page)
   * [[Optional] Deploy Mapping Helper Scripts](#optional-deploy-mapping-helper-scripts)
-* [App Deployment Strategy](#app-deployment-strategy)
+* [Section 3: App Deployment Strategy](#section-3-app-deployment-strategy)
   * [Local Directory Structure](#local-directory-structure)
   * [Mapping URI to Local Directory Structure](#mapping-uri-to-local-directory-structure)
     * [Apps URI](#apps-uri)
@@ -25,14 +25,14 @@ The Open OnDemand Project is an open-source software project, based on the Ohio 
     * [Add/Update User Apps (requires root)](#addupdate-user-apps-requires-root)
     * [Add/Update Dev Apps](#addupdate-dev-apps)
     * [Add/Update Public Assets (requires root)](#addupdate-public-assets-requires-root)
-* [System Apps](#system-apps)
+* [Section 4: System Apps](#section-4-system-apps)
     * [Dashboard App](#dashboard-app)
     * [Shell App](#shell-app)
     * [Files App](#files-app)
     * [File Editor App](#file-editor-app)
 * [Appendix A: Authentication Strategy](#appendix-a-authentication-strategy)
 
-## Components
+## Section 1: Components
 
 Details of the components that make up the Open OnDemand **infrastructure**.
 
@@ -61,7 +61,7 @@ After the user authenticates with their OpenID Connect Provider authorization is
 | [ood_auth_discovery](https://github.com/OSC/ood_auth_discovery) | Open ID Connect Discovery page for OSC OnDemand. |
 | [ood_auth_registration](https://github.com/OSC/ood_auth_registration) | OSC OnDemand Open ID Connect registration page. |
 
-## Installation Guide
+## Section 2: Installation Guide
 
 **Work in Progress**
 
@@ -304,7 +304,7 @@ After a user is authenticated and it is determined that no mapping exists to a l
 
 [ood_auth_mapdn](https://github.com/OSC/ood_auth_mapdn)
 
-## App Deployment Strategy
+## Section 3: App Deployment Strategy
 
 This is the strategy currently employed at the OSC OnDemand and OSC AweSim portals for deploying apps. This is in no way a requirement, and system administrators are encouraged to explore different options.
 
@@ -480,7 +480,7 @@ The command to mirror this directory (**performed** on `webXX`) is:
 sudo rsync -rlptvu --delete /users/PZS0645/wiag/ood_portals/<PORTAL>/public/ /var/www/ood/public
 ```
 
-## System Apps
+## Section 4: System Apps
 
 These are the apps deployed by the system administrator on the local disk that are accessible by all users.
 

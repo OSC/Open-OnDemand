@@ -3,16 +3,16 @@
 The Open OnDemand Project is an open-source software project, based on the Ohio Supercomputer Center's proven "OSC OnDemand" platform, that enables HPC centers to install and deploy advanced web and graphical interfaces for their users. More information can be found in the paper [http://dx.doi.org/10.1145/2949550.2949644](http://dx.doi.org/10.1145/2949550.2949644).
 
 * [Section 1. Components](#section-1-components)
-  * [1.1 Proxy and PUN](#1-1-proxy-and-pun)
-  * [1.2 Authentication and Authorization](#1-2-authentication-and-authorization)
+  * [1.1 Proxy and PUN](#11-proxy-and-pun)
+  * [1.2 Authentication and Authorization](#12-authentication-and-authorization)
 * [Section 2. Installation Guide](#section-2-installation-guide)
-  * [Generate Apache Config for Open OnDemand Portal](#generate-apache-config-for-open-ondemand-portal)
-  * [Install Open OnDemand Proxy Module for Apache](#install-open-ondemand-proxy-module-for-apache)
-  * [Install the PUN Utility](#install-the-pun-utility)
-  * [Install User Mapping Script](#install-user-mapping-script)
-  * [[Optional] Deploy the Discovery Page](#optional-deploy-the-discovery-page)
-  * [[Optional] Deploy the Registration Page](#optional-deploy-the-registration-page)
-  * [[Optional] Deploy Mapping Helper Scripts](#optional-deploy-mapping-helper-scripts)
+  * [2.1 Generate Apache Config for Open OnDemand Portal](#21-generate-apache-config-for-open-ondemand-portal)
+  * [2.2 Install Open OnDemand Proxy Module for Apache](#22-install-open-ondemand-proxy-module-for-apache)
+  * [2.3 Install the PUN Utility](#23-install-the-pun-utility)
+  * [2.4 Install User Mapping Script](#24-install-user-mapping-script)
+  * [2.5 [Optional] Deploy the Discovery Page](#25-optional-deploy-the-discovery-page)
+  * [2.6 [Optional] Deploy the Registration Page](#26-optional-deploy-the-registration-page)
+  * [2.7 [Optional] Deploy Mapping Helper Scripts](#27-optional-deploy-mapping-helper-scripts)
 * [Section 3. App Deployment Strategy](#section-3-app-deployment-strategy)
   * [Local Directory Structure](#local-directory-structure)
   * [Mapping URI to Local Directory Structure](#mapping-uri-to-local-directory-structure)
@@ -67,7 +67,7 @@ After the user authenticates with their OpenID Connect Provider authorization is
 
 **Assumes you are using Software Collections**
 
-### Generate Apache Config for Open OnDemand Portal
+### 2.1 Generate Apache Config for Open OnDemand Portal
 
 In this section we will generate an Open OnDemand Portal config file used by the Apache server. This can be done manually or using the [ood-portal-generator](https://github.com/OSC/ood-portal-generator).
 
@@ -147,7 +147,7 @@ In this section we will generate an Open OnDemand Portal config file used by the
 
 Note: This package references the location of `mod_ood_proxy`, `nginx_stage`, and `ood_auth_map`. It is the source of knowledge for the locations of the various OOD infrastructure pieces. Be sure to update these locations if you change the `PREFIX` for any installation of the corresponding package.
 
-### Install Open OnDemand Proxy Module for Apache
+### 2.2 Install Open OnDemand Proxy Module for Apache
 
 An Apache module written in Lua is the primary component for the proxy logic. It is given by the [mod_ood_proxy](https://github.com/OSC/mod_ood_proxy) project.
 
@@ -173,7 +173,7 @@ An Apache module written in Lua is the primary component for the proxy logic. It
     # => /opt/ood/mod_ood_proxy
     ```
 
-### Install the PUN Utility
+### 2.3 Install the PUN Utility
 
 The PUNs are manipulated and maintained by the [nginx_stage](https://github.com/OSC/nginx_stage) utility. This tool is meant to by run by `root` or a user with `sudoers` privileges.
 
@@ -214,7 +214,7 @@ The PUNs are manipulated and maintained by the [nginx_stage](https://github.com/
     apache ALL=(ALL) NOPASSWD: /opt/ood/nginx_stage/sbin/nginx_stage
     ```
 
-### Install User Mapping Script
+### 2.4 Install User Mapping Script
 
 You will need to map the Apache authenticated user to the local system user. This is done with the simple tool: [ood_auth_map](https://github.com/OSC/ood_auth_map).
 
@@ -242,7 +242,7 @@ You will need to map the Apache authenticated user to the local system user. Thi
 
 The principle behind this script is that you call it with a URL encoded `REMOTE_USER` user name as the only argument, and it will return the mapping to the local system user name if it exists.
 
-### [Optional] Deploy the Discovery Page
+### 2.5 [Optional] Deploy the Discovery Page
 
 Before a user is authenticated, the user is presented with a discovery page where he/she can choose the OpenID Connect Provider. For the [ood_auth_discovery](https://github.com/OSC/ood_auth_discovery) repo it is a branded page with a link to CILogon.
 
@@ -262,7 +262,7 @@ Before a user is authenticated, the user is presented with a discovery page wher
     sudo cp -r ood_auth_discovery /var/www/ood/discover
     ```
 
-### [Optional] Deploy the Registration Page
+### 2.6 [Optional] Deploy the Registration Page
 
 After a user is authenticated and it is determined that no mapping exists to a local system user, they are redirected to the [ood_auth_registration](https://github.com/OSC/ood_auth_registration) branded page. Here the user is required to enter their local system credentials and the mapping is generated.
 
@@ -298,7 +298,7 @@ After a user is authenticated and it is determined that no mapping exists to a l
                                      /usr/local/bin/list-user-dns.real
     ```
 
-### [Optional] Deploy Mapping Helper Scripts
+### 2.7 [Optional] Deploy Mapping Helper Scripts
 
 **FIXME**
 

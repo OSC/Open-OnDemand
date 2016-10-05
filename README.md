@@ -20,16 +20,16 @@ The Open OnDemand Project is an open-source software project, based on the Ohio 
     * [3.2.2 - Discover URI](#322---discover-uri)
     * [3.2.3 - Public URI](#323---public-uri)
     * [3.2.4 - Register URI](#324---register-uri)
-  * [OSC Portals](#osc-portals)
-    * [Add/Update System Apps (requires root)](#addupdate-system-apps-requires-root)
-    * [Add/Update User Apps (requires root)](#addupdate-user-apps-requires-root)
-    * [Add/Update Dev Apps](#addupdate-dev-apps)
-    * [Add/Update Public Assets (requires root)](#addupdate-public-assets-requires-root)
+  * [3.3 - OSC Portals](#33---osc-portals)
+    * [3.3.1 - Add/Update System Apps (requires root)](#331---addupdate-system-apps-requires-root)
+    * [3.3.2 - Add/Update User Apps (requires root)](#332---addupdate-user-apps-requires-root)
+    * [3.3.3 - Add/Update Dev Apps](#333---addupdate-dev-apps)
+    * [3.3.4 - Add/Update Public Assets (requires root)](#334---addupdate-public-assets-requires-root)
 * [Section 4. System Apps](#section-4-system-apps)
-    * [Dashboard App](#dashboard-app)
-    * [Shell App](#shell-app)
-    * [Files App](#files-app)
-    * [File Editor App](#file-editor-app)
+    * [4.1 - Dashboard App](#41---dashboard-app)
+    * [4.2 - Shell App](#42---shell-app)
+    * [4.3 - Files App](#43---files-app)
+    * [4.4 - File Editor App](#44---file-editor-app)
 * [Appendix A. Authentication Strategy](#appendix-a-authentication-strategy)
 
 ## Section 1. Components
@@ -399,7 +399,7 @@ To access any resource underneath the `/register` URI you **MUST**:
 https://<PORTAL>.osc.edu/register  =>  /var/www/ood/register/index.php
 ```
 
-### OSC Portals
+### 3.3 - OSC Portals
 
 Available OSC Portals:
 
@@ -408,7 +408,7 @@ Available OSC Portals:
 | `ondemand` | `web02.hpc.osc.edu` |
 | `awesim`   | `web04.hpc.osc.edu` |
 
-#### Add/Update System Apps (requires root)
+#### 3.3.1 - Add/Update System Apps (requires root)
 
 The system apps are maintained by mirroring the following directory:
 
@@ -423,7 +423,7 @@ The command to mirror this directory (**performed** on `webXX`) is:
 sudo rsync -rlptvu --delete /users/PZS0645/wiag/ood_portals/<PORTAL>/sys/ /var/www/ood/apps/sys
 ```
 
-#### Add/Update User Apps (requires root)
+#### 3.3.2 - Add/Update User Apps (requires root)
 
 Each `<USER>` directory on the local disk will be given an appropriate permission such that only members of the `<GROUP>` can access the user's shared apps. This is an important security condition so that users don't access malicious developers' apps.
 
@@ -456,7 +456,7 @@ Now the user can update/maintain his or her own apps within their home directory
 ~/<PORTAL>/share/*
 ```
 
-#### Add/Update Dev Apps
+#### 3.3.3 - Add/Update Dev Apps
 
 The user will need to create the required dev directory in their home directory in order to develop apps on the given `<PORTAL>`:
 
@@ -465,7 +465,7 @@ The user will need to create the required dev directory in their home directory 
 mkdir -p ~/<PORTAL>/dev
 ```
 
-#### Add/Update Public Assets (requires root)
+#### 3.3.4 - Add/Update Public Assets (requires root)
 
 The public assets are maintained by mirroring the following directory:
 
@@ -484,19 +484,19 @@ sudo rsync -rlptvu --delete /users/PZS0645/wiag/ood_portals/<PORTAL>/public/ /va
 
 These are the apps deployed by the system administrator on the local disk that are accessible by all users.
 
-### Dashboard App
+### 4.1 - Dashboard App
 
 See https://github.com/OSC/ood-dashboard for more information.
 
-### Shell App
+### 4.2 - Shell App
 
 See https://github.com/OSC/ood-shell for more information.
 
-### Files App
+### 4.3 - Files App
 
 See https://github.com/OSC/ood-fileexplorer for more information.
 
-### File Editor App
+### 4.4 - File Editor App
 
 See https://github.com/OSC/ood-fileeditor for more information.
 

@@ -13,7 +13,6 @@ The Open OnDemand Project is an open-source software project, based on the Ohio 
   * [[Optional] Deploy the Discovery Page](#optional-deploy-the-discovery-page)
   * [[Optional] Deploy the Registration Page](#optional-deploy-the-registration-page)
   * [[Optional] Deploy Mapping Helper Scripts](#optional-deploy-mapping-helper-scripts)
-* [Authentication Strategy](#authentication-strategy)
 * [App Deployment Strategy](#app-deployment-strategy)
   * [Local Directory Structure](#local-directory-structure)
   * [Mapping URI to Local Directory Structure](#mapping-uri-to-local-directory-structure)
@@ -31,6 +30,7 @@ The Open OnDemand Project is an open-source software project, based on the Ohio 
     * [Shell App](#shell-app)
     * [Files App](#files-app)
     * [File Editor App](#file-editor-app)
+* [Appendix A: Authentication Strategy](#appendix-a-authentication-strategy)
 
 ## Components
 
@@ -304,34 +304,6 @@ After a user is authenticated and it is determined that no mapping exists to a l
 
 [ood_auth_mapdn](https://github.com/OSC/ood_auth_mapdn)
 
-## Authentication Strategy
-
-The current strategy employed by the OSC OnDemand portal is outlined in detail
-in the figure below.
-
-[![Authentication Strategy](https://www.websequencediagrams.com/cgi-bin/cdraw?lz=dGl0bGUgT1NDIE9uRGVtYW5kIEF1dGhlbnRpY2F0aW9uIERpYWdyYW0KCnBhcnRpY2lwYW50IEFsaWNlAAUNV2ViTm9kAAYOQ0lMb2dvbgAtDUlkUAoKADoFLT4rAC4HOiBHRVQgaHR0cHM6Ly93ZWJub2RlLzxhcHA-CgBRBy0-ACMJY2hlY2sgZm9yIHZhbGlkIG9wZW5pZGMgc2Vzc2lvblxuYW5kIGZhaWwgYmVjYXVzZSBub3QgbG9nZ2VkIGluCmFjdGl2YXRlAIEqCWRlAAIRAG4ILT4tAIFmBTogWzMwMl0gUmVkaXJlY3QAgRwRZGlzY292ZXIAgTUnACYJAFYTMjAwXSBIZWxwZnVsIHBhZ2Ugd2l0aCBsaW5rIHRvIGxvZ2luAA0GAIJYCACCKiZvaWRjLz9pc3M9Li4uAIFPEypTZXQAgkMKdGF0ZSBjb29raWUqXG4AgWcXY2lsb2dvbi5vcmcvYXV0aG9yaXplPy4uLgCDWQoAg30HAINVDgAeGgCELAcAgX8RU2VsZWN0IGFuIElkZW50aXR5IFByb3ZpZACCZwwAYwlQT1MATh8gKGJvZHk6IElkUCBpbmZvKQBmFACDXRZpZHAvAIFWDklkUDogTACDEwUrIFBlcm1pdCAAggcIAIZABQpJZFAtLT4AhEUGCm5vdGUgbGVmdCBvZiAANwVtdWx0aXBsZSBHRVQvUE9TVFxucmVxdWVzdHMgZ28gb24gaW4gaGVyZQCGMghJZFA6AE4HAIUCHwCDFwxnZXR1c2VyAIEvDwCDBhwAJQ4AgXopAIQDFQCDYDQAgmwqAIVYDgCEdg0AhXMjAIYGDACIXwtyZWF0ZSBhAIhTCACIcAUAiXUGAIgPNipSZW1vdmUAhk4YAIZ0DgBtBwCGZCAAiiEOAIovLCAAiy0IAIotMHNldCBSRU1PVEVfVVNFUgCKJS0Aiz4KbWFwADoMIHRvAItLBlxuT1NDIHVzZXIsIHVzaW5nIGdyaWQtbWFwZmlsAIJUJm9wdCBubyBtYXBwaW5nIGZvdW5kAIFkCwCLLSlyZWdpc3Rlcj9yZWRpcgCKMwUgAI12BgCNMQwAESUAgiRHICAAjS4RICAAjS4TAIFYFQCMVQVPU0MAiSUHZm9ybQCBPBQAijENAIF7EACKMQh1c2VybmFtZS9wYXNzd29yZCkAaXwAkBQKaWYAkBAHAIEQETpcbmFkZACEZg0AkDwJAIRqCiBpbgCEYg4AgjU9AIcPJACEPxMAhlFjAIIoPACHAzcAhRQoZW5kAJF_GVJldHVybiB0aGUgd2ViIGFwcAo&s=qsd)](https://www.websequencediagrams.com/?lz=dGl0bGUgT1NDIE9uRGVtYW5kIEF1dGhlbnRpY2F0aW9uIERpYWdyYW0KCnBhcnRpY2lwYW50IEFsaWNlAAUNV2ViTm9kAAYOQ0lMb2dvbgAtDUlkUAoKADoFLT4rAC4HOiBHRVQgaHR0cHM6Ly93ZWJub2RlLzxhcHA-CgBRBy0-ACMJY2hlY2sgZm9yIHZhbGlkIG9wZW5pZGMgc2Vzc2lvblxuYW5kIGZhaWwgYmVjYXVzZSBub3QgbG9nZ2VkIGluCmFjdGl2YXRlAIEqCWRlAAIRAG4ILT4tAIFmBTogWzMwMl0gUmVkaXJlY3QAgRwRZGlzY292ZXIAgTUnACYJAFYTMjAwXSBIZWxwZnVsIHBhZ2Ugd2l0aCBsaW5rIHRvIGxvZ2luAA0GAIJYCACCKiZvaWRjLz9pc3M9Li4uAIFPEypTZXQAgkMKdGF0ZSBjb29raWUqXG4AgWcXY2lsb2dvbi5vcmcvYXV0aG9yaXplPy4uLgCDWQoAg30HAINVDgAeGgCELAcAgX8RU2VsZWN0IGFuIElkZW50aXR5IFByb3ZpZACCZwwAYwlQT1MATh8gKGJvZHk6IElkUCBpbmZvKQBmFACDXRZpZHAvAIFWDklkUDogTACDEwUrIFBlcm1pdCAAggcIAIZABQpJZFAtLT4AhEUGCm5vdGUgbGVmdCBvZiAANwVtdWx0aXBsZSBHRVQvUE9TVFxucmVxdWVzdHMgZ28gb24gaW4gaGVyZQCGMghJZFA6AE4HAIUCHwCDFwxnZXR1c2VyAIEvDwCDBhwAJQ4AgXopAIQDFQCDYDQAgmwqAIVYDgCEdg0AhXMjAIYGDACIXwtyZWF0ZSBhAIhTCACIcAUAiXUGAIgPNipSZW1vdmUAhk4YAIZ0DgBtBwCGZCAAiiEOAIovLCAAiy0IAIotMHNldCBSRU1PVEVfVVNFUgCKJS0Aiz4KbWFwADoMIHRvAItLBlxuT1NDIHVzZXIsIHVzaW5nIGdyaWQtbWFwZmlsAIJUJm9wdCBubyBtYXBwaW5nIGZvdW5kAIFkCwCLLSlyZWdpc3Rlcj9yZWRpcgCKMwUgAI12BgCNMQwAESUAgiRHICAAjS4RICAAjS4TAIFYFQCMVQVPU0MAiSUHZm9ybQCBPBQAijENAIF7EACKMQh1c2VybmFtZS9wYXNzd29yZCkAaXwAkBQKaWYAkBAHAIEQETpcbmFkZACEZg0AkDwJAIRqCiBpbgCEYg4AgjU9AIcPJACEPxMAhlFjAIIoPACHAzcAhRQoZW5kAJF_GVJldHVybiB0aGUgd2ViIGFwcAo&s=qsd)
-
-The workflow for an unauthenticated user accessing a protected resource behind
-the Apache proxy can be briefly described as:
-
-1.  The Apache proxy redirects the user to the
-    [ood_discovery](https://github.com/OSC/ood_auth_discovery/) page
-2.  The user then clicks the link to the CILogon authentication portal
-3.  After choosing their authentication provider and successfully
-    authenticating
-4.  If a mapping exists for the authenticated user to a local system user:
-
-    1. User is given access to the protected resource
-
-    If the mapping doesn't exist:
-
-    1. The user is redirected to the
-       [ood_registration](https://github.com/OSC/ood_auth_registration/) page
-    2. The user registers their authenticated user name to a local system user
-       name by authenticating against a local LDAP server
-    3. The mapping is generated if successfully authenticated
-    4. The user is again redirected to the protected resource
-
 ## App Deployment Strategy
 
 This is the strategy currently employed at the OSC OnDemand and OSC AweSim portals for deploying apps. This is in no way a requirement, and system administrators are encouraged to explore different options.
@@ -527,3 +499,31 @@ See https://github.com/OSC/ood-fileexplorer for more information.
 ### File Editor App
 
 See https://github.com/OSC/ood-fileeditor for more information.
+
+## Appendix A: Authentication Strategy
+
+The current strategy employed by the OSC OnDemand portal is outlined in detail
+in the figure below.
+
+[![Authentication Strategy](https://www.websequencediagrams.com/cgi-bin/cdraw?lz=dGl0bGUgT1NDIE9uRGVtYW5kIEF1dGhlbnRpY2F0aW9uIERpYWdyYW0KCnBhcnRpY2lwYW50IEFsaWNlAAUNV2ViTm9kAAYOQ0lMb2dvbgAtDUlkUAoKADoFLT4rAC4HOiBHRVQgaHR0cHM6Ly93ZWJub2RlLzxhcHA-CgBRBy0-ACMJY2hlY2sgZm9yIHZhbGlkIG9wZW5pZGMgc2Vzc2lvblxuYW5kIGZhaWwgYmVjYXVzZSBub3QgbG9nZ2VkIGluCmFjdGl2YXRlAIEqCWRlAAIRAG4ILT4tAIFmBTogWzMwMl0gUmVkaXJlY3QAgRwRZGlzY292ZXIAgTUnACYJAFYTMjAwXSBIZWxwZnVsIHBhZ2Ugd2l0aCBsaW5rIHRvIGxvZ2luAA0GAIJYCACCKiZvaWRjLz9pc3M9Li4uAIFPEypTZXQAgkMKdGF0ZSBjb29raWUqXG4AgWcXY2lsb2dvbi5vcmcvYXV0aG9yaXplPy4uLgCDWQoAg30HAINVDgAeGgCELAcAgX8RU2VsZWN0IGFuIElkZW50aXR5IFByb3ZpZACCZwwAYwlQT1MATh8gKGJvZHk6IElkUCBpbmZvKQBmFACDXRZpZHAvAIFWDklkUDogTACDEwUrIFBlcm1pdCAAggcIAIZABQpJZFAtLT4AhEUGCm5vdGUgbGVmdCBvZiAANwVtdWx0aXBsZSBHRVQvUE9TVFxucmVxdWVzdHMgZ28gb24gaW4gaGVyZQCGMghJZFA6AE4HAIUCHwCDFwxnZXR1c2VyAIEvDwCDBhwAJQ4AgXopAIQDFQCDYDQAgmwqAIVYDgCEdg0AhXMjAIYGDACIXwtyZWF0ZSBhAIhTCACIcAUAiXUGAIgPNipSZW1vdmUAhk4YAIZ0DgBtBwCGZCAAiiEOAIovLCAAiy0IAIotMHNldCBSRU1PVEVfVVNFUgCKJS0Aiz4KbWFwADoMIHRvAItLBlxuT1NDIHVzZXIsIHVzaW5nIGdyaWQtbWFwZmlsAIJUJm9wdCBubyBtYXBwaW5nIGZvdW5kAIFkCwCLLSlyZWdpc3Rlcj9yZWRpcgCKMwUgAI12BgCNMQwAESUAgiRHICAAjS4RICAAjS4TAIFYFQCMVQVPU0MAiSUHZm9ybQCBPBQAijENAIF7EACKMQh1c2VybmFtZS9wYXNzd29yZCkAaXwAkBQKaWYAkBAHAIEQETpcbmFkZACEZg0AkDwJAIRqCiBpbgCEYg4AgjU9AIcPJACEPxMAhlFjAIIoPACHAzcAhRQoZW5kAJF_GVJldHVybiB0aGUgd2ViIGFwcAo&s=qsd)](https://www.websequencediagrams.com/?lz=dGl0bGUgT1NDIE9uRGVtYW5kIEF1dGhlbnRpY2F0aW9uIERpYWdyYW0KCnBhcnRpY2lwYW50IEFsaWNlAAUNV2ViTm9kAAYOQ0lMb2dvbgAtDUlkUAoKADoFLT4rAC4HOiBHRVQgaHR0cHM6Ly93ZWJub2RlLzxhcHA-CgBRBy0-ACMJY2hlY2sgZm9yIHZhbGlkIG9wZW5pZGMgc2Vzc2lvblxuYW5kIGZhaWwgYmVjYXVzZSBub3QgbG9nZ2VkIGluCmFjdGl2YXRlAIEqCWRlAAIRAG4ILT4tAIFmBTogWzMwMl0gUmVkaXJlY3QAgRwRZGlzY292ZXIAgTUnACYJAFYTMjAwXSBIZWxwZnVsIHBhZ2Ugd2l0aCBsaW5rIHRvIGxvZ2luAA0GAIJYCACCKiZvaWRjLz9pc3M9Li4uAIFPEypTZXQAgkMKdGF0ZSBjb29raWUqXG4AgWcXY2lsb2dvbi5vcmcvYXV0aG9yaXplPy4uLgCDWQoAg30HAINVDgAeGgCELAcAgX8RU2VsZWN0IGFuIElkZW50aXR5IFByb3ZpZACCZwwAYwlQT1MATh8gKGJvZHk6IElkUCBpbmZvKQBmFACDXRZpZHAvAIFWDklkUDogTACDEwUrIFBlcm1pdCAAggcIAIZABQpJZFAtLT4AhEUGCm5vdGUgbGVmdCBvZiAANwVtdWx0aXBsZSBHRVQvUE9TVFxucmVxdWVzdHMgZ28gb24gaW4gaGVyZQCGMghJZFA6AE4HAIUCHwCDFwxnZXR1c2VyAIEvDwCDBhwAJQ4AgXopAIQDFQCDYDQAgmwqAIVYDgCEdg0AhXMjAIYGDACIXwtyZWF0ZSBhAIhTCACIcAUAiXUGAIgPNipSZW1vdmUAhk4YAIZ0DgBtBwCGZCAAiiEOAIovLCAAiy0IAIotMHNldCBSRU1PVEVfVVNFUgCKJS0Aiz4KbWFwADoMIHRvAItLBlxuT1NDIHVzZXIsIHVzaW5nIGdyaWQtbWFwZmlsAIJUJm9wdCBubyBtYXBwaW5nIGZvdW5kAIFkCwCLLSlyZWdpc3Rlcj9yZWRpcgCKMwUgAI12BgCNMQwAESUAgiRHICAAjS4RICAAjS4TAIFYFQCMVQVPU0MAiSUHZm9ybQCBPBQAijENAIF7EACKMQh1c2VybmFtZS9wYXNzd29yZCkAaXwAkBQKaWYAkBAHAIEQETpcbmFkZACEZg0AkDwJAIRqCiBpbgCEYg4AgjU9AIcPJACEPxMAhlFjAIIoPACHAzcAhRQoZW5kAJF_GVJldHVybiB0aGUgd2ViIGFwcAo&s=qsd)
+
+The workflow for an unauthenticated user accessing a protected resource behind
+the Apache proxy can be briefly described as:
+
+1.  The Apache proxy redirects the user to the
+    [ood_discovery](https://github.com/OSC/ood_auth_discovery/) page
+2.  The user then clicks the link to the CILogon authentication portal
+3.  After choosing their authentication provider and successfully
+    authenticating
+4.  If a mapping exists for the authenticated user to a local system user:
+
+    1. User is given access to the protected resource
+
+    If the mapping doesn't exist:
+
+    1. The user is redirected to the
+       [ood_registration](https://github.com/OSC/ood_auth_registration/) page
+    2. The user registers their authenticated user name to a local system user
+       name by authenticating against a local LDAP server
+    3. The mapping is generated if successfully authenticated
+    4. The user is again redirected to the protected resource

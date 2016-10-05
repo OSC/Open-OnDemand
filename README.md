@@ -128,14 +128,14 @@ In this section we will generate an Open OnDemand Portal config file used by the
         
         You can generate this file using the `htpasswd` binary as such:
         
-        ```
+        ```sh
         sudo scl enable httpd24 -- htpasswd -c /opt/rh/httpd24/root/etc/httpd/.htpasswd <username1>
         # => New password:
         ```
         
         The password doesn't need to correspond to the system-level password used by the user to log into the cluster. To add more accounts you can remove the `-c` option:
         
-        ```
+        ```sh
         sudo scl enable httpd24 -- htpasswd /opt/rh/httpd24/root/etc/httpd/.htpasswd <username2>
         # => New password:
         ```

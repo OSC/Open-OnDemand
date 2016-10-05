@@ -82,8 +82,8 @@ In this section we will generate an Open OnDemand Portal config file used by the
 
     ```sh
     # A list of versions & details can be viewed in the CHANGELOG.md
-    # As of writing this the latest version is `v0.0.1`
-    git checkout tags/v0.0.1
+    # As of writing this the latest version is `v0.0.5`
+    git checkout tags/v0.0.5
     ```
 
 3.  Now we build the Apache config using environment variables to modify any of the default settings:
@@ -141,8 +141,8 @@ An Apache module written in Lua is the primary component for the proxy logic. It
 
     ```sh
     # A list of versions & details can be viewed in the CHANGELOG.md
-    # As of writing this the latest version is `v0.0.2`
-    git checkout tags/v0.0.2
+    # As of writing this the latest version is `v0.0.3`
+    git checkout tags/v0.0.3
     ```
 
 3.  Install it to its global location:
@@ -167,8 +167,8 @@ The PUNs are manipulated and maintained by the [nginx_stage](https://github.com/
 
     ```sh
     # A list of versions & details can be viewed in the CHANGELOG.md
-    # As of writing this the latest version is `v0.0.10`
-    git checkout tags/v0.0.10
+    # As of writing this the latest version is `v0.0.11`
+    git checkout tags/v0.0.11
     ```
 
 3.  Install it to its global location:
@@ -208,8 +208,8 @@ If you are using the OOD recommended authentication procedure you will need to m
 
     ```sh
     # A list of versions & details can be viewed in the CHANGELOG.md
-    # As of writing this the latest version is `v0.0.1`
-    git checkout tags/v0.0.1
+    # As of writing this the latest version is `v0.0.3`
+    git checkout tags/v0.0.3
     ```
 
 3.  Install it to its global location:
@@ -235,6 +235,7 @@ Before a user is authenticated, the user is presented with a discovery page wher
 
     ```sh
     # create the /var/www/ood directory if it doesn't already exist
+    sudo mkdir -p /var/www/ood
 
     # copy this repo to its default location
     sudo cp -r ood_auth_discovery /var/www/ood/discover
@@ -254,6 +255,7 @@ After a user is authenticated and it is determined that no mapping exists to a l
 
     ```sh
     # create the /var/www/ood directory if it doesn't already exist
+    sudo mkdir -p /var/www/ood
 
     # copy this repo to its default location
     sudo cp -r ood_auth_registration /var/www/ood/register

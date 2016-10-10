@@ -201,9 +201,11 @@ The PUNs are manipulated and maintained by the [nginx_stage](https://github.com/
 
 4.  Modify `/opt/ood/nginx_stage/config/nginx_stage.yml` and `/opt/ood/nginx_stage/bin/ood_ruby`.
 
-    In particular, opt into metrics reporting in `nginx_stage.yml` and use Software Collections in `ood_ruby`.
+    In particular, **opt into** metrics reporting in `nginx_stage.yml` and use Software Collections in `ood_ruby`.
 
     Note: These files will not be overwritten the next time you update `nginx_stage`.
+    
+    **Pro tip**: If you run an older Linux OS that creates user accounts starting at id `500`, then you will need to modify the configuration option `min_uid: 1000` accordingly.
 
 5.  If not already done, give the `apache` user `sudo` privileges to run this tool:
 

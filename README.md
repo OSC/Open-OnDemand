@@ -82,8 +82,8 @@ In this section we will generate an Open OnDemand Portal config file used by the
 
     ```sh
     # A list of versions & details can be viewed in the CHANGELOG.md
-    # As of writing this the latest version is `v0.0.5`
-    git checkout tags/v0.0.5
+    # As of writing this the latest version is `v0.0.6`
+    git checkout tags/v0.0.6
     ```
 
 3.  Now we build the Apache config using environment variables to modify any of the default settings:
@@ -162,8 +162,8 @@ An Apache module written in Lua is the primary component for the proxy logic. It
 
     ```sh
     # A list of versions & details can be viewed in the CHANGELOG.md
-    # As of writing this the latest version is `v0.0.3`
-    git checkout tags/v0.0.3
+    # As of writing this the latest version is `v0.0.4`
+    git checkout tags/v0.0.4
     ```
 
 3.  Install it to its global location:
@@ -188,8 +188,8 @@ The PUNs are manipulated and maintained by the [nginx_stage](https://github.com/
 
     ```sh
     # A list of versions & details can be viewed in the CHANGELOG.md
-    # As of writing this the latest version is `v0.0.11`
-    git checkout tags/v0.0.11
+    # As of writing this the latest version is `v0.0.12`
+    git checkout tags/v0.0.12
     ```
 
 3.  Install it to its global location:

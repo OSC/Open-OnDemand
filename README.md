@@ -17,9 +17,9 @@ The Open OnDemand Project is an open-source software project, based on the Ohio 
   * [3.1 - Local Directory Structure](#31---local-directory-structure)
   * [3.2 - Mapping URI to Local Directory Structure](#32---mapping-uri-to-local-directory-structure)
     * [3.2.1 - Apps URI](#321---apps-uri)
-    * [3.2.2 - Discover URI](#322---discover-uri)
-    * [3.2.3 - Public URI](#323---public-uri)
-    * [3.2.4 - Register URI](#324---register-uri)
+    * [3.2.2 - Public URI](#322---public-uri)
+    * [3.2.3 - [Optional] Discover URI](#323---optional-discover-uri)
+    * [3.2.4 - [Optional] Register URI](#324---optional-register-uri)
   * [3.3 - OSC Portals](#33---osc-portals)
     * [3.3.1 - Add/Update System Apps (requires root)](#331---addupdate-system-apps-requires-root)
     * [3.3.2 - Add/Update User Apps (requires root)](#332---addupdate-user-apps-requires-root)
@@ -372,16 +372,7 @@ https://<PORTAL>.osc.edu/pun/usr/<USER>/<APP>  =>  /var/www/ood/apps/usr/<USER>/
 https://<PORTAL>.osc.edu/pun/dev/<APP>         =>  ~/<PORTAL>/dev/<APP>
 ```
 
-#### 3.2.2 - Discover URI
-
-**Anyone** can access the resources underneath the `/discover` URI.
-
-```sh
-# Accessing the discovery page
-https://<PORTAL>.osc.edu/discover  =>  /var/www/ood/discover/index.php
-```
-
-#### 3.2.3 - Public URI
+#### 3.2.2 - Public URI
 
 **Anyone** can access the resources underneath the `/public` URI.
 
@@ -390,7 +381,16 @@ https://<PORTAL>.osc.edu/discover  =>  /var/www/ood/discover/index.php
 https://<PORTAL>.osc.edu/public/favicon.ico  =>  /var/www/ood/public/favicon.ico
 ```
 
-#### 3.2.4 - Register URI
+#### 3.2.3 - [Optional] Discover URI
+
+**Anyone** can access the resources underneath the `/discover` URI.
+
+```sh
+# Accessing the discovery page
+https://<PORTAL>.osc.edu/discover  =>  /var/www/ood/discover/index.php
+```
+
+#### 3.2.4 - [Optional] Register URI
 
 To access any resource underneath the `/register` URI you **MUST**:
 

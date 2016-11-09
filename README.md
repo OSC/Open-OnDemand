@@ -3,13 +3,12 @@
 The Open OnDemand Project is an open-source software project, based on the Ohio Supercomputer Center's proven "OSC OnDemand" platform, that enables HPC centers to install and deploy advanced web and graphical interfaces for their users. More information can be found in the paper [http://dx.doi.org/10.1145/2949550.2949644](http://dx.doi.org/10.1145/2949550.2949644).
 
 * [Section 1. Components](#section-1-components)
-  * [1.1 - Proxy and PUN](#11---proxy-and-pun)
-  * [1.2 - Authentication and Authorization](#12---authentication-and-authorization)
 * [Section 2. Installation Guide](#section-2-installation-guide)
-  * [2.1 - Generate Apache Config for Open OnDemand Portal](#21---generate-apache-config-for-open-ondemand-portal)
-  * [2.2 - Install Open OnDemand Proxy Module for Apache](#22---install-open-ondemand-proxy-module-for-apache)
-  * [2.3 - Install the PUN Utility](#23---install-the-pun-utility)
-  * [2.4 - Install User Mapping Script](#24---install-user-mapping-script)
+  * [2.1 - Software Requirements](#21---software-requirements)
+  * [2.2 - Generate Apache Config for Open OnDemand Portal](#22---generate-apache-config-for-open-ondemand-portal)
+  * [2.3 - Install Open OnDemand Proxy Module for Apache](#23---install-open-ondemand-proxy-module-for-apache)
+  * [2.4 - Install the PUN Utility](#24---install-the-pun-utility)
+  * [2.5 - Install User Mapping Script](#25---install-user-mapping-script)
 * [Section 3. App Deployment Strategy](#section-3-app-deployment-strategy)
   * [3.1 - Local Directory Structure](#31---local-directory-structure)
   * [3.2 - Mapping URI to Local Directory Structure](#32---mapping-uri-to-local-directory-structure)
@@ -32,11 +31,7 @@ The Open OnDemand Project is an open-source software project, based on the Ohio 
 
 ## Section 1. Components
 
-Details of the components that make up the Open OnDemand **infrastructure**.
-
-### 1.1 - Proxy and PUN
-
-The core of the infrastructure includes a proxy layer that all traffic passes through using the securely encrypted SSL protocol on port 443. The [Apache proxy](https://httpd.apache.org/) parses the URI and dynamically determines where to route the traffic to. In most cases the traffic will be routed to the per-user [NGINX](https://www.nginx.com/) (PUN) web server.
+The components that make up the Open OnDemand **infrastructure** includes a proxy layer that all traffic passes through using the securely encrypted SSL protocol on port 443. The [Apache proxy](https://httpd.apache.org/) parses the URI and dynamically determines where to route the traffic to. In most cases the traffic will be routed to the per-user [NGINX](https://www.nginx.com/) (PUN) web server.
 
 The PUN is described as an NGINX server instance running as a system-level user listening on a [Unix domain socket](https://en.wikipedia.org/wiki/Unix_domain_socket). File and directory permissions are used to restrict access to this Unix domain socket such that only the proxy daemon can communicate with the PUN.
 
@@ -44,28 +39,18 @@ The PUN is described as an NGINX server instance running as a system-level user 
 | --------- | ----------- |
 | [ood-portal-generator](https://github.com/OSC/ood-portal-generator) | Generates an Open OnDemand portal config for an Apache server that defines the proxy interface. |
 | [mod_ood_proxy](https://github.com/OSC/mod_ood_proxy) | An Apache httpd module implementing the Open OnDemand proxy API. |
+| [ood_auth_map](https://github.com/OSC/ood_auth_map) | The user mapping script that maps the authenticated username to the system-level username. |
 | [nginx_stage](https://github.com/OSC/nginx_stage) | Stages and controls the per-user NGINX (PUN) instances. |
-
-### 1.2 - Authentication and Authorization
-
-There is **no required** authentication mechanism built-into Open OnDemand, but we do provide a recommended solution. The recommended solution utilizes the [mod_auth_openidc](https://github.com/pingidentity/mod_auth_openidc) module within the Apache proxy to authenticate users against an [OpenID Connect](http://openid.net/connect/) Provider for federated authentication.
-
-After the user authenticates with their OpenID Connect Provider authorization is granted by mapping the user's authenticated username to a local system username. The Apache proxy handles this by calling a script that handles the user mapping lookup. If the mapping fails, the user can be taken to a registration page where he or she can set up a mapping.
-
-| Component | Description |
-| --------- | ----------- |
-| [ood_auth_mapdn](https://github.com/OSC/ood_auth_mapdn) | Scripts to setup/maintain mappings between Distinguished Names (DNs) to local usernames. |
-| [ood_auth_map](https://github.com/OSC/ood_auth_map) | The user mapping script employed by OSC for OnDemand and AweSim. |
-| [ood_auth_discovery](https://github.com/OSC/ood_auth_discovery) | Open ID Connect Discovery page for OSC OnDemand. |
-| [ood_auth_registration](https://github.com/OSC/ood_auth_registration) | OSC OnDemand Open ID Connect registration page. |
 
 ## Section 2. Installation Guide
 
+### 2.1 - Software Requirements
+
+**Assumes you are using RedHat Software Collections**
+
 **Work in Progress**
 
-**Assumes you are using Software Collections**
-
-### 2.1 - Generate Apache Config for Open OnDemand Portal
+### 2.2 - Generate Apache Config for Open OnDemand Portal
 
 In this section we will generate an Open OnDemand Portal config file used by the Apache server. This can be done manually or using the [ood-portal-generator](https://github.com/OSC/ood-portal-generator).
 
@@ -123,7 +108,7 @@ In this section we will generate an Open OnDemand Portal config file used by the
     # => /opt/rh/httpd24/root/etc/httpd/conf.d/ood-portal.conf
     ```
 
-6. If using default authentication setup (i.e., you didn't modify any of the environment variables attributed to authentication when building the config), be sure to create an `.htpasswd` file that maps to system-level usernames. The default location specified for this file is:
+6. If using default authentication setup (i.e., you didn't modify any of the environment variables attributed to authentication when building the config), be sure to create an `.htpasswd` file that **maps to system-level usernames**. The default location specified for this file is:
     
     ```
     /opt/rh/httpd24/root/etc/httpd/.htpasswd
@@ -145,7 +130,7 @@ In this section we will generate an Open OnDemand Portal config file used by the
 
 Note: This package references the location of `mod_ood_proxy`, `nginx_stage`, and `ood_auth_map`. It is the source of knowledge for the locations of the various OOD infrastructure pieces. Be sure to update these locations if you change the `PREFIX` for any installation of the corresponding package.
 
-### 2.2 - Install Open OnDemand Proxy Module for Apache
+### 2.3 - Install Open OnDemand Proxy Module for Apache
 
 An Apache module written in Lua is the primary component for the proxy logic. It is given by the [mod_ood_proxy](https://github.com/OSC/mod_ood_proxy) project.
 
@@ -160,8 +145,8 @@ An Apache module written in Lua is the primary component for the proxy logic. It
 
     ```sh
     # A list of versions & details can be viewed in the CHANGELOG.md
-    # As of writing this the latest version is `v0.0.4`
-    git checkout tags/v0.0.4
+    # As of writing this the latest version is `v0.0.5`
+    git checkout tags/v0.0.5
     ```
 
 3.  Install it to its global location:
@@ -171,7 +156,7 @@ An Apache module written in Lua is the primary component for the proxy logic. It
     # => /opt/ood/mod_ood_proxy
     ```
 
-### 2.3 - Install the PUN Utility
+### 2.4 - Install the PUN Utility
 
 The PUNs are manipulated and maintained by the [nginx_stage](https://github.com/OSC/nginx_stage) utility. This tool is meant to by run by `root` or a user with `sudoers` privileges.
 
@@ -186,8 +171,8 @@ The PUNs are manipulated and maintained by the [nginx_stage](https://github.com/
 
     ```sh
     # A list of versions & details can be viewed in the CHANGELOG.md
-    # As of writing this the latest version is `v0.0.12`
-    git checkout tags/v0.0.12
+    # As of writing this the latest version is `v0.1.0`
+    git checkout tags/v0.1.0
     ```
 
 3.  Install it to its global location:
@@ -214,7 +199,7 @@ The PUNs are manipulated and maintained by the [nginx_stage](https://github.com/
     apache ALL=(ALL) NOPASSWD: /opt/ood/nginx_stage/sbin/nginx_stage
     ```
 
-### 2.4 - Install User Mapping Script
+### 2.5 - Install User Mapping Script
 
 You will need to map the Apache authenticated user to the local system user. This is done with the simple tool: [ood_auth_map](https://github.com/OSC/ood_auth_map).
 
@@ -284,6 +269,7 @@ Apps are deployed on the local disk of the host serving the Open OnDemand portal
     ├── index.php                                  # -rw-r--r--  root    root
     └── ...                                        # -rw-r--r--  root    root
 ```
+
 ### 3.2 - Mapping URI to Local Directory Structure
 
 #### 3.2.1 - Apps URI

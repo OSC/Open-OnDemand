@@ -10,16 +10,11 @@ The Open OnDemand Project is an open-source software project, based on the Ohio 
   * [2.2 - Install Open OnDemand Proxy Module for Apache](#22---install-open-ondemand-proxy-module-for-apache)
   * [2.3 - Install the PUN Utility](#23---install-the-pun-utility)
   * [2.4 - Install User Mapping Script](#24---install-user-mapping-script)
-  * [2.5 - [Optional] Deploy the Discovery Page](#25---optional-deploy-the-discovery-page)
-  * [2.6 - [Optional] Deploy the Registration Page](#26---optional-deploy-the-registration-page)
-  * [2.7 - [Optional] Deploy Mapping Helper Scripts](#27---optional-deploy-mapping-helper-scripts)
 * [Section 3. App Deployment Strategy](#section-3-app-deployment-strategy)
   * [3.1 - Local Directory Structure](#31---local-directory-structure)
   * [3.2 - Mapping URI to Local Directory Structure](#32---mapping-uri-to-local-directory-structure)
     * [3.2.1 - Apps URI](#321---apps-uri)
     * [3.2.2 - Public URI](#322---public-uri)
-    * [3.2.3 - [Optional] Discover URI](#323---optional-discover-uri)
-    * [3.2.4 - [Optional] Register URI](#324---optional-register-uri)
   * [3.3 - OSC Portals](#33---osc-portals)
     * [3.3.1 - Add/Update System Apps (requires root)](#331---addupdate-system-apps-requires-root)
     * [3.3.2 - Add/Update User Apps (requires root)](#332---addupdate-user-apps-requires-root)
@@ -30,7 +25,10 @@ The Open OnDemand Project is an open-source software project, based on the Ohio 
     * [4.2 - Shell App](#42---shell-app)
     * [4.3 - Files App](#43---files-app)
     * [4.4 - File Editor App](#44---file-editor-app)
-* [Appendix A. Authentication Strategy](#appendix-a-authentication-strategy)
+* [Appendix A. CILogon Authentication Strategy (expert mode)](#appendix-a-cilogon-authentication-strategy-expert-mode)
+  * [A.1 - Discovery Page](#a1---discovery-page)
+  * [A.2 - Registration Page](#a2---registration-page)
+  * [A.3 - Mapping Helper Scripts](#a3---mapping-helper-scripts)
 
 ## Section 1. Components
 
@@ -244,68 +242,6 @@ You will need to map the Apache authenticated user to the local system user. Thi
 
 The principle behind this script is that you call it with a URL encoded `REMOTE_USER` user name as the only argument, and it will return the mapping to the local system user name if it exists.
 
-### 2.5 - [Optional] Deploy the Discovery Page
-
-Before a user is authenticated, the user is presented with a discovery page where he/she can choose the OpenID Connect Provider. For the [ood_auth_discovery](https://github.com/OSC/ood_auth_discovery) repo it is a branded page with a link to CILogon.
-
-1.  We clone the `ood_auth_discovery` repo to the local disk:
-
-    ```sh
-    git clone https://github.com/OSC/ood_auth_discovery.git
-    ```
-
-2.  Install it to its global location:
-
-    ```sh
-    # create the /var/www/ood directory if it doesn't already exist
-    sudo mkdir -p /var/www/ood
-
-    # copy this repo to its default location
-    sudo cp -r ood_auth_discovery /var/www/ood/discover
-    ```
-
-### 2.6 - [Optional] Deploy the Registration Page
-
-After a user is authenticated and it is determined that no mapping exists to a local system user, they are redirected to the [ood_auth_registration](https://github.com/OSC/ood_auth_registration) branded page. Here the user is required to enter their local system credentials and the mapping is generated.
-
-1.  We clone the `ood_auth_registration` repo to the local disk:
-
-    ```sh
-    git clone https://github.com/OSC/ood_auth_registration.git
-    ```
-
-2.  Install it to its global location:
-
-    ```sh
-    # create the /var/www/ood directory if it doesn't already exist
-    sudo mkdir -p /var/www/ood
-
-    # copy this repo to its default location
-    sudo cp -r ood_auth_registration /var/www/ood/register
-    ```
-
-3.  This repo makes use of a securely encrypted `ldaps://...` server for authenticating a user to the local system. This requires the appropriate OpenLDAP Certificate Authority files be hosted on the local machine:
-
-    ```sh
-    /etc/openldap/cacerts/*
-    ```
-
-4.  This repo also generates a proper user mapping after the user authenticates successfully on the local system. So the `apache` user will need permissions to generate this mapping on behalf of the user. This requires granting the `apache` user `sudo` privileges to the respective `mapdn` script.
-
-    ```sh
-    # /etc/sudoers
-
-    apache      ALL=(ALL) NOPASSWD:  /usr/local/bin/add-user-dn.real, \
-                                     /usr/local/bin/delete-user-dn.real, \
-                                     /usr/local/bin/list-user-dns.real
-    ```
-
-### 2.7 - [Optional] Deploy Mapping Helper Scripts
-
-**FIXME**
-
-[ood_auth_mapdn](https://github.com/OSC/ood_auth_mapdn)
-
 ## Section 3. App Deployment Strategy
 
 This is the strategy currently employed at the OSC OnDemand and OSC AweSim portals for deploying apps. This is in no way a requirement, and system administrators are encouraged to explore different options.
@@ -348,7 +284,6 @@ Apps are deployed on the local disk of the host serving the Open OnDemand portal
     ├── index.php                                  # -rw-r--r--  root    root
     └── ...                                        # -rw-r--r--  root    root
 ```
-
 ### 3.2 - Mapping URI to Local Directory Structure
 
 #### 3.2.1 - Apps URI
@@ -379,26 +314,6 @@ https://<PORTAL>.osc.edu/pun/dev/<APP>         =>  ~/<PORTAL>/dev/<APP>
 ```sh
 # Accessing a publicly available resource
 https://<PORTAL>.osc.edu/public/favicon.ico  =>  /var/www/ood/public/favicon.ico
-```
-
-#### 3.2.3 - [Optional] Discover URI
-
-**Anyone** can access the resources underneath the `/discover` URI.
-
-```sh
-# Accessing the discovery page
-https://<PORTAL>.osc.edu/discover  =>  /var/www/ood/discover/index.php
-```
-
-#### 3.2.4 - [Optional] Register URI
-
-To access any resource underneath the `/register` URI you **MUST**:
-
-  - be authenticated through Apache (in particular authenticated through CILogon)
-
-```sh
-# Accessing the registration page
-https://<PORTAL>.osc.edu/register  =>  /var/www/ood/register/index.php
 ```
 
 ### 3.3 - OSC Portals
@@ -502,7 +417,9 @@ See https://github.com/OSC/ood-fileexplorer for more information.
 
 See https://github.com/OSC/ood-fileeditor for more information.
 
-## Appendix A. Authentication Strategy
+## Appendix A. CILogon Authentication Strategy (expert mode)
+
+**Warning**: Below is not for the faint of heart. It is missing documentation and can be very difficult to fully grasp. It is not recommended to deploy a CILogon authentication strategy on your own. You have been warned!
 
 The current strategy employed by the OSC OnDemand portal is outlined in detail
 in the figure below.
@@ -529,3 +446,83 @@ the Apache proxy can be briefly described as:
        name by authenticating against a local LDAP server
     3. The mapping is generated if successfully authenticated
     4. The user is again redirected to the protected resource
+
+### A.1 - Discovery Page
+
+Before a user is authenticated, the user is presented with a discovery page where he/she can choose the OpenID Connect Provider. For the [ood_auth_discovery](https://github.com/OSC/ood_auth_discovery) repo it is a branded page with a link to CILogon.
+
+1.  We clone the `ood_auth_discovery` repo to the local disk:
+
+    ```sh
+    git clone https://github.com/OSC/ood_auth_discovery.git
+    ```
+
+2.  Install it to its global location:
+
+    ```sh
+    # create the /var/www/ood directory if it doesn't already exist
+    sudo mkdir -p /var/www/ood
+
+    # copy this repo to its default location
+    sudo cp -r ood_auth_discovery /var/www/ood/discover
+    ```
+
+**Anyone** can access the resources underneath the `/discover` URI.
+
+```sh
+# Accessing the discovery page
+https://<PORTAL>.osc.edu/discover  =>  /var/www/ood/discover/index.php
+```
+
+### A.2 - Registration Page
+
+After a user is authenticated and it is determined that no mapping exists to a local system user, they are redirected to the [ood_auth_registration](https://github.com/OSC/ood_auth_registration) branded page. Here the user is required to enter their local system credentials and the mapping is generated.
+
+1.  We clone the `ood_auth_registration` repo to the local disk:
+
+    ```sh
+    git clone https://github.com/OSC/ood_auth_registration.git
+    ```
+
+2.  Install it to its global location:
+
+    ```sh
+    # create the /var/www/ood directory if it doesn't already exist
+    sudo mkdir -p /var/www/ood
+
+    # copy this repo to its default location
+    sudo cp -r ood_auth_registration /var/www/ood/register
+    ```
+
+3.  This repo makes use of a securely encrypted `ldaps://...` server for authenticating a user to the local system. This requires the appropriate OpenLDAP Certificate Authority files be hosted on the local machine:
+
+    ```sh
+    /etc/openldap/cacerts/*
+    ```
+
+4.  This repo also generates a proper user mapping after the user authenticates successfully on the local system. So the `apache` user will need permissions to generate this mapping on behalf of the user. This requires granting the `apache` user `sudo` privileges to the respective `mapdn` script.
+
+    ```sh
+    # /etc/sudoers
+
+    apache      ALL=(ALL) NOPASSWD:  /usr/local/bin/add-user-dn.real, \
+                                     /usr/local/bin/delete-user-dn.real, \
+                                     /usr/local/bin/list-user-dns.real
+    ```
+
+To access any resource underneath the `/register` URI you **MUST**:
+
+  - be authenticated through Apache (in particular authenticated through CILogon)
+
+```sh
+# Accessing the registration page
+https://<PORTAL>.osc.edu/register  =>  /var/www/ood/register/index.php
+```
+
+### A.3 - Mapping Helper Scripts
+
+**FIXME**
+
+[ood_auth_mapdn](https://github.com/OSC/ood_auth_mapdn)
+
+

@@ -33,25 +33,16 @@
 <p>The Open OnDemand Project is an open-source software project, based on the Ohio Supercomputer Center's proven "OSC OnDemand" platform, that enables HPC centers to install and deploy advanced web and graphical interfaces for their users. More information can be found in the paper <a href="http://dx.doi.org/10.1145/2949550.2949644">http://dx.doi.org/10.1145/2949550.2949644</a>.</p>
 
 <ul>
-<li>
-<a href="#section-1-components">Section 1. Components</a>
-
-<ul>
-<li><a href="#11---proxy-and-pun">1.1 - Proxy and PUN</a></li>
-<li><a href="#12---authentication-and-authorization">1.2 - Authentication and Authorization</a></li>
-</ul>
-</li>
+<li><a href="#section-1-components">Section 1. Components</a></li>
 <li>
 <a href="#section-2-installation-guide">Section 2. Installation Guide</a>
 
 <ul>
-<li><a href="#21---generate-apache-config-for-open-ondemand-portal">2.1 - Generate Apache Config for Open OnDemand Portal</a></li>
-<li><a href="#22---install-open-ondemand-proxy-module-for-apache">2.2 - Install Open OnDemand Proxy Module for Apache</a></li>
-<li><a href="#23---install-the-pun-utility">2.3 - Install the PUN Utility</a></li>
-<li><a href="#24---install-user-mapping-script">2.4 - Install User Mapping Script</a></li>
-<li><a href="#25---optional-deploy-the-discovery-page">2.5 - [Optional] Deploy the Discovery Page</a></li>
-<li><a href="#26---optional-deploy-the-registration-page">2.6 - [Optional] Deploy the Registration Page</a></li>
-<li><a href="#27---optional-deploy-mapping-helper-scripts">2.7 - [Optional] Deploy Mapping Helper Scripts</a></li>
+<li><a href="#21---software-requirements">2.1 - Software Requirements</a></li>
+<li><a href="#22---generate-apache-config-for-open-ondemand-portal">2.2 - Generate Apache Config for Open OnDemand Portal</a></li>
+<li><a href="#23---install-open-ondemand-proxy-module-for-apache">2.3 - Install Open OnDemand Proxy Module for Apache</a></li>
+<li><a href="#24---install-the-pun-utility">2.4 - Install the PUN Utility</a></li>
+<li><a href="#25---install-user-mapping-script">2.5 - Install User Mapping Script</a></li>
 </ul>
 </li>
 <li>
@@ -65,8 +56,6 @@
 <ul>
 <li><a href="#321---apps-uri">3.2.1 - Apps URI</a></li>
 <li><a href="#322---public-uri">3.2.2 - Public URI</a></li>
-<li><a href="#323---optional-discover-uri">3.2.3 - [Optional] Discover URI</a></li>
-<li><a href="#324---optional-register-uri">3.2.4 - [Optional] Register URI</a></li>
 </ul>
 </li>
 <li>
@@ -91,18 +80,21 @@
 <li><a href="#44---file-editor-app">4.4 - File Editor App</a></li>
 </ul>
 </li>
-<li><a href="#appendix-a-authentication-strategy">Appendix A. Authentication Strategy</a></li>
+<li>
+<a href="#appendix-a-cilogon-authentication-strategy-expert-mode">Appendix A. CILogon Authentication Strategy (expert mode)</a>
+
+<ul>
+<li><a href="#a1---discovery-page">A.1 - Discovery Page</a></li>
+<li><a href="#a2---registration-page">A.2 - Registration Page</a></li>
+<li><a href="#a3---mapping-helper-scripts">A.3 - Mapping Helper Scripts</a></li>
+</ul>
+</li>
 </ul>
 
 <h2>
 <a id="section-1-components" class="anchor" href="#section-1-components" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Section 1. Components</h2>
 
-<p>Details of the components that make up the Open OnDemand <strong>infrastructure</strong>.</p>
-
-<h3>
-<a id="11---proxy-and-pun" class="anchor" href="#11---proxy-and-pun" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.1 - Proxy and PUN</h3>
-
-<p>The core of the infrastructure includes a proxy layer that all traffic passes through using the securely encrypted SSL protocol on port 443. The <a href="https://httpd.apache.org/">Apache proxy</a> parses the URI and dynamically determines where to route the traffic to. In most cases the traffic will be routed to the per-user <a href="https://www.nginx.com/">NGINX</a> (PUN) web server.</p>
+<p>The components that make up the Open OnDemand <strong>infrastructure</strong> includes a proxy layer that all traffic passes through using the securely encrypted SSL protocol on port 443. The <a href="https://httpd.apache.org/">Apache proxy</a> parses the URI and dynamically determines where to route the traffic to. In most cases the traffic will be routed to the per-user <a href="https://www.nginx.com/">NGINX</a> (PUN) web server.</p>
 
 <p>The PUN is described as an NGINX server instance running as a system-level user listening on a <a href="https://en.wikipedia.org/wiki/Unix_domain_socket">Unix domain socket</a>. File and directory permissions are used to restrict access to this Unix domain socket such that only the proxy daemon can communicate with the PUN.</p>
 
@@ -123,42 +115,12 @@
 <td>An Apache httpd module implementing the Open OnDemand proxy API.</td>
 </tr>
 <tr>
+<td><a href="https://github.com/OSC/ood_auth_map">ood_auth_map</a></td>
+<td>The user mapping script that maps the authenticated username to the system-level username.</td>
+</tr>
+<tr>
 <td><a href="https://github.com/OSC/nginx_stage">nginx_stage</a></td>
 <td>Stages and controls the per-user NGINX (PUN) instances.</td>
-</tr>
-</tbody>
-</table>
-
-<h3>
-<a id="12---authentication-and-authorization" class="anchor" href="#12---authentication-and-authorization" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.2 - Authentication and Authorization</h3>
-
-<p>There is <strong>no required</strong> authentication mechanism built-into Open OnDemand, but we do provide a recommended solution. The recommended solution utilizes the <a href="https://github.com/pingidentity/mod_auth_openidc">mod_auth_openidc</a> module within the Apache proxy to authenticate users against an <a href="http://openid.net/connect/">OpenID Connect</a> Provider for federated authentication.</p>
-
-<p>After the user authenticates with their OpenID Connect Provider authorization is granted by mapping the user's authenticated username to a local system username. The Apache proxy handles this by calling a script that handles the user mapping lookup. If the mapping fails, the user can be taken to a registration page where he or she can set up a mapping.</p>
-
-<table>
-<thead>
-<tr>
-<th>Component</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a href="https://github.com/OSC/ood_auth_mapdn">ood_auth_mapdn</a></td>
-<td>Scripts to setup/maintain mappings between Distinguished Names (DNs) to local usernames.</td>
-</tr>
-<tr>
-<td><a href="https://github.com/OSC/ood_auth_map">ood_auth_map</a></td>
-<td>The user mapping script employed by OSC for OnDemand and AweSim.</td>
-</tr>
-<tr>
-<td><a href="https://github.com/OSC/ood_auth_discovery">ood_auth_discovery</a></td>
-<td>Open ID Connect Discovery page for OSC OnDemand.</td>
-</tr>
-<tr>
-<td><a href="https://github.com/OSC/ood_auth_registration">ood_auth_registration</a></td>
-<td>OSC OnDemand Open ID Connect registration page.</td>
 </tr>
 </tbody>
 </table>
@@ -166,12 +128,15 @@
 <h2>
 <a id="section-2-installation-guide" class="anchor" href="#section-2-installation-guide" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Section 2. Installation Guide</h2>
 
+<h3>
+<a id="21---software-requirements" class="anchor" href="#21---software-requirements" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.1 - Software Requirements</h3>
+
+<p><strong>Assumes you are using RedHat Software Collections</strong></p>
+
 <p><strong>Work in Progress</strong></p>
 
-<p><strong>Assumes you are using Software Collections</strong></p>
-
 <h3>
-<a id="21---generate-apache-config-for-open-ondemand-portal" class="anchor" href="#21---generate-apache-config-for-open-ondemand-portal" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.1 - Generate Apache Config for Open OnDemand Portal</h3>
+<a id="22---generate-apache-config-for-open-ondemand-portal" class="anchor" href="#22---generate-apache-config-for-open-ondemand-portal" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.2 - Generate Apache Config for Open OnDemand Portal</h3>
 
 <p>In this section we will generate an Open OnDemand Portal config file used by the Apache server. This can be done manually or using the <a href="https://github.com/OSC/ood-portal-generator">ood-portal-generator</a>.</p>
 
@@ -222,7 +187,7 @@ scl <span class="pl-c1">enable</span> rh-ruby22 -- rake ...</pre></div>
 <span class="pl-c"># =&gt; /opt/rh/httpd24/root/etc/httpd/conf.d/ood-portal.conf</span></pre></div>
 </li>
 <li>
-<p>If using default authentication setup (i.e., you didn't modify any of the environment variables attributed to authentication when building the config), be sure to create an <code>.htpasswd</code> file that maps to system-level usernames. The default location specified for this file is:</p>
+<p>If using default authentication setup (i.e., you didn't modify any of the environment variables attributed to authentication when building the config), be sure to create an <code>.htpasswd</code> file that <strong>maps to system-level usernames</strong>. The default location specified for this file is:</p>
 
 <pre><code>/opt/rh/httpd24/root/etc/httpd/.htpasswd
 </code></pre>
@@ -242,7 +207,7 @@ scl <span class="pl-c1">enable</span> rh-ruby22 -- rake ...</pre></div>
 <p>Note: This package references the location of <code>mod_ood_proxy</code>, <code>nginx_stage</code>, and <code>ood_auth_map</code>. It is the source of knowledge for the locations of the various OOD infrastructure pieces. Be sure to update these locations if you change the <code>PREFIX</code> for any installation of the corresponding package.</p>
 
 <h3>
-<a id="22---install-open-ondemand-proxy-module-for-apache" class="anchor" href="#22---install-open-ondemand-proxy-module-for-apache" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.2 - Install Open OnDemand Proxy Module for Apache</h3>
+<a id="23---install-open-ondemand-proxy-module-for-apache" class="anchor" href="#23---install-open-ondemand-proxy-module-for-apache" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.3 - Install Open OnDemand Proxy Module for Apache</h3>
 
 <p>An Apache module written in Lua is the primary component for the proxy logic. It is given by the <a href="https://github.com/OSC/mod_ood_proxy">mod_ood_proxy</a> project.</p>
 
@@ -257,8 +222,8 @@ scl <span class="pl-c1">enable</span> rh-ruby22 -- rake ...</pre></div>
 <p>Check out the version of the generator you intend on using:</p>
 
 <div class="highlight highlight-source-shell"><pre><span class="pl-c"># A list of versions &amp; details can be viewed in the CHANGELOG.md</span>
-<span class="pl-c"># As of writing this the latest version is `v0.0.4`</span>
-git checkout tags/v0.0.4</pre></div>
+<span class="pl-c"># As of writing this the latest version is `v0.0.5`</span>
+git checkout tags/v0.0.5</pre></div>
 </li>
 <li>
 <p>Install it to its global location:</p>
@@ -269,7 +234,7 @@ git checkout tags/v0.0.4</pre></div>
 </ol>
 
 <h3>
-<a id="23---install-the-pun-utility" class="anchor" href="#23---install-the-pun-utility" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.3 - Install the PUN Utility</h3>
+<a id="24---install-the-pun-utility" class="anchor" href="#24---install-the-pun-utility" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.4 - Install the PUN Utility</h3>
 
 <p>The PUNs are manipulated and maintained by the <a href="https://github.com/OSC/nginx_stage">nginx_stage</a> utility. This tool is meant to by run by <code>root</code> or a user with <code>sudoers</code> privileges.</p>
 
@@ -284,8 +249,8 @@ git checkout tags/v0.0.4</pre></div>
 <p>Check out the version of the generator you intend on using:</p>
 
 <div class="highlight highlight-source-shell"><pre><span class="pl-c"># A list of versions &amp; details can be viewed in the CHANGELOG.md</span>
-<span class="pl-c"># As of writing this the latest version is `v0.0.12`</span>
-git checkout tags/v0.0.12</pre></div>
+<span class="pl-c"># As of writing this the latest version is `v0.1.0`</span>
+git checkout tags/v0.1.0</pre></div>
 </li>
 <li>
 <p>Install it to its global location:</p>
@@ -313,7 +278,7 @@ apache ALL=(ALL) NOPASSWD: /opt/ood/nginx_stage/sbin/nginx_stage</pre></div>
 </ol>
 
 <h3>
-<a id="24---install-user-mapping-script" class="anchor" href="#24---install-user-mapping-script" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.4 - Install User Mapping Script</h3>
+<a id="25---install-user-mapping-script" class="anchor" href="#25---install-user-mapping-script" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.5 - Install User Mapping Script</h3>
 
 <p>You will need to map the Apache authenticated user to the local system user. This is done with the simple tool: <a href="https://github.com/OSC/ood_auth_map">ood_auth_map</a>.</p>
 
@@ -340,71 +305,6 @@ git checkout tags/v0.0.3</pre></div>
 </ol>
 
 <p>The principle behind this script is that you call it with a URL encoded <code>REMOTE_USER</code> user name as the only argument, and it will return the mapping to the local system user name if it exists.</p>
-
-<h3>
-<a id="25---optional-deploy-the-discovery-page" class="anchor" href="#25---optional-deploy-the-discovery-page" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.5 - [Optional] Deploy the Discovery Page</h3>
-
-<p>Before a user is authenticated, the user is presented with a discovery page where he/she can choose the OpenID Connect Provider. For the <a href="https://github.com/OSC/ood_auth_discovery">ood_auth_discovery</a> repo it is a branded page with a link to CILogon.</p>
-
-<ol>
-<li>
-<p>We clone the <code>ood_auth_discovery</code> repo to the local disk:</p>
-
-<div class="highlight highlight-source-shell"><pre>git clone https://github.com/OSC/ood_auth_discovery.git</pre></div>
-</li>
-<li>
-<p>Install it to its global location:</p>
-
-<div class="highlight highlight-source-shell"><pre><span class="pl-c"># create the /var/www/ood directory if it doesn't already exist</span>
-sudo mkdir -p /var/www/ood
-
-<span class="pl-c"># copy this repo to its default location</span>
-sudo cp -r ood_auth_discovery /var/www/ood/discover</pre></div>
-</li>
-</ol>
-
-<h3>
-<a id="26---optional-deploy-the-registration-page" class="anchor" href="#26---optional-deploy-the-registration-page" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.6 - [Optional] Deploy the Registration Page</h3>
-
-<p>After a user is authenticated and it is determined that no mapping exists to a local system user, they are redirected to the <a href="https://github.com/OSC/ood_auth_registration">ood_auth_registration</a> branded page. Here the user is required to enter their local system credentials and the mapping is generated.</p>
-
-<ol>
-<li>
-<p>We clone the <code>ood_auth_registration</code> repo to the local disk:</p>
-
-<div class="highlight highlight-source-shell"><pre>git clone https://github.com/OSC/ood_auth_registration.git</pre></div>
-</li>
-<li>
-<p>Install it to its global location:</p>
-
-<div class="highlight highlight-source-shell"><pre><span class="pl-c"># create the /var/www/ood directory if it doesn't already exist</span>
-sudo mkdir -p /var/www/ood
-
-<span class="pl-c"># copy this repo to its default location</span>
-sudo cp -r ood_auth_registration /var/www/ood/register</pre></div>
-</li>
-<li>
-<p>This repo makes use of a securely encrypted <code>ldaps://...</code> server for authenticating a user to the local system. This requires the appropriate OpenLDAP Certificate Authority files be hosted on the local machine:</p>
-
-<div class="highlight highlight-source-shell"><pre>/etc/openldap/cacerts/<span class="pl-k">*</span></pre></div>
-</li>
-<li>
-<p>This repo also generates a proper user mapping after the user authenticates successfully on the local system. So the <code>apache</code> user will need permissions to generate this mapping on behalf of the user. This requires granting the <code>apache</code> user <code>sudo</code> privileges to the respective <code>mapdn</code> script.</p>
-
-<div class="highlight highlight-source-shell"><pre><span class="pl-c"># /etc/sudoers</span>
-
-apache      ALL=(ALL) NOPASSWD:  /usr/local/bin/add-user-dn.real, \
-                                 /usr/local/bin/delete-user-dn.real, \
-                                 /usr/local/bin/list-user-dns.real</pre></div>
-</li>
-</ol>
-
-<h3>
-<a id="27---optional-deploy-mapping-helper-scripts" class="anchor" href="#27---optional-deploy-mapping-helper-scripts" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.7 - [Optional] Deploy Mapping Helper Scripts</h3>
-
-<p><strong>FIXME</strong></p>
-
-<p><a href="https://github.com/OSC/ood_auth_mapdn">ood_auth_mapdn</a></p>
 
 <h2>
 <a id="section-3-app-deployment-strategy" class="anchor" href="#section-3-app-deployment-strategy" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Section 3. App Deployment Strategy</h2>
@@ -482,26 +382,6 @@ https://<span class="pl-k">&lt;</span>PORTAL<span class="pl-k">&gt;</span>.osc.e
 
 <div class="highlight highlight-source-shell"><pre><span class="pl-c"># Accessing a publicly available resource</span>
 https://<span class="pl-k">&lt;</span>PORTAL<span class="pl-k">&gt;</span>.osc.edu/public/favicon.ico  =<span class="pl-k">&gt;</span>  /var/www/ood/public/favicon.ico</pre></div>
-
-<h4>
-<a id="323---optional-discover-uri" class="anchor" href="#323---optional-discover-uri" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>3.2.3 - [Optional] Discover URI</h4>
-
-<p><strong>Anyone</strong> can access the resources underneath the <code>/discover</code> URI.</p>
-
-<div class="highlight highlight-source-shell"><pre><span class="pl-c"># Accessing the discovery page</span>
-https://<span class="pl-k">&lt;</span>PORTAL<span class="pl-k">&gt;</span>.osc.edu/discover  =<span class="pl-k">&gt;</span>  /var/www/ood/discover/index.php</pre></div>
-
-<h4>
-<a id="324---optional-register-uri" class="anchor" href="#324---optional-register-uri" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>3.2.4 - [Optional] Register URI</h4>
-
-<p>To access any resource underneath the <code>/register</code> URI you <strong>MUST</strong>:</p>
-
-<ul>
-<li>be authenticated through Apache (in particular authenticated through CILogon)</li>
-</ul>
-
-<div class="highlight highlight-source-shell"><pre><span class="pl-c"># Accessing the registration page</span>
-https://<span class="pl-k">&lt;</span>PORTAL<span class="pl-k">&gt;</span>.osc.edu/register  =<span class="pl-k">&gt;</span>  /var/www/ood/register/index.php</pre></div>
 
 <h3>
 <a id="33---osc-portals" class="anchor" href="#33---osc-portals" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>3.3 - OSC Portals</h3>
@@ -632,7 +512,9 @@ sudo rsync -rlptvu --delete /users/PZS0645/wiag/ood_portals/<span class="pl-k">&
 <p>See <a href="https://github.com/OSC/ood-fileeditor">https://github.com/OSC/ood-fileeditor</a> for more information.</p>
 
 <h2>
-<a id="appendix-a-authentication-strategy" class="anchor" href="#appendix-a-authentication-strategy" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Appendix A. Authentication Strategy</h2>
+<a id="appendix-a-cilogon-authentication-strategy-expert-mode" class="anchor" href="#appendix-a-cilogon-authentication-strategy-expert-mode" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Appendix A. CILogon Authentication Strategy (expert mode)</h2>
+
+<p><strong>Warning</strong>: Below is not for the faint of heart. It is missing documentation and can be very difficult to fully grasp. It is not recommended to deploy a CILogon authentication strategy on your own. You have been warned!</p>
 
 <p>The current strategy employed by the OSC OnDemand portal is outlined in detail
 in the figure below.</p>
@@ -667,6 +549,85 @@ name by authenticating against a local LDAP server</li>
 </ol>
 </li>
 </ol>
+
+<h3>
+<a id="a1---discovery-page" class="anchor" href="#a1---discovery-page" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>A.1 - Discovery Page</h3>
+
+<p>Before a user is authenticated, the user is presented with a discovery page where he/she can choose the OpenID Connect Provider. For the <a href="https://github.com/OSC/ood_auth_discovery">ood_auth_discovery</a> repo it is a branded page with a link to CILogon.</p>
+
+<ol>
+<li>
+<p>We clone the <code>ood_auth_discovery</code> repo to the local disk:</p>
+
+<div class="highlight highlight-source-shell"><pre>git clone https://github.com/OSC/ood_auth_discovery.git</pre></div>
+</li>
+<li>
+<p>Install it to its global location:</p>
+
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"># create the /var/www/ood directory if it doesn't already exist</span>
+sudo mkdir -p /var/www/ood
+
+<span class="pl-c"># copy this repo to its default location</span>
+sudo cp -r ood_auth_discovery /var/www/ood/discover</pre></div>
+</li>
+</ol>
+
+<p><strong>Anyone</strong> can access the resources underneath the <code>/discover</code> URI.</p>
+
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"># Accessing the discovery page</span>
+https://<span class="pl-k">&lt;</span>PORTAL<span class="pl-k">&gt;</span>.osc.edu/discover  =<span class="pl-k">&gt;</span>  /var/www/ood/discover/index.php</pre></div>
+
+<h3>
+<a id="a2---registration-page" class="anchor" href="#a2---registration-page" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>A.2 - Registration Page</h3>
+
+<p>After a user is authenticated and it is determined that no mapping exists to a local system user, they are redirected to the <a href="https://github.com/OSC/ood_auth_registration">ood_auth_registration</a> branded page. Here the user is required to enter their local system credentials and the mapping is generated.</p>
+
+<ol>
+<li>
+<p>We clone the <code>ood_auth_registration</code> repo to the local disk:</p>
+
+<div class="highlight highlight-source-shell"><pre>git clone https://github.com/OSC/ood_auth_registration.git</pre></div>
+</li>
+<li>
+<p>Install it to its global location:</p>
+
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"># create the /var/www/ood directory if it doesn't already exist</span>
+sudo mkdir -p /var/www/ood
+
+<span class="pl-c"># copy this repo to its default location</span>
+sudo cp -r ood_auth_registration /var/www/ood/register</pre></div>
+</li>
+<li>
+<p>This repo makes use of a securely encrypted <code>ldaps://...</code> server for authenticating a user to the local system. This requires the appropriate OpenLDAP Certificate Authority files be hosted on the local machine:</p>
+
+<div class="highlight highlight-source-shell"><pre>/etc/openldap/cacerts/<span class="pl-k">*</span></pre></div>
+</li>
+<li>
+<p>This repo also generates a proper user mapping after the user authenticates successfully on the local system. So the <code>apache</code> user will need permissions to generate this mapping on behalf of the user. This requires granting the <code>apache</code> user <code>sudo</code> privileges to the respective <code>mapdn</code> script.</p>
+
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"># /etc/sudoers</span>
+
+apache      ALL=(ALL) NOPASSWD:  /usr/local/bin/add-user-dn.real, \
+                                 /usr/local/bin/delete-user-dn.real, \
+                                 /usr/local/bin/list-user-dns.real</pre></div>
+</li>
+</ol>
+
+<p>To access any resource underneath the <code>/register</code> URI you <strong>MUST</strong>:</p>
+
+<ul>
+<li>be authenticated through Apache (in particular authenticated through CILogon)</li>
+</ul>
+
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"># Accessing the registration page</span>
+https://<span class="pl-k">&lt;</span>PORTAL<span class="pl-k">&gt;</span>.osc.edu/register  =<span class="pl-k">&gt;</span>  /var/www/ood/register/index.php</pre></div>
+
+<h3>
+<a id="a3---mapping-helper-scripts" class="anchor" href="#a3---mapping-helper-scripts" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>A.3 - Mapping Helper Scripts</h3>
+
+<p><strong>FIXME</strong></p>
+
+<p><a href="https://github.com/OSC/ood_auth_mapdn">ood_auth_mapdn</a></p>
       </section>
     </div>
     <footer>

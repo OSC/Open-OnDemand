@@ -65,8 +65,8 @@ In this section we will generate an Open OnDemand Portal config file used by the
 
     ```sh
     # A list of versions & details can be viewed in the CHANGELOG.md
-    # As of writing this the latest version is `v0.0.6`
-    git checkout tags/v0.0.6
+    # As of writing this the latest version is `v0.0.7`
+    git checkout tags/v0.0.7
     ```
 
 3.  Now we build the Apache config using environment variables to modify any of the default settings:
@@ -86,6 +86,12 @@ In this section we will generate an Open OnDemand Portal config file used by the
 
     # Example:
     scl enable rh-ruby22 -- rake OOD_IP='xxx.xxx.xxx.xxx' OOD_SERVER_NAME='ondemand.osc.edu'
+    ```
+    
+    **Pro-tip**: For a *production* server we'd greatly appreciate it if you contributed analytics back to us for continued support of the project.
+    
+    ```sh
+    scl enable rh-ruby22 -- rake OOD_ANALYTICS_OPT_IN=true
     ```
 
 4.  Confirm the Apache config is to your liking by viewing the config file generated:
@@ -145,8 +151,8 @@ An Apache module written in Lua is the primary component for the proxy logic. It
 
     ```sh
     # A list of versions & details can be viewed in the CHANGELOG.md
-    # As of writing this the latest version is `v0.0.5`
-    git checkout tags/v0.0.5
+    # As of writing this the latest version is `v0.0.6`
+    git checkout tags/v0.0.6
     ```
 
 3.  Install it to its global location:

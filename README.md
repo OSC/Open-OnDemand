@@ -50,7 +50,7 @@ The PUN is described as an NGINX server instance running as a system-level user 
 
 ```
 yum install -y centos-release-scl lsof sudo
-    yum install -y httpd24 nginx16 rh-passenger40 rh-ruby22 rh-ruby22-rubygem-rake rh-ruby22-rubygem-bundler rh-ruby22-ruby-devel nodejs010 git19
+yum install -y httpd24 nginx16 rh-passenger40 rh-ruby22 rh-ruby22-rubygem-rake rh-ruby22-rubygem-bundler rh-ruby22-ruby-devel nodejs010 git19
 ```
 
 **Work in Progress**

@@ -66,7 +66,9 @@ In this section we will generate an Open OnDemand Portal config file used by the
     cd ood-portal-generator
     ```
 
-2.  Check out the version of the generator you intend on using (latest ![GitHub Release](https://img.shields.io/github/release/osc/ood-portal-generator.svg)):
+2.  Check out the version of the generator you intend on using:
+
+    ![GitHub Release](https://img.shields.io/github/release/osc/ood-portal-generator.svg?label=latest release)
 
     ```sh
     # A list of versions & details can be viewed in the CHANGELOG.md
@@ -152,7 +154,9 @@ An Apache module written in Lua is the primary component for the proxy logic. It
     cd mod_ood_proxy
     ```
 
-2.  Check out the version of the generator you intend on using (latest ![GitHub Release](https://img.shields.io/github/release/osc/mod_ood_proxy.svg)):
+2.  Check out the version of the generator you intend on using:
+
+    ![GitHub Release](https://img.shields.io/github/release/osc/mod_ood_proxy.svg?label=latest release)
 
     ```sh
     # A list of versions & details can be viewed in the CHANGELOG.md
@@ -178,7 +182,9 @@ The PUNs are manipulated and maintained by the [nginx_stage](https://github.com/
     cd nginx_stage
     ```
 
-2.  Check out the version of the generator you intend on using (latest ![GitHub Release](https://img.shields.io/github/release/osc/nginx_stage.svg)):
+2.  Check out the version of the generator you intend on using:
+
+    ![GitHub Release](https://img.shields.io/github/release/osc/nginx_stage.svg?label=latest release)
 
     ```sh
     # A list of versions & details can be viewed in the CHANGELOG.md
@@ -221,7 +227,9 @@ You will need to map the Apache authenticated user to the local system user. Thi
     cd ood_auth_map
     ```
 
-2.  Check out the version of the generator you intend on using (latest ![GitHub Release](https://img.shields.io/github/release/osc/ood_auth_map.svg)):
+2.  Check out the version of the generator you intend on using:
+
+    ![GitHub Release](https://img.shields.io/github/release/osc/ood_auth_map.svg?label=latest release)
 
     ```sh
     # A list of versions & details can be viewed in the CHANGELOG.md

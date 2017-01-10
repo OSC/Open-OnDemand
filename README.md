@@ -35,12 +35,12 @@ The components that make up the Open OnDemand **infrastructure** includes a prox
 
 The PUN is described as an NGINX server instance running as a system-level user listening on a [Unix domain socket](https://en.wikipedia.org/wiki/Unix_domain_socket). File and directory permissions are used to restrict access to this Unix domain socket such that only the proxy daemon can communicate with the PUN.
 
-| Component | Description |
-| --------- | ----------- |
-| [ood-portal-generator](https://github.com/OSC/ood-portal-generator) | Generates an Open OnDemand portal config for an Apache server that defines the proxy interface. |
-| [mod_ood_proxy](https://github.com/OSC/mod_ood_proxy) | An Apache httpd module implementing the Open OnDemand proxy API. |
-| [ood_auth_map](https://github.com/OSC/ood_auth_map) | The user mapping script that maps the authenticated username to the system-level username. |
-| [nginx_stage](https://github.com/OSC/nginx_stage) | Stages and controls the per-user NGINX (PUN) instances. |
+| Component | Release | Description |
+| --------- | ------- | ----------- |
+| [ood-portal-generator](https://github.com/OSC/ood-portal-generator) | ![GitHub Release](https://img.shields.io/github/release/osc/ood-portal-generator.svg) | Generates an Open OnDemand portal config for an Apache server that defines the proxy interface. |
+| [mod_ood_proxy](https://github.com/OSC/mod_ood_proxy) | ![GitHub Release](https://img.shields.io/github/release/osc/mod_ood_proxy.svg) | An Apache httpd module implementing the Open OnDemand proxy API. |
+| [ood_auth_map](https://github.com/OSC/ood_auth_map) | ![GitHub Release](https://img.shields.io/github/release/osc/ood_auth_map.svg) | The user mapping script that maps the authenticated username to the system-level username. |
+| [nginx_stage](https://github.com/OSC/nginx_stage) | ![GitHub Release](https://img.shields.io/github/release/osc/nginx_stage.svg) | Stages and controls the per-user NGINX (PUN) instances. |
 
 ## Section 2. Installation Guide
 
@@ -66,7 +66,7 @@ In this section we will generate an Open OnDemand Portal config file used by the
     cd ood-portal-generator
     ```
 
-2.  Check out the version of the generator you intend on using:
+2.  Check out the version of the generator you intend on using (latest ![GitHub Release](https://img.shields.io/github/release/osc/ood-portal-generator.svg)):
 
     ```sh
     # A list of versions & details can be viewed in the CHANGELOG.md
@@ -152,7 +152,7 @@ An Apache module written in Lua is the primary component for the proxy logic. It
     cd mod_ood_proxy
     ```
 
-2.  Check out the version of the generator you intend on using:
+2.  Check out the version of the generator you intend on using (latest ![GitHub Release](https://img.shields.io/github/release/osc/mod_ood_proxy.svg)):
 
     ```sh
     # A list of versions & details can be viewed in the CHANGELOG.md
@@ -178,7 +178,7 @@ The PUNs are manipulated and maintained by the [nginx_stage](https://github.com/
     cd nginx_stage
     ```
 
-2.  Check out the version of the generator you intend on using:
+2.  Check out the version of the generator you intend on using (latest ![GitHub Release](https://img.shields.io/github/release/osc/nginx_stage.svg)):
 
     ```sh
     # A list of versions & details can be viewed in the CHANGELOG.md
@@ -221,7 +221,7 @@ You will need to map the Apache authenticated user to the local system user. Thi
     cd ood_auth_map
     ```
 
-2.  Check out the version of the generator you intend on using:
+2.  Check out the version of the generator you intend on using (latest ![GitHub Release](https://img.shields.io/github/release/osc/ood_auth_map.svg)):
 
     ```sh
     # A list of versions & details can be viewed in the CHANGELOG.md

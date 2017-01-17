@@ -24,6 +24,7 @@ The Open OnDemand Project is an open-source software project, based on the Ohio 
     * [4.2 - Shell App](#42---shell-app)
     * [4.3 - Files App](#43---files-app)
     * [4.4 - File Editor App](#44---file-editor-app)
+    * [4.5 - User Documentation](#45---user-documentation)
 * [Appendix A. CILogon Authentication Strategy (expert mode)](#appendix-a-cilogon-authentication-strategy-expert-mode)
   * [A.1 - Discovery Page](#a1---discovery-page)
   * [A.2 - Registration Page](#a2---registration-page)
@@ -421,6 +422,16 @@ See https://github.com/OSC/ood-fileexplorer for more information.
 ### 4.4 - File Editor App
 
 See https://github.com/OSC/ood-fileeditor for more information.
+
+### 4.5 - User Documentation
+
+Currently there is no general user documentation provided.
+
+OSC provides user documentation for their Open OnDemand deployment (OSC OnDemand) at:
+
+https://www.osc.edu/resources/online_portals/ondemand
+
+Feel free to use it as template for your own organization's user-facing documentation.
 
 ## Appendix A. CILogon Authentication Strategy (expert mode)
 

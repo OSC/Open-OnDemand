@@ -73,8 +73,8 @@ In this section we will generate an Open OnDemand Portal config file used by the
 
     ```sh
     # A list of versions & details can be viewed in the CHANGELOG.md
-    # As of writing this the latest version is `v0.0.7`
-    git checkout tags/v0.0.7
+    # As of writing this the latest version is `v0.1.0`
+    git checkout tags/v0.1.0
     ```
 
 3.  Now we build the Apache config using environment variables to modify any of the default settings:
@@ -161,8 +161,8 @@ An Apache module written in Lua is the primary component for the proxy logic. It
 
     ```sh
     # A list of versions & details can be viewed in the CHANGELOG.md
-    # As of writing this the latest version is `v0.0.6`
-    git checkout tags/v0.0.6
+    # As of writing this the latest version is `v0.1.0`
+    git checkout tags/v0.1.0
     ```
 
 3.  Install it to its global location:

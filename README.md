@@ -278,7 +278,6 @@ v1:
   cluster:
     type: "OodCluster::Cluster"
     data:
-      hpc_cluster: true
       servers:
         login:
           type: "OodCluster::Servers::Ssh"
@@ -302,7 +301,6 @@ v1:
   cluster:
     type: "OodCluster::Cluster"
     data:
-      hpc_cluster: true
       servers:
         login:
           type: "OodCluster::Servers::Ssh"

@@ -9,7 +9,7 @@ The Open OnDemand Project is an open-source software project, based on the Ohio 
   * [2.3 - Install Open OnDemand Proxy Module for Apache](#23---install-open-ondemand-proxy-module-for-apache)
   * [2.4 - Install the PUN Utility](#24---install-the-pun-utility)
   * [2.5 - Install User Mapping Script](#25---install-user-mapping-script)
-  * [2.6 - Add cluster connection config files](#26---add-cluster-connection-config-files)
+  * [2.6 - Add Cluster Connection Config Files](#26---add-cluster-connection-config-files)
 * [Section 3. App Deployment Strategy](#section-3-app-deployment-strategy)
   * [3.1 - Local Directory Structure](#31---local-directory-structure)
   * [3.2 - Mapping URI to Local Directory Structure](#32---mapping-uri-to-local-directory-structure)
@@ -250,7 +250,7 @@ You will need to map the Apache authenticated user to the local system user. Thi
 
 The principle behind this script is that you call it with a URL encoded `REMOTE_USER` user name as the only argument, and it will return the mapping to the local system user name if it exists.
 
-### 2.6 - Add cluster connection config files
+### 2.6 - Add Cluster Connection Config Files
 
 **(Optional step)**
 

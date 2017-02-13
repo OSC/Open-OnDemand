@@ -258,7 +258,7 @@ The Dashboard, File Explorer, and Shell Access can work without cluster
 connection config files. These config files are required for:
 
 * enable Shell Access to multiple named hosts outside of the local host OOD is running on
-* use Active Jobs, Job Constructor, or any other app that works with batch jobs
+* use Active Jobs, My Jobs, or any other app that works with batch jobs
 
 
 1. Create default directory for config files:
@@ -293,7 +293,7 @@ v1:
   * scheduler
   * ganglia
 
-For Active Jobs and Job Constructor to work, a cluster configuration must specify a resource_mgr to use.
+For Active Jobs and My Jobs to work, a cluster configuration must specify a resource_mgr to use.
 
 ```yaml
 ---
@@ -317,7 +317,7 @@ v1:
             version: "6.0.1"
 ```
 
-The name of the file becomes the key for this host. So `oakley.yml` cluster config will have a key `oakley`. Job Constructor and other OOD apps that cache information about jobs they manage will associate job metadata with this key.
+The name of the file becomes the key for this host. So `oakley.yml` cluster config will have a key `oakley`. My Jobs and other OOD apps that cache information about jobs they manage will associate job metadata with this key.
 
 ## Section 3. App Deployment Strategy
 

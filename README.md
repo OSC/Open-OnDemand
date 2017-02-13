@@ -25,7 +25,9 @@ The Open OnDemand Project is an open-source software project, based on the Ohio 
     * [4.2 - Shell App](#42---shell-app)
     * [4.3 - Files App](#43---files-app)
     * [4.4 - File Editor App](#44---file-editor-app)
-    * [4.5 - User Documentation](#45---user-documentation)
+    * [4.5 - Active Jobs App](#45---active-jobs-app)
+    * [4.6 - My Jobs App](#46---my-jobs-app)
+    * [4.7 - User Documentation](#47---user-documentation)
 * [Appendix A. CILogon Authentication Strategy (expert mode)](#appendix-a-cilogon-authentication-strategy-expert-mode)
   * [A.1 - Discovery Page](#a1---discovery-page)
   * [A.2 - Registration Page](#a2---registration-page)
@@ -493,7 +495,15 @@ See https://github.com/OSC/ood-fileexplorer for more information.
 
 See https://github.com/OSC/ood-fileeditor for more information.
 
-### 4.5 - User Documentation
+### 4.5 - Active Jobs App
+
+See https://github.com/OSC/ood-activejobs for more information.
+
+### 4.6 - My Jobs App
+
+See https://github.com/OSC/ood-myjobs for more information.
+
+### 4.7 - User Documentation
 
 Currently there is no general user documentation provided.
 

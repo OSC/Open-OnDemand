@@ -9,6 +9,7 @@ The Open OnDemand Project is an open-source software project, based on the Ohio 
   * [2.3 - Install Open OnDemand Proxy Module for Apache](#23---install-open-ondemand-proxy-module-for-apache)
   * [2.4 - Install the PUN Utility](#24---install-the-pun-utility)
   * [2.5 - Install User Mapping Script](#25---install-user-mapping-script)
+  * [2.6 - Add Cluster Connection Config Files](#26---add-cluster-connection-config-files)
 * [Section 3. App Deployment Strategy](#section-3-app-deployment-strategy)
   * [3.1 - Local Directory Structure](#31---local-directory-structure)
   * [3.2 - Mapping URI to Local Directory Structure](#32---mapping-uri-to-local-directory-structure)
@@ -24,7 +25,9 @@ The Open OnDemand Project is an open-source software project, based on the Ohio 
     * [4.2 - Shell App](#42---shell-app)
     * [4.3 - Files App](#43---files-app)
     * [4.4 - File Editor App](#44---file-editor-app)
-    * [4.5 - User Documentation](#45---user-documentation)
+    * [4.5 - Active Jobs App](#45---active-jobs-app)
+    * [4.6 - My Jobs App](#46---my-jobs-app)
+    * [4.7 - User Documentation](#47---user-documentation)
 * [Appendix A. CILogon Authentication Strategy (expert mode)](#appendix-a-cilogon-authentication-strategy-expert-mode)
   * [A.1 - Discovery Page](#a1---discovery-page)
   * [A.2 - Registration Page](#a2---registration-page)
@@ -247,6 +250,73 @@ You will need to map the Apache authenticated user to the local system user. Thi
 
 The principle behind this script is that you call it with a URL encoded `REMOTE_USER` user name as the only argument, and it will return the mapping to the local system user name if it exists.
 
+### 2.6 - Add Cluster Connection Config Files
+
+**(Optional step)**
+
+The Dashboard, File Explorer, and Shell Access can work without cluster
+connection config files. These config files are required for:
+
+* enable Shell Access to multiple named hosts outside of the local host OOD is running on
+* use Active Jobs, My Jobs, or any other app that works with batch jobs
+
+
+1. Create default directory for config files:
+
+    ```sh
+    sudo mkdir -p /etc/ood/config/clusters.d
+    ```
+
+2. Add one config file for each host you want to provide access to. Each config file is a YAML file and must have the `.yml` suffix.
+
+Here is the minimal YAML config required to specify a host that can be accessed via Shell Access app. The filename is `oakley.yml`:
+
+```yaml
+---
+v1:
+  title: "Oakley"
+  cluster:
+    type: "OodCluster::Cluster"
+    data:
+      servers:
+        login:
+          type: "OodCluster::Servers::Ssh"
+          data:
+            host: "oakely.osc.edu"
+```
+
+* a cluster contains one ore more servers, with server names "login", "resource_mgr" and "scheduler"
+* special server keywards are:
+  * login
+  * resource_mgr
+  * scheduler
+  * ganglia
+
+For Active Jobs and My Jobs to work, a cluster configuration must specify a resource_mgr to use.
+
+```yaml
+---
+v1:
+  title: "Oakley"
+  cluster:
+    type: "OodCluster::Cluster"
+    data:
+      servers:
+        login:
+          type: "OodCluster::Servers::Ssh"
+          data:
+            host: "oakely.osc.edu"
+        resource_mgr:
+          type: "OodCluster::Servers::Torque"
+          data:
+            host: "oak-batch.osc.edu"
+            lib: "/opt/torque/lib64"
+            bin: "/opt/torque/bin"
+            version: "6.0.1"
+```
+
+The name of the file becomes the key for this host. So `oakley.yml` cluster config will have a key `oakley`. My Jobs and other OOD apps that cache information about jobs they manage will associate job metadata with this key.
+
 ## Section 3. App Deployment Strategy
 
 This is the strategy currently employed at the OSC OnDemand and OSC AweSim portals for deploying apps. This is in no way a requirement, and system administrators are encouraged to explore different options.
@@ -423,7 +493,15 @@ See https://github.com/OSC/ood-fileexplorer for more information.
 
 See https://github.com/OSC/ood-fileeditor for more information.
 
-### 4.5 - User Documentation
+### 4.5 - Active Jobs App
+
+See https://github.com/OSC/ood-activejobs for more information.
+
+### 4.6 - My Jobs App
+
+See https://github.com/OSC/ood-myjobs for more information.
+
+### 4.7 - User Documentation
 
 Currently there is no general user documentation provided.
 

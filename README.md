@@ -10,24 +10,24 @@ The Open OnDemand Project is an open-source software project, based on the Ohio 
   * [2.4 - Install the PUN Utility](#24---install-the-pun-utility)
   * [2.5 - Install User Mapping Script](#25---install-user-mapping-script)
   * [2.6 - Add Cluster Connection Config Files](#26---add-cluster-connection-config-files)
-* [Section 3. App Deployment Strategy](#section-3-app-deployment-strategy)
-  * [3.1 - Local Directory Structure](#31---local-directory-structure)
-  * [3.2 - Mapping URI to Local Directory Structure](#32---mapping-uri-to-local-directory-structure)
-    * [3.2.1 - Apps URI](#321---apps-uri)
-    * [3.2.2 - Public URI](#322---public-uri)
-  * [3.3 - OSC Portals](#33---osc-portals)
-    * [3.3.1 - Add/Update System Apps (requires root)](#331---addupdate-system-apps-requires-root)
-    * [3.3.2 - Add/Update User Apps (requires root)](#332---addupdate-user-apps-requires-root)
-    * [3.3.3 - Add/Update Dev Apps](#333---addupdate-dev-apps)
-    * [3.3.4 - Add/Update Public Assets (requires root)](#334---addupdate-public-assets-requires-root)
-* [Section 4. System Apps](#section-4-system-apps)
-    * [4.1 - Dashboard App](#41---dashboard-app)
-    * [4.2 - Shell App](#42---shell-app)
-    * [4.3 - Files App](#43---files-app)
-    * [4.4 - File Editor App](#44---file-editor-app)
-    * [4.5 - Active Jobs App](#45---active-jobs-app)
-    * [4.6 - My Jobs App](#46---my-jobs-app)
-    * [4.7 - User Documentation](#47---user-documentation)
+* [Section 3. System Apps](#section-3-system-apps)
+    * [3.1 - Dashboard App](#31---dashboard-app)
+    * [3.2 - Shell App](#32---shell-app)
+    * [3.3 - Files App](#33---files-app)
+    * [3.4 - File Editor App](#34---file-editor-app)
+    * [3.5 - Active Jobs App](#35---active-jobs-app)
+    * [3.6 - My Jobs App](#36---my-jobs-app)
+    * [3.7 - User Documentation](#37---user-documentation)
+* [Section 4. App Deployment Strategy](#section-4-app-deployment-strategy)
+  * [4.1 - Local Directory Structure](#41---local-directory-structure)
+  * [4.2 - Mapping URI to Local Directory Structure](#42---mapping-uri-to-local-directory-structure)
+    * [4.2.1 - Apps URI](#421---apps-uri)
+    * [4.2.2 - Public URI](#422---public-uri)
+  * [4.3 - OSC Portals](#43---osc-portals)
+    * [4.3.1 - Add/Update System Apps (requires root)](#431---addupdate-system-apps-requires-root)
+    * [4.3.2 - Add/Update User Apps (requires root)](#432---addupdate-user-apps-requires-root)
+    * [4.3.3 - Add/Update Dev Apps](#433---addupdate-dev-apps)
+    * [4.3.4 - Add/Update Public Assets (requires root)](#434---addupdate-public-assets-requires-root)
 * [Appendix A. CILogon Authentication Strategy (expert mode)](#appendix-a-cilogon-authentication-strategy-expert-mode)
   * [A.1 - Discovery Page](#a1---discovery-page)
   * [A.2 - Registration Page](#a2---registration-page)
@@ -317,11 +317,49 @@ v1:
 
 The name of the file becomes the key for this host. So `oakley.yml` cluster config will have a key `oakley`. My Jobs and other OOD apps that cache information about jobs they manage will associate job metadata with this key.
 
-## Section 3. App Deployment Strategy
+## Section 3. System Apps
+
+These are the apps deployed by the system administrator on the local disk that are accessible by all users.
+
+### 3.1 - Dashboard App
+
+See https://github.com/OSC/ood-dashboard for more information.
+
+### 3.2 - Shell App
+
+See https://github.com/OSC/ood-shell for more information.
+
+### 3.3 - Files App
+
+See https://github.com/OSC/ood-fileexplorer for more information.
+
+### 3.4 - File Editor App
+
+See https://github.com/OSC/ood-fileeditor for more information.
+
+### 3.5 - Active Jobs App
+
+See https://github.com/OSC/ood-activejobs for more information.
+
+### 3.6 - My Jobs App
+
+See https://github.com/OSC/ood-myjobs for more information.
+
+### 3.7 - User Documentation
+
+Currently there is no general user documentation provided.
+
+OSC provides user documentation for their Open OnDemand deployment (OSC OnDemand) at:
+
+https://www.osc.edu/resources/online_portals/ondemand
+
+Feel free to use it as template for your own organization's user-facing documentation.
+
+## Section 4. App Deployment Strategy
 
 This is the strategy currently employed at the OSC OnDemand and OSC AweSim portals for deploying apps. This is in no way a requirement, and system administrators are encouraged to explore different options.
 
-### 3.1 - Local Directory Structure
+### 4.1 - Local Directory Structure
 
 Apps are deployed on the local disk of the host serving the Open OnDemand portal. Care must be taken for user shared apps as they are deployed through symlinks to the corresponding user's home directory on the shared file system.
 
@@ -360,9 +398,9 @@ Apps are deployed on the local disk of the host serving the Open OnDemand portal
     └── ...                                        # -rw-r--r--  root    root
 ```
 
-### 3.2 - Mapping URI to Local Directory Structure
+### 4.2 - Mapping URI to Local Directory Structure
 
-#### 3.2.1 - Apps URI
+#### 4.2.1 - Apps URI
 
 To access an app you **MUST**:
 
@@ -383,7 +421,7 @@ https://<PORTAL>.osc.edu/pun/usr/<USER>/<APP>  =>  /var/www/ood/apps/usr/<USER>/
 https://<PORTAL>.osc.edu/pun/dev/<APP>         =>  ~/<PORTAL>/dev/<APP>
 ```
 
-#### 3.2.2 - Public URI
+#### 4.2.2 - Public URI
 
 **Anyone** can access the resources underneath the `/public` URI.
 
@@ -392,7 +430,7 @@ https://<PORTAL>.osc.edu/pun/dev/<APP>         =>  ~/<PORTAL>/dev/<APP>
 https://<PORTAL>.osc.edu/public/favicon.ico  =>  /var/www/ood/public/favicon.ico
 ```
 
-### 3.3 - OSC Portals
+### 4.3 - OSC Portals
 
 Available OSC Portals:
 
@@ -401,7 +439,7 @@ Available OSC Portals:
 | `ondemand` | `web02.hpc.osc.edu` |
 | `awesim`   | `web04.hpc.osc.edu` |
 
-#### 3.3.1 - Add/Update System Apps (requires root)
+#### 4.3.1 - Add/Update System Apps (requires root)
 
 The system apps are maintained by mirroring the following directory:
 
@@ -416,7 +454,7 @@ The command to mirror this directory (**performed** on `webXX`) is:
 sudo rsync -rlptvu --delete /users/PZS0645/wiag/ood_portals/<PORTAL>/sys/ /var/www/ood/apps/sys
 ```
 
-#### 3.3.2 - Add/Update User Apps (requires root)
+#### 4.3.2 - Add/Update User Apps (requires root)
 
 Each `<USER>` directory on the local disk will be given an appropriate permission such that only members of the `<GROUP>` can access the user's shared apps. This is an important security condition so that users don't access malicious developers' apps.
 
@@ -449,7 +487,7 @@ Now the user can update/maintain his or her own apps within their home directory
 ~/<PORTAL>/share/*
 ```
 
-#### 3.3.3 - Add/Update Dev Apps
+#### 4.3.3 - Add/Update Dev Apps
 
 The user will need to create the required dev directory in their home directory in order to develop apps on the given `<PORTAL>`:
 
@@ -458,7 +496,7 @@ The user will need to create the required dev directory in their home directory 
 mkdir -p ~/<PORTAL>/dev
 ```
 
-#### 3.3.4 - Add/Update Public Assets (requires root)
+#### 4.3.4 - Add/Update Public Assets (requires root)
 
 The public assets are maintained by mirroring the following directory:
 
@@ -472,44 +510,6 @@ The command to mirror this directory (**performed** on `webXX`) is:
 # Mirror the deployment directory with the staged directory
 sudo rsync -rlptvu --delete /users/PZS0645/wiag/ood_portals/<PORTAL>/public/ /var/www/ood/public
 ```
-
-## Section 4. System Apps
-
-These are the apps deployed by the system administrator on the local disk that are accessible by all users.
-
-### 4.1 - Dashboard App
-
-See https://github.com/OSC/ood-dashboard for more information.
-
-### 4.2 - Shell App
-
-See https://github.com/OSC/ood-shell for more information.
-
-### 4.3 - Files App
-
-See https://github.com/OSC/ood-fileexplorer for more information.
-
-### 4.4 - File Editor App
-
-See https://github.com/OSC/ood-fileeditor for more information.
-
-### 4.5 - Active Jobs App
-
-See https://github.com/OSC/ood-activejobs for more information.
-
-### 4.6 - My Jobs App
-
-See https://github.com/OSC/ood-myjobs for more information.
-
-### 4.7 - User Documentation
-
-Currently there is no general user documentation provided.
-
-OSC provides user documentation for their Open OnDemand deployment (OSC OnDemand) at:
-
-https://www.osc.edu/resources/online_portals/ondemand
-
-Feel free to use it as template for your own organization's user-facing documentation.
 
 ## Appendix A. CILogon Authentication Strategy (expert mode)
 

@@ -12,4 +12,3 @@ Open OnDemand is an NSF-funded open-source HPC portal based on OSC's original On
  * Graphical desktop environments and desktop applications
 
 [Open-OnDemand-gh]:   https://github.com/OSC/Open-OnDemand
-

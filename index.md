@@ -4,3 +4,5 @@
 # See: https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 layout: default
 ---
+ - [Learn more about Open OnDemand](/about)
+ - [Learn about upcoming Open OnDemand events](/webinar)

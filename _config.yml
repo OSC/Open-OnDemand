@@ -16,9 +16,6 @@
 title: Open OnDemand – Open Source General Purpose HPC Portal
 email: bgohar@osc.edu
 description: > # this means to ignore newlines until "baseurl:"
-  Open OnDemand is an NSF-funded, open-source general purpose HPC portal
-  written primarily in Ruby on Rails and supporting a variety of accessibility features
-  as well as custom application support.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://osc.github.io/Open-OnDemand" # the base hostname & protocol for your site, e.g. http://example.com
 github_username:  osc

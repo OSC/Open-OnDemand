@@ -107,7 +107,7 @@ cd ~/tmp/ood/src
     ```sh
     scl enable git19 -- git clone https://github.com/OSC/ood-portal-generator.git
     cd ood-portal-generator/
-    git checkout 0.3.0
+    scl enable git19 -- git checkout 0.3.0
     ```
 
 2. `ood-portal-generator` is a script that takes a config.yml (or uses defaults if not provided) and renders an Apache config template file. Generate a default one now:
@@ -137,105 +137,95 @@ Then we will add another authentication mechanism.
 
 _Note: The Apache config references the location of `mod_ood_proxy`, `nginx_stage`, and `ood_auth_map`. Be sure to update these locations if you change the `PREFIX` for any installation of the corresponding package in the config.yml prior to generating the Apache config._
 
-### 2.3 - Install Open OnDemand Proxy Module for Apache
+### 2.3 - Install Proxy Module for Apache
 
 An Apache module written in Lua is the primary component for the proxy logic. It is given by the [mod_ood_proxy](https://github.com/OSC/mod_ood_proxy) project.
 
-1.  We clone the `mod_ood_proxy` repo to the local disk:
+1.  Clone and check out the latest tag:
 
     ```sh
-    git clone https://github.com/OSC/mod_ood_proxy.git
+    cd ~/tmp/ood/src
+    scl enable git19 -- git clone https://github.com/OSC/mod_ood_proxy.git
     cd mod_ood_proxy
-    ```
-
-2.  Check out the version of the generator you intend on using:
-
-    ![GitHub Release](https://img.shields.io/github/release/osc/mod_ood_proxy.svg?label=latest release)
-
-    ```sh
-    # A list of versions & details can be viewed in the CHANGELOG.md
-    # As of writing this the latest version is `v0.2.0`
     git checkout tags/v0.2.0
     ```
 
-3.  Install it to its global location:
+2.  Install it to its global location:
 
     ```sh
     sudo scl enable rh-ruby22 -- rake install
-    # => /opt/ood/mod_ood_proxy
+    # => mkdir -p /opt/ood/mod_ood_proxy
+    # => etc.
     ```
 
 ### 2.4 - Install the PUN Utility
 
 The PUNs are manipulated and maintained by the [nginx_stage](https://github.com/OSC/nginx_stage) utility. This tool is meant to by run by `root` or a user with `sudoers` privileges.
 
-1.  We clone the `nginx_stage` repo to the local disk:
+1.  Clone and check out the latest tag:
 
     ```sh
-    git clone https://github.com/OSC/nginx_stage.git
-    cd nginx_stage
+    cd ~/tmp/ood/src
+    scl enable git19 -- git clone https://github.com/OSC/nginx_stage.git
+    scl enable git19 -- git checkout tags/v0.2.0
     ```
 
-2.  Check out the version of the generator you intend on using:
-
-    ![GitHub Release](https://img.shields.io/github/release/osc/nginx_stage.svg?label=latest release)
-
-    ```sh
-    # A list of versions & details can be viewed in the CHANGELOG.md
-    # As of writing this the latest version is `v0.2.0`
-    git checkout tags/v0.2.0
-    ```
-
-3.  Install it to its global location:
+2.  Install it to its global location:
 
     ```sh
     sudo scl enable rh-ruby22 -- rake install
     # => /opt/ood/nginx_stage
     ```
 
-4.  Modify `/opt/ood/nginx_stage/config/nginx_stage.yml` and `/opt/ood/nginx_stage/bin/ood_ruby`.
+This creates the nginx_stage config `/opt/ood/nginx_stage/config/nginx_stage.yml` and the ruby binstub/wrapper script `/opt/ood/nginx_stage/bin/ood_ruby`.
 
-    In particular, **opt into** metrics reporting in `nginx_stage.yml` and use Software Collections in `ood_ruby`.
+* If you run an older Linux OS that creates user accounts starting at id 500, then you will need to modify nginx_stage.yml - the configuration option min_uid: 1000 accordingly.
 
-    Note: These files will not be overwritten the next time you update `nginx_stage`.
-    
-    **Pro tip**: If you run an older Linux OS that creates user accounts starting at id `500`, then you will need to modify the configuration option `min_uid: 1000` accordingly.
 
-5.  If not already done, give the `apache` user `sudo` privileges to run this tool:
+3. Give apache user sudo privileges to run `nginx_stage` command
 
-    ```sh
-    # /etc/sudoers
+4.  If not already done, give the `apache` user `sudo` privileges to run this tool. To do this I created a `sudoers_ood` file in src directory:
 
+    ```
     Defaults:apache     !requiretty, !authenticate
     apache ALL=(ALL) NOPASSWD: /opt/ood/nginx_stage/sbin/nginx_stage
     ```
+
+    and then I copied this to `/etc/sudoers.d/10_ood`:
+
+    ```
+    sudo cp sudoers_ood /etc/sudoers.d/10_ood
+    sudo chmod 440 /etc/sudoers.d/10_ood
+    ```
+
+    Our `/etc/sudoers` file includes files in `/etc/sudoers.d`:
+
+    ```
+    $ sudo tail -n 2 /etc/sudoers
+    ## Read drop-in files from /etc/sudoers.d (the # here does not mean a comment)
+    #includedir /etc/sudoers.d
+    ```
+
 
 ### 2.5 - Install User Mapping Script
 
 You will need to map the Apache authenticated user to the local system user. This is done with the simple tool: [ood_auth_map](https://github.com/OSC/ood_auth_map).
 
-1.  We clone the `ood_auth_map` repo to the local disk:
+1.  Clone and check out the latest tag:
 
     ```sh
-    git clone https://github.com/OSC/ood_auth_map.git
+    cd ~/tmp/ood/src
+    scl enable git19 -- git clone https://github.com/OSC/ood_auth_map.git
     cd ood_auth_map
+    scl enable git19 -- git checkout tags/v0.0.3
     ```
 
-2.  Check out the version of the generator you intend on using:
-
-    ![GitHub Release](https://img.shields.io/github/release/osc/ood_auth_map.svg?label=latest release)
-
-    ```sh
-    # A list of versions & details can be viewed in the CHANGELOG.md
-    # As of writing this the latest version is `v0.0.3`
-    git checkout tags/v0.0.3
-    ```
-
-3.  Install it to its global location:
+2.  Install it to its global location:
 
     ```sh
     sudo scl enable rh-ruby22 -- rake install
-    # => /opt/ood/ood_auth_map
+    # => mkdir -p /opt/ood/ood_auth_map/bin
+    # => etc.
     ```
 
 The principle behind this script is that you call it with a URL encoded `REMOTE_USER` user name as the only argument, and it will return the mapping to the local system user name if it exists.

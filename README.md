@@ -297,6 +297,34 @@ v1:
 
 The name of the file becomes the key for this host. So `oakley.yml` cluster config will have a key `oakley`. My Jobs and other OOD apps that cache information about jobs they manage will associate job metadata with this key.
 
+### 2.7 - Disable SELinux and open port 80 and 443 through IP Tables
+
+1. Disable SELinux (not documented here)
+
+2. Open port 80 and 443 through IP Tables i.e.
+
+    ```sh
+    sudo iptables -I INPUT -p tcp -m multiport --dports 80 -m comment --comment "00080 *:80" -j ACCEPT
+    sudo iptables -I INPUT -p tcp -m multiport --dports 443 -m comment --comment "00443 *:443" -j ACCEPT
+    sudo /etc/init.d/iptables save
+    ```
+
+### 2.8 - Start Apache
+
+```
+$ sudo service httpd24-httpd start
+Starting httpd:                                            [  OK  ]
+```
+
+If you access the host now through a web browser you should see this error:
+
+```
+Error -- invalid app root: /var/www/ood/apps/sys/dashboard
+Run 'nginx_stage --help' to see a full list of available command line options.
+```
+
+Success! The infrastructure components are installed and now we need to install the OOD "System Apps".
+
 ## Section 3. System Apps
 
 These are the apps deployed by the system administrator on the local disk that are accessible by all users.

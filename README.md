@@ -69,6 +69,7 @@ We will use RedHat Software Collections to satisfy these requirements:
 * Git 1.9
 
 In this tutorial scl (RedHat Software Collections) packages happen to be installed at `/opt/rh`.
+This tutorial is also done from an account that has sudo access but is not root.
 
 Enable the SCL location to pull rpms from:
 
@@ -91,95 +92,50 @@ script which is written in ruby. Do this by editing `/opt/rh/httpd24/service-env
 +HTTPD24_HTTPD_SCLS_ENABLED="httpd24 rh-ruby22"
 ```
 
-### 2.2 - Generate Apache Config for Open OnDemand Portal
+Finally, make src directory where we will check out and build OOD infrastructure components and apps:
 
-**TODO**
+```sh
+mkdir -p ~/tmp/ood/src
+cd ~/tmp/ood/src
+```
 
-In this section we will generate an Open OnDemand Portal config file used by the Apache server. This can be done manually or using the [ood-portal-generator](https://github.com/OSC/ood-portal-generator).
 
-1.  We clone the `ood-portal-generator` repo to the local disk:
+### 2.2 - Generate Apache Config
 
-    ```sh
-    git clone https://github.com/OSC/ood-portal-generator.git
-    cd ood-portal-generator
-    ```
-
-2.  Check out the version of the generator you intend on using:
-
-    ![GitHub Release](https://img.shields.io/github/release/osc/ood-portal-generator.svg?label=latest release)
+1. Clone and check out the latest tag:
 
     ```sh
-    # A list of versions & details can be viewed in the CHANGELOG.md
-    # As of writing this the latest version is `v0.2.0`
-    git checkout tags/v0.2.0
+    scl enable git19 -- git clone https://github.com/OSC/ood-portal-generator.git
+    cd ood-portal-generator/
+    git checkout 0.3.0
     ```
 
-3.  Now we build the Apache config using environment variables to modify any of the default settings:
+2. `ood-portal-generator` is a script that takes a config.yml (or uses defaults if not provided) and renders an Apache config template file. Generate a default one now:
 
     ```sh
     scl enable rh-ruby22 -- rake
+    # => mkdir -p build
+    # => rendering templates/ood-portal.conf.erb => build/ood-portal.conf
     ```
 
-    Documentation on the available options can be found at:
+3. Copy this to the default installation location:
 
-    https://github.com/OSC/ood-portal-generator#default-options
-
-    **SUBDOMAIN** -- If a subdomain or different IP address is used (assuming the SSL certificates are setup as well for this subdomain):
-
-    ```sh
-    scl enable rh-ruby22 -- rake OOD_IP=<ip> OOD_SERVER_NAME=<subdomain>
-
-    # Example:
-    scl enable rh-ruby22 -- rake OOD_IP='xxx.xxx.xxx.xxx' OOD_SERVER_NAME='ondemand.osc.edu'
     ```
-    
-    **Pro-tip**: For a *production* server we'd greatly appreciate it if you contributed analytics back to us for continued support of the project.
-    
-    ```sh
-    scl enable rh-ruby22 -- rake OOD_ANALYTICS_OPT_IN=true
-    ```
-
-4.  Confirm the Apache config is to your liking by viewing the config file generated:
-
-    ```sh
-    cat build/ood-portal.conf
-    ```
-    
-    If you made a mistake, clean up first then build again:
-    
-    ```sh
-    scl enable rh-ruby22 -- rake clean
-    scl enable rh-ruby22 -- rake ...
-    ```
-
-5.  Install it to its global location:
-
-    ```sh
     sudo scl enable rh-ruby22 -- rake install
-    # => /opt/rh/httpd24/root/etc/httpd/conf.d/ood-portal.conf
+    # => cp build/ood-portal.conf /opt/rh/httpd24/root/etc/httpd/conf.d/ood-portal.conf
     ```
 
-6. If using default authentication setup (i.e., you didn't modify any of the environment variables attributed to authentication when building the config), be sure to create an `.htpasswd` file that **maps to system-level usernames**. The default location specified for this file is:
-    
-    ```
-    /opt/rh/httpd24/root/etc/httpd/.htpasswd
-    ```
-        
-    You can generate this file using the `htpasswd` binary as such:
-        
+4. For now, lets use basic auth with an .htpasswd file till we get the installation complete.
+Then we will add another authentication mechanism.
+
     ```sh
-    sudo scl enable httpd24 -- htpasswd -c /opt/rh/httpd24/root/etc/httpd/.htpasswd <username1>
-    # => New password:
-    ```
-        
-    The password doesn't need to correspond to the system-level password used by the user to log into the cluster. To add more accounts you can remove the `-c` option:
-        
-    ```sh
-    sudo scl enable httpd24 -- htpasswd /opt/rh/httpd24/root/etc/httpd/.htpasswd <username2>
-    # => New password:
+    sudo scl enable httpd24 -- htpasswd -c /opt/rh/httpd24/root/etc/httpd/.htpasswd efranz
+    #=> New password:
+    #=> Re-type new password:
+    #=> Adding password for user efranz
     ```
 
-Note: This package references the location of `mod_ood_proxy`, `nginx_stage`, and `ood_auth_map`. It is the source of knowledge for the locations of the various OOD infrastructure pieces. Be sure to update these locations if you change the `PREFIX` for any installation of the corresponding package.
+_Note: The Apache config references the location of `mod_ood_proxy`, `nginx_stage`, and `ood_auth_map`. Be sure to update these locations if you change the `PREFIX` for any installation of the corresponding package in the config.yml prior to generating the Apache config._
 
 ### 2.3 - Install Open OnDemand Proxy Module for Apache
 

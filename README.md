@@ -177,9 +177,9 @@ The PUNs are manipulated and maintained by the [nginx_stage](https://github.com/
     # => /opt/ood/nginx_stage
     ```
 
-This creates the nginx_stage config `/opt/ood/nginx_stage/config/nginx_stage.yml` and the ruby binstub/wrapper script `/opt/ood/nginx_stage/bin/ood_ruby`.
+    This creates the nginx_stage config `/opt/ood/nginx_stage/config/nginx_stage.yml` and the ruby binstub/wrapper script `/opt/ood/nginx_stage/bin/ood_ruby`.
 
-* If you run an older Linux OS that creates user accounts starting at id 500, then you will need to modify nginx_stage.yml - the configuration option min_uid: 1000 accordingly.
+    * If you run an older Linux OS that creates user accounts starting at id 500, then you will need to modify nginx_stage.yml - the configuration option min_uid: 1000 accordingly.
 
 
 3. Give apache user sudo privileges to run `nginx_stage` command

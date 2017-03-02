@@ -48,18 +48,52 @@ The PUN is described as an NGINX server instance running as a system-level user 
 
 ## Section 2. Installation Guide
 
+This installation tutorial starts with a web host webdev05.osc.edu which has
+
+* TORQUE client libraries installed and TORQUE authd daemon started
+* SSL public and private certificates and a chain certificate
+* `scl`, `lsof`, and `sudo` are installed
+* The home directory file system is mounted and accessible by users
+* The host has been added as submit hosts to the servers it will be submitting jobs to
+* **FIXME: is there anything else I missed?**
+
 ### 2.1 - Software Requirements
 
-**Assumes you are using RedHat Software Collections**
+We will use RedHat Software Collections to satisfy these requirements:
+
+* Apache HTTP Server 2.4
+* NGINX 1.6
+* Phusion Passenger 4.0
+* Ruby 2.2 with rake, bundler, and ability to build gem native extensions
+* Node.js 0.10
+* Git 1.9
+
+In this tutorial scl (RedHat Software Collections) packages happen to be installed at `/opt/rh`.
+
+Enable the SCL location to pull rpms from:
 
 ```
-yum install -y centos-release-scl lsof sudo
-yum install -y httpd24 nginx16 rh-passenger40 rh-ruby22 rh-ruby22-rubygem-rake rh-ruby22-rubygem-bundler rh-ruby22-ruby-devel nodejs010 git19
+sudo subscription-manager repos --enable=rhel-server-rhscl-6-rpms
+# => Repository 'rhel-server-rhscl-6-rpms' is enabled for this system.
 ```
 
-**Work in Progress**
+Install dependencies:
+
+```
+sudo yum install -y httpd24 nginx16 rh-passenger40 rh-ruby22 rh-ruby22-rubygem-rake rh-ruby22-rubygem-bundler rh-ruby22-ruby-devel nodejs010 git19
+```
+
+Update Apache Environment to include rh-ruby22. We need this for the user mapping
+script which is written in ruby. Do this by editing `/opt/rh/httpd24/service-environment`:
+
+```diff
+-HTTPD24_HTTPD_SCLS_ENABLED="httpd24"
++HTTPD24_HTTPD_SCLS_ENABLED="httpd24 rh-ruby22"
+```
 
 ### 2.2 - Generate Apache Config for Open OnDemand Portal
+
+**TODO**
 
 In this section we will generate an Open OnDemand Portal config file used by the Apache server. This can be done manually or using the [ood-portal-generator](https://github.com/OSC/ood-portal-generator).
 

@@ -161,7 +161,7 @@ An Apache module written in Lua is the primary component for the proxy logic. It
     cd ~/tmp/ood/src
     scl enable git19 -- git clone https://github.com/OSC/mod_ood_proxy.git
     cd mod_ood_proxy/
-    git checkout v0.2.1
+    scl enable git19 -- git checkout v0.2.1
     ```
 
 2.  Install it to its global location:
@@ -184,7 +184,7 @@ to by run by `root` or a user with `sudoers` privileges.
     cd ~/tmp/ood/src
     scl enable git19 -- git clone https://github.com/OSC/nginx_stage.git
     cd nginx_stage/
-    scl enable git19 -- git checkout tags/v0.2.1
+    scl enable git19 -- git checkout v0.2.1
     ```
 
 2.  Install it to its global location:
@@ -238,7 +238,7 @@ This is done with the simple tool:
     cd ~/tmp/ood/src
     scl enable git19 -- git clone https://github.com/OSC/ood_auth_map.git
     cd ood_auth_map/
-    scl enable git19 -- git checkout tags/v0.0.3
+    scl enable git19 -- git checkout v0.0.3
     ```
 
 2.  Install it to its global location:

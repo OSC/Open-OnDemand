@@ -13,7 +13,7 @@ The Open OnDemand Project is an open-source software project, based on the Ohio 
   * [2.7 - Disable SELinux and open port 80 and 443 through IP Tables](#27---disable-selinux-and-open-port-80-and-443-through-ip-tables)
   * [2.8 - Start Apache](#28---start-apache)
   * [2.9 - Add SSL Support](#29---add-ssl-support)
-  * [2.9 - Add LDAP Support](#29---add-ldap-support)
+  * [2.10 - Add LDAP Support](#210---add-ldap-support)
 * [Section 3. System Apps](#section-3-system-apps)
     * [3.1 - Dashboard App](#31---dashboard-app)
     * [3.2 - Shell App](#32---shell-app)

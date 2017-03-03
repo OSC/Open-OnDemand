@@ -405,6 +405,9 @@ In this example the certificates are located at:
       - 'SSLCertificateChainFile "/etc/pki/tls/certs/webdev05.hpc.osc.edu-interm.crt"'
     ```
 
+    For documentation on SSL directives please see
+    https://httpd.apache.org/docs/2.4/mod/mod_ssl.html
+
     Re-build the Apache config:
 
     ```sh

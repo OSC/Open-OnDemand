@@ -425,6 +425,10 @@ In this example the certificates are located at:
 When you visit the portal in your browser now it should redirect any http
 traffic to the proper https protocol.
 
+```
+https://webdev05.hpc.osc.edu/
+```
+
 ## Section 3. System Apps
 
 These are the apps deployed by the system administrator on the local disk that are accessible by all users.

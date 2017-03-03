@@ -430,7 +430,7 @@ traffic to the proper https protocol.
 https://webdev05.hpc.osc.edu/
 ```
 
-# 2.10 - Add LDAP Support
+### 2.10 - Add LDAP Support
 
 **(Optional step, but recommended)**
 

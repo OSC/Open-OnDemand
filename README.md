@@ -352,6 +352,76 @@ Run 'nginx_stage --help' to see a full list of available command line options.
 Success! The infrastructure components are installed and now we need to install
 the OOD "System Apps".
 
+### 2.9 - Add SSL Support
+
+**(Optional step, but recommended)**
+
+SSL provides for an encrypted channel of communication between the user's
+browser and the Open OnDemand portal. This requires:
+
+* a server name that points to the Open OnDemand server
+  (`webdev05.hpc.osc.edu`)
+* signed SSL certificates with possible intermediate certificates
+
+In this example the certificates are located at:
+
+```sh
+# Public certificate
+/etc/pki/tls/certs/webdev05.hpc.osc.edu.crt
+
+# Private key
+/etc/pki/tls/private/webdev05.hpc.osc.edu.key
+
+# Intermediate certificate
+/etc/pki/tls/certs/webdev05.hpc.osc.edu-interm.crt
+```
+
+1.  Install the necessary Apache module to use SSL:
+
+    ```sh
+    sudo yum install httpd24-mod_ssl.x86_64
+    ```
+
+2.  Update the Apache config with this server name and paths to the SSL
+    certificates.
+
+    ```sh
+    cd ~/tmp/ood/src/ood-portal-generator
+    ```
+
+    Create or edit the `config.yml` as such:
+
+    ```yaml
+    ---
+
+    servername: webdev05.hpc.osc.edu
+    ssl:
+      - 'SSLCertificateFile "/etc/pki/tls/certs/webdev05.hpc.osc.edu.crt"'
+      - 'SSLCertificateKeyFile "/etc/pki/tls/private/webdev05.hpc.osc.edu.key"'
+      - 'SSLCertificateChainFile "/etc/pki/tls/certs/webdev05.hpc.osc.edu-interm.crt"'
+    ```
+
+    Re-build the Apache config:
+
+    ```sh
+    scl enable rh-ruby22 -- rake
+    ```
+
+    Copy it over to the default location:
+
+    ```sh
+    scl enable rh-ruby22 -- rake install
+    ```
+
+3.  Restart the Apache server:
+
+    ```sh
+    sudo service httpd24-httpd restart
+    ```
+
+When you visit the portal in your browser now it should redirect any http
+traffic to the proper https protocol.
+
 ## Section 3. System Apps
 
 These are the apps deployed by the system administrator on the local disk that are accessible by all users.

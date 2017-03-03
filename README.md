@@ -5,11 +5,15 @@ The Open OnDemand Project is an open-source software project, based on the Ohio 
 * [Section 1. Components](#section-1-components)
 * [Section 2. Installation Guide](#section-2-installation-guide)
   * [2.1 - Software Requirements](#21---software-requirements)
-  * [2.2 - Generate Apache Config for Open OnDemand Portal](#22---generate-apache-config-for-open-ondemand-portal)
-  * [2.3 - Install Open OnDemand Proxy Module for Apache](#23---install-open-ondemand-proxy-module-for-apache)
+  * [2.2 - Generate Apache Config](#22---generate-apache-config)
+  * [2.3 - Install Proxy Module for Apache](#23---install-proxy-module-for-apache)
   * [2.4 - Install the PUN Utility](#24---install-the-pun-utility)
   * [2.5 - Install User Mapping Script](#25---install-user-mapping-script)
   * [2.6 - Add Cluster Connection Config Files](#26---add-cluster-connection-config-files)
+  * [2.7 - Disable SELinux and open port 80 and 443 through IP Tables](#27---disable-selinux-and-open-port-80-and-443-through-ip-tables)
+  * [2.8 - Start Apache](#28---start-apache)
+  * [2.9 - Add SSL Support](#29---add-ssl-support)
+  * [2.10 - Add LDAP Support](#210---add-ldap-support)
 * [Section 3. System Apps](#section-3-system-apps)
     * [3.1 - Dashboard App](#31---dashboard-app)
     * [3.2 - Shell App](#32---shell-app)
@@ -48,207 +52,206 @@ The PUN is described as an NGINX server instance running as a system-level user 
 
 ## Section 2. Installation Guide
 
+This installation tutorial starts with a web host `webdev05.osc.edu` which has
+
+* the users are mirrored with the other machines (LDAP+NSS)
+* the home directory shared file system is mounted and accessible by users
+* TORQUE client libraries installed and the `trqauthd` process started
+* signed SSL certificates with corresponding intermediate certificate
+* Software Collections package/repo, `lsof`, and `sudo` are installed
+* the host has been added as a submit host to the respective batch servers
+
 ### 2.1 - Software Requirements
 
-**Assumes you are using RedHat Software Collections**
+We will use RedHat Software Collections to satisfy these requirements:
+
+* Apache HTTP Server 2.4
+* NGINX 1.6
+* Phusion Passenger 4.0
+* Ruby 2.2 with rake, bundler, and ability to build gem native extensions
+* Node.js 0.10
+* Git 1.9
+
+In this tutorial scl (RedHat Software Collections) packages happen to be
+installed at `/opt/rh`. This tutorial is also done from an account that has
+sudo access but is not root.
+
+Enable the RHSCL repository. Note that you may also need to enable the Optional
+channel and attach a subscription providing access to RHSCL to be able to use
+the repository.
 
 ```
-yum install -y centos-release-scl lsof sudo
-yum install -y httpd24 nginx16 rh-passenger40 rh-ruby22 rh-ruby22-rubygem-rake rh-ruby22-rubygem-bundler rh-ruby22-ruby-devel nodejs010 git19
+sudo subscription-manager repos --enable=rhel-server-rhscl-6-rpms
+# => Repository 'rhel-server-rhscl-6-rpms' is enabled for this system.
 ```
 
-**Work in Progress**
+Install dependencies:
 
-### 2.2 - Generate Apache Config for Open OnDemand Portal
+```
+sudo yum install -y httpd24 nginx16 rh-passenger40 rh-ruby22 rh-ruby22-rubygem-rake rh-ruby22-rubygem-bundler rh-ruby22-ruby-devel nodejs010 git19
+```
 
-In this section we will generate an Open OnDemand Portal config file used by the Apache server. This can be done manually or using the [ood-portal-generator](https://github.com/OSC/ood-portal-generator).
+Update Apache Environment to include `rh-ruby22`. This is necessary for the user mapping
+script written in Ruby. Do this by editing `/opt/rh/httpd24/service-environment`:
 
-1.  We clone the `ood-portal-generator` repo to the local disk:
+```diff
+-HTTPD24_HTTPD_SCLS_ENABLED="httpd24"
++HTTPD24_HTTPD_SCLS_ENABLED="httpd24 rh-ruby22"
+```
+
+Finally, make a source directory that will contain the checked out and built
+OOD infrastructure components and apps:
+
+```sh
+mkdir -p ~/tmp/ood/src
+```
+
+### 2.2 - Generate Apache Config
+
+1. Clone and check out the latest tag:
 
     ```sh
-    git clone https://github.com/OSC/ood-portal-generator.git
-    cd ood-portal-generator
+    cd ~/tmp/ood/src
+    scl enable git19 -- git clone https://github.com/OSC/ood-portal-generator.git
+    cd ood-portal-generator/
+    scl enable git19 -- git checkout v0.3.0
     ```
 
-2.  Check out the version of the generator you intend on using:
-
-    ![GitHub Release](https://img.shields.io/github/release/osc/ood-portal-generator.svg?label=latest release)
-
-    ```sh
-    # A list of versions & details can be viewed in the CHANGELOG.md
-    # As of writing this the latest version is `v0.2.0`
-    git checkout tags/v0.2.0
-    ```
-
-3.  Now we build the Apache config using environment variables to modify any of the default settings:
+2. `ood-portal-generator` is a script that takes a `config.yml` (or uses
+   defaults if not provided) and renders an Apache config from a template.
+   Generate a default one now:
 
     ```sh
     scl enable rh-ruby22 -- rake
+    # => mkdir -p build
+    # => rendering templates/ood-portal.conf.erb => build/ood-portal.conf
     ```
 
-    Documentation on the available options can be found at:
+3. Copy this to the default installation location:
 
-    https://github.com/OSC/ood-portal-generator#default-options
-
-    **SUBDOMAIN** -- If a subdomain or different IP address is used (assuming the SSL certificates are setup as well for this subdomain):
-
-    ```sh
-    scl enable rh-ruby22 -- rake OOD_IP=<ip> OOD_SERVER_NAME=<subdomain>
-
-    # Example:
-    scl enable rh-ruby22 -- rake OOD_IP='xxx.xxx.xxx.xxx' OOD_SERVER_NAME='ondemand.osc.edu'
     ```
-    
-    **Pro-tip**: For a *production* server we'd greatly appreciate it if you contributed analytics back to us for continued support of the project.
-    
-    ```sh
-    scl enable rh-ruby22 -- rake OOD_ANALYTICS_OPT_IN=true
-    ```
-
-4.  Confirm the Apache config is to your liking by viewing the config file generated:
-
-    ```sh
-    cat build/ood-portal.conf
-    ```
-    
-    If you made a mistake, clean up first then build again:
-    
-    ```sh
-    scl enable rh-ruby22 -- rake clean
-    scl enable rh-ruby22 -- rake ...
-    ```
-
-5.  Install it to its global location:
-
-    ```sh
     sudo scl enable rh-ruby22 -- rake install
-    # => /opt/rh/httpd24/root/etc/httpd/conf.d/ood-portal.conf
+    # => cp build/ood-portal.conf /opt/rh/httpd24/root/etc/httpd/conf.d/ood-portal.conf
     ```
 
-6. If using default authentication setup (i.e., you didn't modify any of the environment variables attributed to authentication when building the config), be sure to create an `.htpasswd` file that **maps to system-level usernames**. The default location specified for this file is:
-    
-    ```
-    /opt/rh/httpd24/root/etc/httpd/.htpasswd
-    ```
-        
-    You can generate this file using the `htpasswd` binary as such:
-        
+4. For now, lets use basic auth with an `.htpasswd` file until we get the
+   installation complete. Then we will add another authentication mechanism.
+   Start by generating an `.htpasswd` file with a user that **exists** on your
+   system (the password need not be the same as their current system password):
+
     ```sh
-    sudo scl enable httpd24 -- htpasswd -c /opt/rh/httpd24/root/etc/httpd/.htpasswd <username1>
-    # => New password:
-    ```
-        
-    The password doesn't need to correspond to the system-level password used by the user to log into the cluster. To add more accounts you can remove the `-c` option:
-        
-    ```sh
-    sudo scl enable httpd24 -- htpasswd /opt/rh/httpd24/root/etc/httpd/.htpasswd <username2>
-    # => New password:
+    sudo scl enable httpd24 -- htpasswd -c /opt/rh/httpd24/root/etc/httpd/.htpasswd efranz
+    #=> New password:
+    #=> Re-type new password:
+    #=> Adding password for user efranz
     ```
 
-Note: This package references the location of `mod_ood_proxy`, `nginx_stage`, and `ood_auth_map`. It is the source of knowledge for the locations of the various OOD infrastructure pieces. Be sure to update these locations if you change the `PREFIX` for any installation of the corresponding package.
+_Note: The Apache config references the location of `mod_ood_proxy`,
+`nginx_stage`, and `ood_auth_map`. Be sure to update these locations if you
+change the `PREFIX` for any installation of the corresponding package in the
+`config.yml` prior to generating the Apache config._
 
-### 2.3 - Install Open OnDemand Proxy Module for Apache
+### 2.3 - Install Proxy Module for Apache
 
 An Apache module written in Lua is the primary component for the proxy logic. It is given by the [mod_ood_proxy](https://github.com/OSC/mod_ood_proxy) project.
 
-1.  We clone the `mod_ood_proxy` repo to the local disk:
+1.  Clone and check out the latest tag:
 
     ```sh
-    git clone https://github.com/OSC/mod_ood_proxy.git
-    cd mod_ood_proxy
+    cd ~/tmp/ood/src
+    scl enable git19 -- git clone https://github.com/OSC/mod_ood_proxy.git
+    cd mod_ood_proxy/
+    git checkout v0.2.1
     ```
 
-2.  Check out the version of the generator you intend on using:
-
-    ![GitHub Release](https://img.shields.io/github/release/osc/mod_ood_proxy.svg?label=latest release)
-
-    ```sh
-    # A list of versions & details can be viewed in the CHANGELOG.md
-    # As of writing this the latest version is `v0.2.0`
-    git checkout tags/v0.2.0
-    ```
-
-3.  Install it to its global location:
+2.  Install it to its global location:
 
     ```sh
     sudo scl enable rh-ruby22 -- rake install
-    # => /opt/ood/mod_ood_proxy
+    # => mkdir -p /opt/ood/mod_ood_proxy
+    # => ...
     ```
 
 ### 2.4 - Install the PUN Utility
 
-The PUNs are manipulated and maintained by the [nginx_stage](https://github.com/OSC/nginx_stage) utility. This tool is meant to by run by `root` or a user with `sudoers` privileges.
+The PUNs are manipulated and maintained by the
+[nginx_stage](https://github.com/OSC/nginx_stage) utility. This tool is meant
+to by run by `root` or a user with `sudoers` privileges.
 
-1.  We clone the `nginx_stage` repo to the local disk:
-
-    ```sh
-    git clone https://github.com/OSC/nginx_stage.git
-    cd nginx_stage
-    ```
-
-2.  Check out the version of the generator you intend on using:
-
-    ![GitHub Release](https://img.shields.io/github/release/osc/nginx_stage.svg?label=latest release)
+1.  Clone and check out the latest tag:
 
     ```sh
-    # A list of versions & details can be viewed in the CHANGELOG.md
-    # As of writing this the latest version is `v0.2.0`
-    git checkout tags/v0.2.0
+    cd ~/tmp/ood/src
+    scl enable git19 -- git clone https://github.com/OSC/nginx_stage.git
+    cd nginx_stage/
+    scl enable git19 -- git checkout tags/v0.2.1
     ```
 
-3.  Install it to its global location:
+2.  Install it to its global location:
 
     ```sh
     sudo scl enable rh-ruby22 -- rake install
     # => /opt/ood/nginx_stage
     ```
 
-4.  Modify `/opt/ood/nginx_stage/config/nginx_stage.yml` and `/opt/ood/nginx_stage/bin/ood_ruby`.
+    This creates the `nginx_stage` config
+    `/opt/ood/nginx_stage/config/nginx_stage.yml` and the ruby binstub/wrapper
+    script `/opt/ood/nginx_stage/bin/ood_ruby`.
 
-    In particular, **opt into** metrics reporting in `nginx_stage.yml` and use Software Collections in `ood_ruby`.
+    * If you run an older Linux OS that creates user accounts starting at id
+      500, then you will need to modify `nginx_stage.yml` - the configuration
+      option `min_uid: 1000` accordingly.
 
-    Note: These files will not be overwritten the next time you update `nginx_stage`.
-    
-    **Pro tip**: If you run an older Linux OS that creates user accounts starting at id `500`, then you will need to modify the configuration option `min_uid: 1000` accordingly.
 
-5.  If not already done, give the `apache` user `sudo` privileges to run this tool:
+3.  Give the `apache` user `sudo` privileges to run the `nginx_stage` command.
+    To do this, generate a `sudoers_ood` file in `~/tmp/ood/src` directory:
 
-    ```sh
-    # /etc/sudoers
-
+    ```
     Defaults:apache     !requiretty, !authenticate
     apache ALL=(ALL) NOPASSWD: /opt/ood/nginx_stage/sbin/nginx_stage
     ```
 
+    and then copy this to `/etc/sudoers.d/10_ood`:
+
+    ```sh
+    sudo cp ~/tmp/ood/src/sudoers_ood /etc/sudoers.d/10_ood
+    sudo chmod 440 /etc/sudoers.d/10_ood
+    ```
+
+    Our `/etc/sudoers` file includes files in `/etc/sudoers.d`:
+
+    ```sh
+    sudo tail -n 2 /etc/sudoers
+    ## Read drop-in files from /etc/sudoers.d (the # here does not mean a comment)
+    #includedir /etc/sudoers.d
+    ```
+
 ### 2.5 - Install User Mapping Script
 
-You will need to map the Apache authenticated user to the local system user. This is done with the simple tool: [ood_auth_map](https://github.com/OSC/ood_auth_map).
+You will need to map the Apache authenticated user to the local system user.
+This is done with the simple tool:
+[ood_auth_map](https://github.com/OSC/ood_auth_map).
 
-1.  We clone the `ood_auth_map` repo to the local disk:
-
-    ```sh
-    git clone https://github.com/OSC/ood_auth_map.git
-    cd ood_auth_map
-    ```
-
-2.  Check out the version of the generator you intend on using:
-
-    ![GitHub Release](https://img.shields.io/github/release/osc/ood_auth_map.svg?label=latest release)
+1.  Clone and check out the latest tag:
 
     ```sh
-    # A list of versions & details can be viewed in the CHANGELOG.md
-    # As of writing this the latest version is `v0.0.3`
-    git checkout tags/v0.0.3
+    cd ~/tmp/ood/src
+    scl enable git19 -- git clone https://github.com/OSC/ood_auth_map.git
+    cd ood_auth_map/
+    scl enable git19 -- git checkout tags/v0.0.3
     ```
 
-3.  Install it to its global location:
+2.  Install it to its global location:
 
     ```sh
     sudo scl enable rh-ruby22 -- rake install
-    # => /opt/ood/ood_auth_map
+    # => mkdir -p /opt/ood/ood_auth_map/bin
+    # => ...
     ```
 
-The principle behind this script is that you call it with a URL encoded `REMOTE_USER` user name as the only argument, and it will return the mapping to the local system user name if it exists.
+The principle behind this script is that you call it with a URL encoded
+`REMOTE_USER` user name as the only argument, and it will return the mapping to
+the local system user name if it exists.
 
 ### 2.6 - Add Cluster Connection Config Files
 
@@ -257,7 +260,8 @@ The principle behind this script is that you call it with a URL encoded `REMOTE_
 The Dashboard, File Explorer, and Shell Access can work without cluster
 connection config files. These config files are required for:
 
-* enable Shell Access to multiple named hosts outside of the local host OOD is running on
+* enable Shell Access to multiple named hosts outside of the local host OOD is
+  running on
 * use Active Jobs, My Jobs, or any other app that works with batch jobs
 
 
@@ -267,9 +271,11 @@ connection config files. These config files are required for:
     sudo mkdir -p /etc/ood/config/clusters.d
     ```
 
-2. Add one config file for each host you want to provide access to. Each config file is a YAML file and must have the `.yml` suffix.
+2. Add one config file for each host you want to provide access to. Each config
+   file is a YAML file and must have the `.yml` suffix.
 
-Here is the minimal YAML config required to specify a host that can be accessed via Shell Access app. The filename is `oakley.yml`:
+Here is the minimal YAML config required to specify a host that can be accessed
+via Shell Access app. The filename is `oakley.yml`:
 
 ```yaml
 ---
@@ -285,14 +291,16 @@ v1:
             host: "oakely.osc.edu"
 ```
 
-* a cluster contains one ore more servers, with server names "login", "resource_mgr" and "scheduler"
-* special server keywards are:
-  * login
-  * resource_mgr
-  * scheduler
-  * ganglia
+* a cluster contains one ore more servers, with server names `login`,
+  `resource_mgr` and `scheduler`
+* special server keywords are:
+  * `login`
+  * `resource_mgr`
+  * `scheduler`
+  * `ganglia`
 
-For Active Jobs and My Jobs to work, a cluster configuration must specify a resource_mgr to use.
+For Active Jobs and My Jobs to work, a cluster configuration must specify a
+`resource_mgr` to use.
 
 ```yaml
 ---
@@ -315,7 +323,178 @@ v1:
             version: "6.0.1"
 ```
 
-The name of the file becomes the key for this host. So `oakley.yml` cluster config will have a key `oakley`. My Jobs and other OOD apps that cache information about jobs they manage will associate job metadata with this key.
+The name of the file becomes the key for this host. So `oakley.yml` cluster
+config will have a key `oakley`. My Jobs and other OOD apps that cache
+information about jobs they manage will associate job metadata with this key.
+
+### 2.7 - Disable SELinux and open port 80 and 443 through IP Tables
+
+1. Disable SELinux (not documented here)
+
+2. Open port 80 and 443 through IP Tables i.e.
+
+    ```sh
+    sudo iptables -I INPUT -p tcp -m multiport --dports 80 -m comment --comment "00080 *:80" -j ACCEPT
+    sudo iptables -I INPUT -p tcp -m multiport --dports 443 -m comment --comment "00443 *:443" -j ACCEPT
+    sudo /etc/init.d/iptables save
+    ```
+
+### 2.8 - Start Apache
+
+```sh
+sudo service httpd24-httpd start
+# => Starting httpd:                                            [  OK  ]
+```
+
+If you access the host now through a web browser you should see this error:
+
+```
+Error -- invalid app root: /var/www/ood/apps/sys/dashboard
+Run 'nginx_stage --help' to see a full list of available command line options.
+```
+
+Success! The infrastructure components are installed and now we need to install
+the OOD "System Apps".
+
+### 2.9 - Add SSL Support
+
+**(Optional step, but recommended)**
+
+SSL provides for an encrypted channel of communication between the user's
+browser and the Open OnDemand portal. This requires:
+
+* a server name that points to the Open OnDemand server
+  (`webdev05.hpc.osc.edu`)
+* signed SSL certificates with possible intermediate certificates
+
+In this example the certificates are located at:
+
+```sh
+# Public certificate
+/etc/pki/tls/certs/webdev05.hpc.osc.edu.crt
+
+# Private key
+/etc/pki/tls/private/webdev05.hpc.osc.edu.key
+
+# Intermediate certificate
+/etc/pki/tls/certs/webdev05.hpc.osc.edu-interm.crt
+```
+
+1.  Install the necessary Apache module to use SSL:
+
+    ```sh
+    sudo yum install httpd24-mod_ssl.x86_64
+    ```
+
+2.  Update the Apache config with this server name and paths to the SSL
+    certificates.
+
+    ```sh
+    cd ~/tmp/ood/src/ood-portal-generator
+    ```
+
+    Create or edit the `config.yml` as such:
+
+    ```yaml
+    ---
+
+    servername: webdev05.hpc.osc.edu
+    ssl:
+      - 'SSLCertificateFile "/etc/pki/tls/certs/webdev05.hpc.osc.edu.crt"'
+      - 'SSLCertificateKeyFile "/etc/pki/tls/private/webdev05.hpc.osc.edu.key"'
+      - 'SSLCertificateChainFile "/etc/pki/tls/certs/webdev05.hpc.osc.edu-interm.crt"'
+    ```
+
+    For documentation on SSL directives please see
+    https://httpd.apache.org/docs/2.4/mod/mod_ssl.html
+
+    Re-build the Apache config:
+
+    ```sh
+    scl enable rh-ruby22 -- rake
+    ```
+
+    Copy it over to the default location:
+
+    ```sh
+    scl enable rh-ruby22 -- rake install
+    ```
+
+3.  Restart the Apache server:
+
+    ```sh
+    sudo service httpd24-httpd restart
+    ```
+
+When you visit the portal in your browser now it should redirect any http
+traffic to the proper https protocol.
+
+```
+https://webdev05.hpc.osc.edu/
+```
+
+### 2.10 - Add LDAP Support
+
+**(Optional step, but recommended)**
+
+LDAP support allows for your users to log in using their local username and
+password. It also removes the need for the sys admin to keep updating the
+`.htpasswd` file. This requires:
+
+* an LDAP server preferably with SSL support (`cts06.osc.edu:636`)
+
+1.  Install the necessary Apache module to use LDAP:
+
+    ```sh
+    sudo yum install httpd24-mod_ldap.x86_64
+    ```
+
+2.  Update the Apache config with LDAP Basic Authentication support.
+
+    ```sh
+    cd ~/tmp/ood/src/ood-portal-generator
+    ```
+
+    Create or edit the `config.yml` as such:
+
+    ```yaml
+    ---
+
+    auth:
+      - 'AuthType Basic'
+      - 'AuthName "private"'
+      - 'AuthBasicProvider ldap'
+      - 'AuthLDAPURL "ldaps://cts06.osc.edu:636/ou=People,ou=hpc,o=osc?uid" SSL'
+      - 'AuthLDAPGroupAttribute memberUid'
+      - 'AuthLDAPGroupAttributeIsDN off'
+      - 'RequestHeader unset Authorization'
+      - 'Require valid-user'
+    ```
+
+    For documentation on LDAP directives please see
+    https://httpd.apache.org/docs/2.4/mod/mod_authnz_ldap.html
+
+    Re-build the Apache config:
+
+    ```sh
+    scl enable rh-ruby22 -- rake
+    ```
+
+    Copy it over to the default location:
+
+    ```sh
+    scl enable rh-ruby22 -- rake install
+    ```
+
+3.  Restart the Apache server:
+
+    ```sh
+    sudo service httpd24-httpd restart
+    ```
+
+Close your browser so that you are properly logged out. Then open your browser
+again and access the portal. You should now be able to authenticate with your
+local username and password.
 
 ## Section 3. System Apps
 

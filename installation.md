@@ -65,7 +65,7 @@ mkdir -p ~/tmp/ood/src
     cd ~/tmp/ood/src
     scl enable git19 -- git clone https://github.com/OSC/ood-portal-generator.git
     cd ood-portal-generator/
-    scl enable git19 -- git checkout v0.3.0
+    scl enable git19 -- git checkout v0.3.1
     ```
 
 2.  `ood-portal-generator` is a script that takes a `config.yml` (or uses

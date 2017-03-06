@@ -6,41 +6,41 @@ title: System Apps
 These are the apps deployed by the system administrator on the local disk that
 are accessible by all users.
 
-### 3.1 - Dashboard App
+## Dashboard App
 
 See
 [https://github.com/OSC/ood-dashboard](https://github.com/OSC/ood-dashboard)
 for more information.
 
-### 3.2 - Shell App
+## Shell App
 
 See [https://github.com/OSC/ood-shell](https://github.com/OSC/ood-shell) for
 more information.
 
-### 3.3 - Files App
+## Files App
 
 See
 [https://github.com/OSC/ood-fileexplorer](https://github.com/OSC/ood-fileexplorer)
 for more information.
 
-### 3.4 - File Editor App
+## File Editor App
 
 See
 [https://github.com/OSC/ood-fileeditor](https://github.com/OSC/ood-fileeditor)
 for more information.
 
-### 3.5 - Active Jobs App
+## Active Jobs App
 
 See
 [https://github.com/OSC/ood-activejobs](https://github.com/OSC/ood-activejobs)
 for more information.
 
-### 3.6 - My Jobs App
+## My Jobs App
 
 See [https://github.com/OSC/ood-myjobs](https://github.com/OSC/ood-myjobs) for
 more information.
 
-### 3.7 - User Documentation
+## User Documentation
 
 Currently there is no general user documentation provided.
 

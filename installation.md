@@ -3,7 +3,7 @@ layout: default
 title: Installation
 ---
 
-This installation tutorial starts with a web host `webdev05.osc.edu` which has
+This installation tutorial starts with a web host `webdev05.hpc.osc.edu` which has
 
 * the users are mirrored with the other machines (LDAP+NSS)
 * the home directory shared file system is mounted and accessible by users

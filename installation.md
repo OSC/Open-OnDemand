@@ -59,7 +59,7 @@ mkdir -p ~/tmp/ood/src
 
 ## Generate Apache Config
 
-1. Clone and check out the latest tag:
+1.  Clone and check out the latest tag:
 
     ```sh
     cd ~/tmp/ood/src
@@ -68,9 +68,9 @@ mkdir -p ~/tmp/ood/src
     scl enable git19 -- git checkout v0.3.0
     ```
 
-2. `ood-portal-generator` is a script that takes a `config.yml` (or uses
-   defaults if not provided) and renders an Apache config from a template.
-   Generate a default one now:
+2.  `ood-portal-generator` is a script that takes a `config.yml` (or uses
+    defaults if not provided) and renders an Apache config from a template.
+    Generate a default one now:
 
     ```sh
     scl enable rh-ruby22 -- rake
@@ -78,17 +78,17 @@ mkdir -p ~/tmp/ood/src
     # => rendering templates/ood-portal.conf.erb => build/ood-portal.conf
     ```
 
-3. Copy this to the default installation location:
+3.  Copy this to the default installation location:
 
     ```
     sudo scl enable rh-ruby22 -- rake install
     # => cp build/ood-portal.conf /opt/rh/httpd24/root/etc/httpd/conf.d/ood-portal.conf
     ```
 
-4. For now, lets use basic auth with an `.htpasswd` file until we get the
-   installation complete. Then we will add another authentication mechanism.
-   Start by generating an `.htpasswd` file with a user that **exists** on your
-   system (the password need not be the same as their current system password):
+4.  For now, lets use basic auth with an `.htpasswd` file until we get the
+    installation complete. Then we will add another authentication mechanism.
+    Start by generating an `.htpasswd` file with a user that **exists** on your
+    system (the password need not be the same as their current system password):
 
     ```sh
     sudo scl enable httpd24 -- htpasswd -c /opt/rh/httpd24/root/etc/httpd/.htpasswd efranz

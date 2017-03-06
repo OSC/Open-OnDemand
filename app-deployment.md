@@ -42,9 +42,9 @@ symlinks to the corresponding user's home directory on the shared file system.
     └── ...                                        # -rw-r--r--  root    root
 ```
 
-### 4.2 - Mapping URI to Local Directory Structure
+## Mapping URI to Local Directory Structure
 
-#### 4.2.1 - Apps URI
+### Apps URI
 
 To access an app you **MUST**:
 
@@ -66,7 +66,7 @@ https://<PORTAL>.osc.edu/pun/usr/<USER>/<APP>  =>  /var/www/ood/apps/usr/<USER>/
 https://<PORTAL>.osc.edu/pun/dev/<APP>         =>  ~/<PORTAL>/dev/<APP>
 ```
 
-#### 4.2.2 - Public URI
+### Public URI
 
 **Anyone** can access the resources underneath the `/public` URI.
 
@@ -75,7 +75,7 @@ https://<PORTAL>.osc.edu/pun/dev/<APP>         =>  ~/<PORTAL>/dev/<APP>
 https://<PORTAL>.osc.edu/public/favicon.ico  =>  /var/www/ood/public/favicon.ico
 ```
 
-### 4.3 - OSC Portals
+## OSC Portals
 
 Available OSC Portals:
 
@@ -84,7 +84,7 @@ Available OSC Portals:
 | `ondemand` | `web02.hpc.osc.edu` |
 | `awesim`   | `web04.hpc.osc.edu` |
 
-#### 4.3.1 - Add/Update System Apps (requires root)
+### Add/Update System Apps (requires root)
 
 The system apps are maintained by mirroring the following directory:
 
@@ -99,7 +99,7 @@ The command to mirror this directory (**performed** on `webXX`) is:
 sudo rsync -rlptvu --delete /users/PZS0645/wiag/ood_portals/<PORTAL>/sys/ /var/www/ood/apps/sys
 ```
 
-#### 4.3.2 - Add/Update User Apps (requires root)
+### Add/Update User Apps (requires root)
 
 Each `<USER>` directory on the local disk will be given an appropriate
 permission such that only members of the `<GROUP>` can access the user's shared
@@ -137,7 +137,7 @@ directory:
 ~/<PORTAL>/share/*
 ```
 
-#### 4.3.3 - Add/Update Dev Apps
+### Add/Update Dev Apps
 
 The user will need to create the required dev directory in their home directory
 in order to develop apps on the given `<PORTAL>`:
@@ -147,7 +147,7 @@ in order to develop apps on the given `<PORTAL>`:
 mkdir -p ~/<PORTAL>/dev
 ```
 
-#### 4.3.4 - Add/Update Public Assets (requires root)
+### Add/Update Public Assets (requires root)
 
 The public assets are maintained by mirroring the following directory:
 

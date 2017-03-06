@@ -14,3 +14,4 @@ at OSC:
 
  - [Components of Open OnDemand](components)
  - [OSC App Deployment Strategy](app-deployment)
+ - [OSC CILogon Authentication Strategy](cilogon)

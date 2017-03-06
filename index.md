@@ -13,3 +13,4 @@ Some helpful discussion guides describing the various aspects of Open OnDemand
 at OSC:
 
  - [Components of Open OnDemand](components)
+ - [OSC App Deployment Strategy](app-deployment)

@@ -6,5 +6,6 @@ layout: default
 ---
  - [Learn more about Open OnDemand](about)
  - [Learn about upcoming Open OnDemand events](webinar)
+ - [Discussion on Components](components)
  - [Installation](installation)
  - [System Apps](system-apps)

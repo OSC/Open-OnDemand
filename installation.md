@@ -177,6 +177,18 @@ to by run by `root` or a user with `sudoers` privileges.
     #includedir /etc/sudoers.d
     ```
 
+4.  Schedule a cron job that automatically cleans up inactive user PUNs. To do
+    this, generate the file `/etc/cron.d/ood` with the following contents:
+
+    ```sh
+    #!/bin/bash
+
+    PATH=/sbin:/bin:/usr/sbin:/usr/bin
+    0 */2 * * * root [ -f /opt/ood/nginx_stage/sbin/nginx_stage  ] && /opt/ood/nginx_stage/sbin/nginx_stage nginx_clean 1>/dev/null
+    ```
+
+    This will clean up inactive PUNs every two hours.
+
 ## Install User Mapping Script
 
 You will need to map the Apache authenticated user to the local system user.

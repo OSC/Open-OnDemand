@@ -319,6 +319,70 @@ Run 'nginx_stage --help' to see a full list of available command line options.
 Success! The infrastructure components are installed and now we need to install
 the OOD "System Apps".
 
+## Install the Apps
+
+Create the build directory for the sys apps:
+
+```sh
+cd ~/tmp/ood/src
+mkdir sys
+cd sys
+```
+
+### Install the Dashboard App
+
+Follow the installation directions at [https://github.com/OSC/ood-dashboard#new-install](https://github.com/OSC/ood-dashboard#new-install).
+
+### Install the Shell App
+
+Start again in the build directory for sys apps
+
+```sh
+cd ~/tmp/ood/src/sys
+```
+
+and follow the installation directions at [https://github.com/OSC/ood-shell#new-install](https://github.com/OSC/ood-shell#new-install).
+
+### Install the Files App
+
+Start again in the build directory for sys apps
+
+```sh
+cd ~/tmp/ood/src/sys
+```
+
+and follow the installation directions at [https://github.com/OSC/ood-fileexplorer#new-install](https://github.com/OSC/ood-fileexplorer#new-install).
+
+### Install the File Editor App
+
+Start again in the build directory for sys apps
+
+```sh
+cd ~/tmp/ood/src/sys
+```
+
+and follow the installation directions at [https://github.com/OSC/ood-fileeditor#new-install](https://github.com/OSC/ood-fileeditor#new-install).
+
+### Install the Active Jobs App
+
+Start again in the build directory for sys apps
+
+```sh
+cd ~/tmp/ood/src/sys
+```
+
+and follow the installation directions at [https://github.com/OSC/ood-activejobs#new-install](https://github.com/OSC/ood-activejobs#new-install).
+
+### Install the My Jobs App
+
+Start again in the build directory for sys apps
+
+```sh
+cd ~/tmp/ood/src/sys
+```
+
+and follow the installation directions at [https://github.com/OSC/ood-myjobs#new-install](https://github.com/OSC/ood-myjobs#new-install) for.
+
 ## Add SSL Support
 
 **(Optional step, but recommended)**

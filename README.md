@@ -8,3 +8,10 @@ More information can be found in the paper
 
 1. The website https://osc.github.io/Open-OnDemand/ provides links to past webinar recordings and other information.
 2. The [documentation](https://osc.github.io/ood-documentation/master/) provides installation directions, app development tutorials, and an overview of the components and applications that make up OnDemand.
+
+
+## License
+
+* Documentation, website content, and logo is licensed under [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/)
+* Code is licensed under MIT (see LICENSE.txt)
+

@@ -58,7 +58,7 @@
   "dateModified": "2018-02-19",
   "dateCreated": "2018-02-19",
   "description": "Open-source software project that enables HPC centers to install and deploy advanced web and graphical interfaces for their users.",
-  "keywords": "hpc, science gateway, gateway, web-based hpc, HTML5 VNC, Jupyter",
+  "keywords": "HPC, apps, portal, gateway, web platform",
   "license": "MIT",
   "title": "Open OnDemand",
   "version": "v1.2.0"

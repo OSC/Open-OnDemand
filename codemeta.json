@@ -3,17 +3,17 @@
   "@type": "Code",
   "author": [
     {
-      "@id": "https://orcid.org/0000-0002-4331-8508",
-      "@type": "Person",
-      "email": "djohnson@osc.edu",
-      "name": "Doug Johnson",
-      "affiliation": "Ohio Supercomputer Center"
-    },
-    {
       "@id": "https://orcid.org/0000-0002-9043-0850",
       "@type": "Person",
       "email": "dhudak@osc.edu",
       "name": "Dave Hudak",
+      "affiliation": "Ohio Supercomputer Center"
+    },
+    {
+      "@id": "https://orcid.org/0000-0002-4331-8508",
+      "@type": "Person",
+      "email": "djohnson@osc.edu",
+      "name": "Doug Johnson",
       "affiliation": "Ohio Supercomputer Center"
     },
     {

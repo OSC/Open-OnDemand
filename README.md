@@ -49,6 +49,16 @@ More information can be found in the paper
 | Paraview	| https://github.com/OSC/bc_osc_paraview |
 | RStudio Server	| https://github.com/OSC/bc_osc_rstudio_server |
 
+## Appkit
+
+| Name | GitHub URL |
+| --- | --- |
+| ood_core	| https://github.com/OSC/ood_core |
+| ood_appkit	| https://github.com/OSC/ood_appkit |
+| ood_support	| https://github.com/OSC/ood_support |
+| osc-machete	| https://github.com/OSC/osc-machete (deprecated)|
+| osc_machete_rails	| https://github.com/OSC/osc_machete_rails (deprecated) |
+
 
 ## License
 

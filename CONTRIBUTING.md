@@ -1,25 +1,33 @@
 # Contributing
 
-When contributing to this repository, please first discuss the change you wish
+When contributing to this project, please first discuss the change you wish
 to make via issue, email, or any other method with the owners of this
 repository before making a change.
 
 Please note we have a code of conduct, please follow it in all your
 interactions with the project.
 
+OnDemand is made up of multiple components and libraries with their own repos.
+An index of all the repos can be found on the [[README.md]].
+
 ## Pull Request Process
 
-1. Ensure any install or build dependencies are removed before the end of the
-   layer when doing a build.
-2. Update the `README.md` and `CHANGELOG.md` with details of changes to the
-   interface, this includes new environment variables, exposed ports, useful
-   file locations and container parameters.
-3. Increase the version numbers in any examples files and the `README.md` to
-   the new version that this Pull Request would represent. The versioning
-   scheme we use is [SemVer](http://semver.org/).
-4. You may merge the Pull Request in once you have the sign-off of two other
-   developers, or if you do not have permission to do that, you may request the
-   second reviewer to merge it for you.
+1. [Fork the repo](https://help.github.com/articles/fork-a-repo/) of the component or library you want to modify.
+2. Branch off of the master branch (see exceptions below) and apply fix.
+3. Create a PR to merge into the master upstream branch.
+4. We will review it and either add comments for requested changes or merge.
+
+### Exceptions
+
+1. When making proposed changes to the Open OnDemand website, please branch off of the gh-pages branch.
+2. When making proposed changes to the [Open OnDemand documentation](https://github.com/OSC/ood-documentation), please branch off of the develop branch (this is the default branch on the repo).
+
+### Tips
+
+1. Contributions in a functional style (see "Functional Core, Imperative Shell") accompanied by unit tests are recommended.
+2. For Ruby code we add [yardoc](https://yardoc.org/) comments above all of our public interface methods as this is used to generate helpful documentation on http://www.rubydoc.info/. We do not yet have adopted a strong style guide for code in JavaScript and Python.
+3. With the PR for the change, add to the CHANGELOG a line under the "Unreleased" section specifying https://keepachangelog.com/en/1.0.0/.
+4. Follow best conventions with Ruby coding style. We haven't yet adopted a strict style guide, so unless you are using tabs or 4 spaces instead of 2 spaces you will probably not find an objection from us.
 
 ## Code of Conduct
 

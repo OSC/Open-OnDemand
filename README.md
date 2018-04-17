@@ -59,6 +59,21 @@ More information can be found in the paper
 | osc-machete	| https://github.com/OSC/osc-machete (deprecated)|
 | osc_machete_rails	| https://github.com/OSC/osc_machete_rails (deprecated) |
 
+## Packaging
+
+| Name | Description | GitHub URL |
+| --- | --- | --- |
+| ondemand-packaging | RPM spec files for OnDemand and dependencies | https://github.com/OSC/ondemand-packaging |
+| ondemand | specifies component versions to include in OnDemand RPM | https://github.com/OSC/ondemand |
+| ood-apps-installer | deprecated installer script (replaced with RPM) | https://github.com/OSC/ood-apps-installer |
+
+## Documentation
+
+| Name | GitHub URL |
+| --- | --- |
+| ood-documentation | https://github.com/OSC/ood-documentation |
+| ood-documentation-test | https://github.com/OSC/ood-documentation-test |
+
 
 ## License
 

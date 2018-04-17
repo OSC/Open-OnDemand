@@ -8,7 +8,7 @@ Please note we have a code of conduct, please follow it in all your
 interactions with the project.
 
 OnDemand is made up of multiple components and libraries with their own repos.
-An index of all the repos can be found on the [[README.md]].
+An index of all the repos can be found on the [README.md](README.md).
 
 ## Pull Request Process
 

@@ -19,7 +19,7 @@ An index of all the repos can be found on the [README.md](README.md).
 
 ### Exceptions
 
-1. When making proposed changes to the Open OnDemand website, please branch off of the gh-pages branch.
+1. When making proposed changes to the [Open OnDemand website](https://osc.github.io/Open-OnDemand/), please branch off of the [gh-pages branch](https://github.com/OSC/Open-OnDemand/tree/gh-pages).
 2. When making proposed changes to the [Open OnDemand documentation](https://github.com/OSC/ood-documentation), please branch off of the develop branch (this is the default branch on the repo).
 
 ### Tips

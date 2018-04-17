@@ -24,7 +24,7 @@ An index of all the repos can be found on the [README.md](README.md).
 
 ### Tips
 
-1. Contributions in a functional style (see "Functional Core, Imperative Shell") accompanied by unit tests are recommended.
+1. Contributions accompanied by unit tests are recommended.
 2. For Ruby code we add [yardoc](https://yardoc.org/) comments above all of our public interface methods as this is used to generate helpful documentation on http://www.rubydoc.info/. We do not yet have adopted a strong style guide for code in JavaScript and Python.
 3. With the PR for the change, add to the CHANGELOG a line under the "Unreleased" section specifying https://keepachangelog.com/en/1.0.0/.
 4. Follow best conventions with Ruby coding style. We haven't yet adopted a strict style guide, so unless you are using tabs or 4 spaces instead of 2 spaces you will probably not find an objection from us.

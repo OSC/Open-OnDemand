@@ -1,5 +1,8 @@
 # Open OnDemand
 
+[![DOI](http://joss.theoj.org/papers/10.21105/joss.00622/status.svg)](https://doi.org/10.21105/joss.00622)
+
+
 The Open OnDemand Project is an open-source software project, based on the Ohio
 Supercomputer Center's proven "OSC OnDemand" platform, that enables HPC centers
 to install and deploy advanced web and graphical interfaces for their users.

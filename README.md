@@ -51,6 +51,7 @@ More information can be found in the paper
 | Jupyter + Spark	| https://github.com/OSC/bc_osc_jupyter_spark |
 | Paraview	| https://github.com/OSC/bc_osc_paraview |
 | RStudio Server	| https://github.com/OSC/bc_osc_rstudio_server |
+| VMD	| https://github.com/OSC/bc_osc_vmd |
 
 ## Appkit
 
@@ -82,4 +83,3 @@ More information can be found in the paper
 
 * Documentation, website content, and logo is licensed under [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/)
 * Code is licensed under MIT (see LICENSE.txt)
-

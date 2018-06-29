@@ -64,4 +64,8 @@ for the development of both workflow and interactive applications and includes
 mechanisms for user-based app creation, app sharing and app publishing. The
 AppKit technology is included as part of the Open OnDemand project.
 
+# Acknowledgements
+
+This work is supported by the National Science Foundation of the United States under the award NSF SI2-SSE-1534949.
+
 # References

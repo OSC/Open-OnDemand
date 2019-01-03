@@ -17,7 +17,11 @@ Don't hesistate to reach out to the developers via our [Discourse instance](http
 
 ## Infrastructure
 
-| Name | GitHub URL |
+All of the components are now part of a single repo: https://github.com/OSC/ondemand
+
+Below are the old locations:
+
+| Name | Legacy GitHub URL |
 | --- | --- |
 | ood-portal-generator	| https://github.com/OSC/ood-portal-generator |
 | mod_ood_proxy	| https://github.com/OSC/mod_ood_proxy |

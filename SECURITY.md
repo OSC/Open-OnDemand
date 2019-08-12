@@ -3,10 +3,6 @@
 This document outlines security procedures and general policies for the `OnDemand`
 project.
 
-  * [Reporting a Bug](#reporting-a-bug)
-  * [Disclosure Policy](#disclosure-policy)
-  * [Comments on this Policy](#comments-on-this-policy)
-
 ## Reporting a Bug
 
 If you have security concerns or think you have found a vulnerability in Open OnDemand,

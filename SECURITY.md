@@ -15,11 +15,10 @@ We hope to have more audits on a regular ongoing basis and to share those result
 
 ## Reporting a Vulnerability
 
-
 If you have security concerns or think you have found a vulnerability in Open OnDemand,
-please contact us directly via [email](mailto:ood-users@lists.osc.edu) on the news list found [here](https://lists.osu.edu/mailman/listinfo/ood-users).
-
-Your email will be answered promptly by one of our team.
+please contact us directly via [email](mailto:ood-users@lists.osc.edu) on the news list found 
+[here](https://lists.osu.edu/mailman/listinfo/ood-users).  Emails sent to it are only seen by 
+the core project team.
 
 ## Disclosure Policy
 
@@ -35,4 +34,4 @@ involving the following steps:
 ## Comments on this Policy
 
 If you have suggestions on how this process could be improved please submit 
-a ticket, open a [discorse](https://discourse.osc.edu/) topic or open a pull request.
+a ticket, open a [Discorse](https://discourse.osc.edu/) topic or open a pull request.

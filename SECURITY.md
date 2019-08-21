@@ -11,8 +11,6 @@ it in December 2018. This assessment included a careful review of the code, incr
 our confidence in its security. The Ohio Supercomputing Center addressed the implementation 
 issues (bugs) that were found during this review, producing a more robust revision of Open OnDemand.
 
-We hope to have more audits on a regular ongoing basis and to share those results when applicable.
-
 ## Reporting a Vulnerability
 
 If you have security concerns or think you have found a vulnerability in Open OnDemand,

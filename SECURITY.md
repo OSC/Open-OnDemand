@@ -5,8 +5,8 @@ project.
 
 ## Security Audits
 
-We have used [Trusted CI](https://trustedci.org/) in the past, the NSF Cybersecurity Center of 
-Excellence conducted an in-depth vulnerability assessment of Open OnDemand, completing 
+[Trusted CI](https://trustedci.org/), the NSF Cybersecurity Center of 
+Excellence, conducted an in-depth vulnerability assessment of Open OnDemand, completing 
 it in December 2018. This assessment included a careful review of the code, increasing 
 our confidence in its security. The Ohio Supercomputing Center addressed the implementation 
 issues (bugs) that were found during this review, producing a more robust revision of Open OnDemand.

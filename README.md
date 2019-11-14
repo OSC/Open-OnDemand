@@ -14,37 +14,26 @@ More information can be found in the paper
 
 Don't hesistate to reach out to the developers via our [Discourse instance](https://discourse.osc.edu/c/open-ondemand) or the [mailing list](https://lists.osu.edu/mailman/listinfo/ood-users) if you would like more information or need help installing or configuring Open OnDemand.
 
+## Main OnDemand repo
 
-## Infrastructure
+All of the components and core apps, excluding the appkit gems and generic interactive apps like Jupyter, are now part of a single repo: https://github.com/OSC/ondemand
 
-All of the components are now part of a single repo: https://github.com/OSC/ondemand
-
-Below are the old locations:
-
-| Name | Legacy GitHub URL |
-| --- | --- |
-| ood-portal-generator	| https://github.com/OSC/ood-portal-generator |
-| mod_ood_proxy	| https://github.com/OSC/mod_ood_proxy |
-| ood_auth_map	| https://github.com/OSC/ood_auth_map |
-| nginx_stage	| https://github.com/OSC/nginx_stage |
-
-## Applications
+## Appkit
 
 | Name | GitHub URL |
 | --- | --- |
-| Dashboard	| https://github.com/OSC/ood-dashboard |
-| Shell	| https://github.com/OSC/ood-shell |
-| Files	| https://github.com/OSC/ood-fileexplorer |
-| Editor	| https://github.com/OSC/ood-fileeditor |
-| Active Jobs	| https://github.com/OSC/ood-activejobs |
-| Job Composer	| https://github.com/OSC/ood-myjobs |
-| Interactive Apps: Desktop	| https://github.com/OSC/bc_desktop |
+| ood_core	| https://github.com/OSC/ood_core |
+| ood_appkit	| https://github.com/OSC/ood_appkit |
+| ood_support	| https://github.com/OSC/ood_support |
+| osc-machete	| https://github.com/OSC/osc-machete (deprecated)|
+| osc_machete_rails	| https://github.com/OSC/osc_machete_rails (deprecated) |
 
 ## Applications: Generic Interactive Apps
 
 | Name | GitHub URL |
 | --- | --- |
 | Jupyter	| https://github.com/OSC/bc_example_jupyter |
+
 
 ## Applications: OSC's Interactive Apps
 
@@ -60,15 +49,6 @@ Below are the old locations:
 | RStudio Server	| https://github.com/OSC/bc_osc_rstudio_server |
 | VMD	| https://github.com/OSC/bc_osc_vmd |
 
-## Appkit
-
-| Name | GitHub URL |
-| --- | --- |
-| ood_core	| https://github.com/OSC/ood_core |
-| ood_appkit	| https://github.com/OSC/ood_appkit |
-| ood_support	| https://github.com/OSC/ood_support |
-| osc-machete	| https://github.com/OSC/osc-machete (deprecated)|
-| osc_machete_rails	| https://github.com/OSC/osc_machete_rails (deprecated) |
 
 ## Packaging
 
@@ -84,6 +64,30 @@ Below are the old locations:
 | --- | --- |
 | ood-documentation | https://github.com/OSC/ood-documentation |
 | ood-documentation-test | https://github.com/OSC/ood-documentation-test |
+
+## Legacy archived repos:
+
+Components:
+
+| Name | Legacy GitHub URL |
+| --- | --- |
+| ood-portal-generator	| https://github.com/OSC/ood-portal-generator |
+| mod_ood_proxy	| https://github.com/OSC/mod_ood_proxy |
+| ood_auth_map	| https://github.com/OSC/ood_auth_map |
+| nginx_stage	| https://github.com/OSC/nginx_stage |
+
+Apps:
+
+| Name | GitHub URL |
+| --- | --- |
+| Dashboard	| https://github.com/OSC/ood-dashboard |
+| Shell	| https://github.com/OSC/ood-shell |
+| Files	| https://github.com/OSC/ood-fileexplorer |
+| Editor	| https://github.com/OSC/ood-fileeditor |
+| Active Jobs	| https://github.com/OSC/ood-activejobs |
+| Job Composer	| https://github.com/OSC/ood-myjobs |
+| Interactive Apps: Desktop	| https://github.com/OSC/bc_desktop |
+
 
 
 ## License

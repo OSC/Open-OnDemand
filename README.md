@@ -11,6 +11,7 @@ More information can be found in the paper
 
 1. The website https://osc.github.io/Open-OnDemand/ provides links to past webinar recordings and other information.
 2. The [documentation](https://osc.github.io/ood-documentation/master/) provides installation directions, app development tutorials, and an overview of the components and applications that make up OnDemand.
+3. The [main code repo](https://github.com/OSC/ondemand) contains the core components of OnDemand.
 
 Don't hesistate to reach out to the developers via our [Discourse instance](https://discourse.osc.edu/c/open-ondemand) or the [mailing list](https://lists.osu.edu/mailman/listinfo/ood-users) if you would like more information or need help installing or configuring Open OnDemand.
 

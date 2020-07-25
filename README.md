@@ -3,10 +3,10 @@
 [![DOI](http://joss.theoj.org/papers/10.21105/joss.00622/status.svg)](https://doi.org/10.21105/joss.00622)
 
 - Website: http://openondemand.org/
+- Website repo with JOSS publication: https://github.com/OSC/Open-OnDemand
 - Documentation: https://osc.github.io/ood-documentation/master/
 - Main code repo: https://github.com/OSC/ondemand
 - Core library repo: https://github.com/OSC/ood_core
-- Original repo with JOSS publication: https://github.com/OSC/Open-OnDemand
 
 
 The Open OnDemand Project is an open-source software project, based on the Ohio
